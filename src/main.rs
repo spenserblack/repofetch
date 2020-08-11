@@ -1,5 +1,6 @@
 use big_bytes::BigByte;
 use cli::app;
+use colored::Colorize;
 use github_stats::Repo;
 
 macro_rules! println_stat {
@@ -18,7 +19,7 @@ fn main() {
         let repo = repo.next().expect("No repo name");
         Repo::new(owner, repo).expect("Could not fetch remote repo data")
     };
-    println!("{}:", repo);
+    println!("{}:", repo.bold());
     println_stat!("URL", repo_stats.clone_url(), emojis::EMPTY);
     println_stat!("stargazers", repo_stats.stargazers_count(), emojis::STAR);
     println_stat!("subscribers", repo_stats.subscribers_count(), emojis::WATCHER);
