@@ -2,6 +2,12 @@ use big_bytes::BigByte;
 use cli::app;
 use github_stats::Repo;
 
+macro_rules! println_stat {
+    ($name:expr, $stat:expr, $emoji:expr) => {
+        println!("{emoji}{name}: {stat}", name=$name, stat=$stat, emoji=$emoji);
+    }
+}
+
 fn main() {
     let matches = app().get_matches();
 
@@ -13,18 +19,18 @@ fn main() {
         Repo::new(owner, repo).expect("Could not fetch remote repo data")
     };
     println!("{}:", repo);
-    println!("{emoji}URL: {stat}", stat=repo_stats.clone_url(), emoji="");
-    println!("{emoji}stargazers: {stat}", stat=repo_stats.stargazers_count(), emoji=emojis::STAR);
-    println!("{emoji}subscribers: {stat}", stat=repo_stats.subscribers_count(), emoji=emojis::WATCHER);
-    println!("{emoji}forks: {stat}", stat=repo_stats.forks_count(), emoji="");
-    println!("{emoji}created: {stat}", stat=repo_stats.created_at(), emoji=emojis::CREATED);
-    println!("{emoji}updated: {stat}", stat=repo_stats.updated_at(), emoji="");
-    println!("{emoji}size: {stat}", emoji="", stat={
+    println_stat!("URL", repo_stats.clone_url(), emojis::EMPTY);
+    println_stat!("stargazers", repo_stats.stargazers_count(), emojis::STAR);
+    println_stat!("subscribers", repo_stats.subscribers_count(), emojis::WATCHER);
+    println_stat!("forks", repo_stats.forks_count(), emojis::EMPTY);
+    println_stat!("created", repo_stats.created_at(), emojis::CREATED);
+    println_stat!("updated", repo_stats.updated_at(), emojis::EMPTY);
+    println_stat!("size", {
         let size = repo_stats.size();
         let size = size * 1_000; // convert from KB to just B
         size.big_byte(2)
-    });
-    println!("{emoji}fork: {stat}", stat=repo_stats.fork(), emoji="");
+    }, emojis::EMPTY);
+    println_stat!("fork", repo_stats.fork(), emojis::EMPTY);
 }
 
 mod cli;
