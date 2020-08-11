@@ -13,13 +13,14 @@ fn main() {
     };
     println!("{}:", repo);
     println!("URL: {}", repo_stats.clone_url());
-    println!("stargazers: {}", repo_stats.stargazers_count());
-    println!("subscribers: {}", repo_stats.subscribers_count());
+    println!("stargazers: {}{}", repo_stats.stargazers_count(), emojis::STAR);
+    println!("subscribers: {}{}", repo_stats.subscribers_count(), emojis::WATCHER);
     println!("forks: {}", repo_stats.forks_count());
-    println!("created: {}", repo_stats.created_at());
+    println!("created: {}{}", repo_stats.created_at(), emojis::CREATED);
     println!("updated: {}", repo_stats.updated_at());
     println!("size: {}KB", repo_stats.size());
     println!("fork: {}", repo_stats.fork());
 }
 
 mod cli;
+mod emojis;
