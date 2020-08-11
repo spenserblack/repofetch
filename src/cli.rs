@@ -1,4 +1,4 @@
-use clap::{crate_description, crate_name, crate_version, App, Arg, SubCommand};
+use clap::{crate_description, crate_name, crate_version, App, Arg};
 
 pub(crate) const REPO_OPTION_NAME: &str = "repository";
 
