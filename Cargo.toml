@@ -12,3 +12,4 @@ repository = "https://github.com/spenserblack/repofetch"
 publish = false # You should at least look at this file before you publish
 
 [dependencies]
+clap = "2"
