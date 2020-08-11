@@ -12,5 +12,6 @@ repository = "https://github.com/spenserblack/repofetch"
 publish = false # You should at least look at this file before you publish
 
 [dependencies]
+big-bytes = "1"
 clap = "2"
 github-stats = "0.2"

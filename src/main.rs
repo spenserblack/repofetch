@@ -1,3 +1,4 @@
+use big_bytes::BigByte;
 use cli::app;
 use github_stats::Repo;
 
@@ -18,7 +19,11 @@ fn main() {
     println!("forks: {}", repo_stats.forks_count());
     println!("created: {}{}", repo_stats.created_at(), emojis::CREATED);
     println!("updated: {}", repo_stats.updated_at());
-    println!("size: {}KB", repo_stats.size());
+    println!("size: {}", {
+        let size = repo_stats.size();
+        let size = size * 1_000; // convert from KB to just B
+        size.big_byte(2)
+    });
     println!("fork: {}", repo_stats.fork());
 }
 
