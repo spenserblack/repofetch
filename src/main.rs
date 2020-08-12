@@ -5,7 +5,7 @@ use github_stats::Repo;
 
 macro_rules! println_stat {
     ($name:expr, $stat:expr, $emoji:expr) => {
-        println!("{emoji}{name}: {stat}", name=$name, stat=$stat, emoji=$emoji);
+        println!("{emoji}{name}: {stat}", name=$name.bold(), stat=$stat, emoji=$emoji);
     }
 }
 
