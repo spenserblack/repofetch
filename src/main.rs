@@ -30,7 +30,7 @@ fn main() {
         let size = repo_stats.size();
         let size = size * 1_000; // convert from KB to just B
         size.big_byte(2)
-    }, emojis::EMPTY);
+    }, emojis::SIZE);
     println_stat!("original", !repo_stats.fork(), emojis::NOT_FORK);
 }
 
