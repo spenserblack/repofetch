@@ -20,7 +20,7 @@ fn main() {
         Repo::new(owner, repo).expect("Could not fetch remote repo data")
     };
     println!("{}:", repo.bold());
-    println_stat!("URL", repo_stats.clone_url(), emojis::EMPTY);
+    println_stat!("URL", repo_stats.clone_url(), emojis::URL);
     println_stat!("stargazers", repo_stats.stargazers_count(), emojis::STAR);
     println_stat!("subscribers", repo_stats.subscribers_count(), emojis::WATCHER);
     println_stat!("forks", repo_stats.forks_count(), emojis::EMPTY);

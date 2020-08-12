@@ -1,3 +1,4 @@
+pub(crate) const URL: &str = "🌐";
 pub(crate) const STAR: &str = "⭐";
 pub(crate) const WATCHER: &str = "👀";
 pub(crate) const CREATED: &str = "🌱";
