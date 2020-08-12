@@ -25,7 +25,7 @@ fn main() {
     println_stat!("subscribers", repo_stats.subscribers_count(), emojis::WATCHER);
     println_stat!("forks", repo_stats.forks_count(), emojis::EMPTY);
     println_stat!("created", repo_stats.created_at(), emojis::CREATED);
-    println_stat!("updated", repo_stats.updated_at(), emojis::EMPTY);
+    println_stat!("updated", repo_stats.updated_at(), emojis::UPDATED);
     println_stat!("size", {
         let size = repo_stats.size();
         let size = size * 1_000; // convert from KB to just B
