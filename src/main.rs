@@ -31,7 +31,7 @@ fn main() {
         let size = size * 1_000; // convert from KB to just B
         size.big_byte(2)
     }, emojis::EMPTY);
-    println_stat!("fork", repo_stats.fork(), emojis::EMPTY);
+    println_stat!("original", !repo_stats.fork(), emojis::NOT_FORK);
 }
 
 mod cli;
