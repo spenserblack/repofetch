@@ -4,8 +4,8 @@ use colored::Colorize;
 use github_stats::Repo;
 
 macro_rules! println_stat {
-    ($name:expr, $stat:expr, $emoji:expr) => {
-        println!("{emoji}{name}: {stat}", name=$name.bold(), stat=$stat, emoji=$emoji);
+    ($name:expr, $stat:expr, $emoji:expr $(,)?) => {
+        println!("{emoji}{name}: {stat}", name=$name.bold(), stat=$stat, emoji=$emoji)
     }
 }
 
