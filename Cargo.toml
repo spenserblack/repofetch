@@ -10,7 +10,12 @@ keywords = ["repository", "github"]
 categories = ["command-line-utilities"]
 repository = "https://github.com/spenserblack/repofetch"
 exclude = [
-    "images",
+    ".github/*",
+    "images/*",
+    ".editorconfig",
+    ".gitignore",
+    ".travis.yml",
+    "CHANGELOG.md",
 ]
 publish = false # You should at least look at this file before you publish
 
