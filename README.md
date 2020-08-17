@@ -9,3 +9,20 @@ Fetch details about your remote repository
 Made with `repofetch spenserblack/repofetch`.
 
 ![screenshot](https://github.com/spenserblack/repofetch/blob/master/images/screenshot.png?raw=true)
+
+## Installation
+
+### From [Crates.io][crates.io]
+
+```bash
+cargo install repofetch
+```
+
+### Manually
+
+```bash
+git clone https://github.com/spenserblack/repofetch.git
+cargo install --path ./repofetch
+```
+
+[crates.io]: https://crates.io/crates/repofetch
