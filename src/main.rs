@@ -46,6 +46,7 @@ async fn main() {
     let hacktoberfest = Query::new()
         .repo(owner, repo)
         .is("issue")
+        .is("open")
         .label("hacktoberfest");
     let hacktoberfest = Search::issues(&hacktoberfest)
         .search(user_agent!())
@@ -58,7 +59,7 @@ async fn main() {
 
     match hacktoberfest {
         Some(count) => println_stat!(
-            "hacktoberfest issues",
+            "open hacktoberfest issues",
             count,
             emojis::HACKTOBERFEST,
         ),
