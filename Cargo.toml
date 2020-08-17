@@ -17,7 +17,6 @@ exclude = [
     ".travis.yml",
     "CHANGELOG.md",
 ]
-publish = false # You should at least look at this file before you publish
 
 [dependencies]
 big-bytes = "1"
