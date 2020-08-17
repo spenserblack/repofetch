@@ -9,6 +9,9 @@ readme = "README.md"
 keywords = ["repository", "github"]
 categories = ["command-line-utilities"]
 repository = "https://github.com/spenserblack/repofetch"
+exclude = [
+    "images",
+]
 publish = false # You should at least look at this file before you publish
 
 [dependencies]
