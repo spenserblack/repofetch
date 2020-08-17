@@ -1,7 +1,7 @@
 use big_bytes::BigByte;
 use cli::app;
 use colored::Colorize;
-use github_stats::Repo;
+use github_stats::*;
 
 macro_rules! println_stat {
     ($name:expr, $stat:expr, $emoji:expr $(,)?) => {
@@ -20,14 +20,15 @@ async fn main() {
     let matches = app().get_matches();
 
     let repo = matches.value_of(cli::REPO_OPTION_NAME).unwrap();
-    let repo_stats = {
+    let (owner, repo) = {
         let mut repo = repo.split('/');
         let owner = repo.next().expect("No repo owner");
         let repo = repo.next().expect("No repo name");
-        Repo::new(owner, repo, user_agent!())
-            .await
-            .expect("Could not fetch remote repo data")
+        (owner, repo)
     };
+    let repo_stats = Repo::new(owner, repo, user_agent!())
+        .await
+        .expect("Could not fetch remote repo data");
     println!("{}:", repo.bold());
     println_stat!("URL", repo_stats.clone_url(), emojis::URL);
     println_stat!("stargazers", repo_stats.stargazers_count(), emojis::STAR);
@@ -41,6 +42,28 @@ async fn main() {
         size.big_byte(2)
     }, emojis::SIZE);
     println_stat!("original", !repo_stats.fork(), emojis::NOT_FORK);
+
+    let hacktoberfest = Query::new()
+        .repo(owner, repo)
+        .is("issue")
+        .label("hacktoberfest");
+    let hacktoberfest = Search::issues(&hacktoberfest)
+        .search(user_agent!())
+        .await;
+    let hacktoberfest = hacktoberfest.ok().map(|results| results.total_count());
+    let hacktoberfest = match hacktoberfest {
+        Some(0) => None,
+        count => count,
+    };
+
+    match hacktoberfest {
+        Some(count) => println_stat!(
+            "hacktoberfest issues",
+            count,
+            emojis::HACKTOBERFEST,
+        ),
+        _ => {},
+    }
 }
 
 mod cli;
