@@ -9,6 +9,12 @@ macro_rules! println_stat {
     }
 }
 
+macro_rules! user_agent {
+    () => {
+        concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"))
+    }
+}
+
 fn main() {
     let matches = app().get_matches();
 
@@ -17,7 +23,8 @@ fn main() {
         let mut repo = repo.split('/');
         let owner = repo.next().expect("No repo owner");
         let repo = repo.next().expect("No repo name");
-        Repo::new(owner, repo).expect("Could not fetch remote repo data")
+        Repo::new(owner, repo, user_agent!())
+            .expect("Could not fetch remote repo data")
     };
     println!("{}:", repo.bold());
     println_stat!("URL", repo_stats.clone_url(), emojis::URL);
