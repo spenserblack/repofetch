@@ -16,3 +16,4 @@ big-bytes = "1"
 clap = "2"
 colored = "2"
 github-stats = "0.3"
+tokio = { version = "0.2", features = ["macros"] }

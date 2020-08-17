@@ -15,7 +15,8 @@ macro_rules! user_agent {
     }
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let matches = app().get_matches();
 
     let repo = matches.value_of(cli::REPO_OPTION_NAME).unwrap();
@@ -24,6 +25,7 @@ fn main() {
         let owner = repo.next().expect("No repo owner");
         let repo = repo.next().expect("No repo name");
         Repo::new(owner, repo, user_agent!())
+            .await
             .expect("Could not fetch remote repo data")
     };
     println!("{}:", repo.bold());
