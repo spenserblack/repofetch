@@ -29,7 +29,7 @@ async fn main() {
     let repo_stats = Repo::new(owner, repo, user_agent!())
         .await
         .expect("Could not fetch remote repo data");
-    println!("{}:", repo.bold());
+    println!("{}:", format!("{}/{}", owner, repo).bold());
     println_stat!("URL", repo_stats.clone_url(), emojis::URL);
     println_stat!("stargazers", repo_stats.stargazers_count(), emojis::STAR);
     println_stat!("subscribers", repo_stats.subscribers_count(), emojis::WATCHER);
