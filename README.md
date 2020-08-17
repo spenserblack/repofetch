@@ -6,4 +6,6 @@ Fetch details about your remote repository
 
 ## Screenshot
 
-![`repofetch spenserblack/repofetch`](https://github.com/spenserblack/repofetch/blob/master/images/screenshot.png?raw=true)
+Made with `repofetch spenserblack/repofetch`.
+
+![screenshot](https://github.com/spenserblack/repofetch/blob/master/images/screenshot.png?raw=true)
