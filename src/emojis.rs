@@ -1,11 +1,17 @@
-pub(crate) const URL: &str = "🌐";
-pub(crate) const STAR: &str = "⭐";
-pub(crate) const WATCHER: &str = "👀";
-pub(crate) const FORK: &str = "🔱";
-pub(crate) const CREATED: &str = "🐣";
-pub(crate) const UPDATED: &str = "📤";
-pub(crate) const SIZE: &str = "💽";
-pub(crate) const NOT_FORK: &str = "🥄";
+macro_rules! define_emoji {
+    ($name:ident, $value:literal) => {
+        pub(crate) const $name: &str = $value;
+    }
+}
+
+define_emoji!{URL, "🌐"}
+define_emoji!{STAR, "⭐"}
+define_emoji!{WATCHER, "👀"}
+define_emoji!{FORK, "🔱"}
+define_emoji!{CREATED, "🐣"}
+define_emoji!{UPDATED, "📤"}
+define_emoji!{SIZE, "💽"}
+define_emoji!{NOT_FORK, "🥄"}
 
 #[allow(dead_code)]
 pub(crate) const EMPTY: &str = "  ";
