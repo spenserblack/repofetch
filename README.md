@@ -15,13 +15,13 @@ Made with `repofetch spenserblack/repofetch`.
 
 ## Installation
 
-### From [Crates.io][crates.io]
+### Latest Release from [Crates.io][crates.io]
 
 ```bash
 cargo install repofetch
 ```
 
-### From [this repo](https://github.com/spenserblack/repofetch)
+### Latest Commit from [this repo](https://github.com/spenserblack/repofetch)
 
 ```bash
 git clone https://github.com/spenserblack/repofetch.git
