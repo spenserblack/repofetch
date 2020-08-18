@@ -23,7 +23,7 @@ macro_rules! user_agent {
 async fn main() {
     let matches = app().get_matches();
     let mut default_config = config_dir().unwrap();
-    default_config.push("repofetch");
+    default_config.push("repofetch.yml");
     let default_config = default_config;
 
     println!("Config: {:?}", RepofetchConfig::new(&default_config.display().to_string()));
