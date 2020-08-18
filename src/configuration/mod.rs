@@ -39,6 +39,9 @@ pub(crate) struct Emojis {
 
     #[serde(default = "default_hacktoberfest")]
     hacktoberfest: ConfigEmoji,
+
+    #[serde(default = "default_empty")]
+    placeholder: ConfigEmoji,
 }
 
 impl RepofetchConfig {
@@ -70,6 +73,7 @@ impl Default for Emojis {
             size: default_size(),
             original: default_spoon(),
             hacktoberfest: default_hacktoberfest(),
+            placeholder: default_empty(),
         }
     }
 }
