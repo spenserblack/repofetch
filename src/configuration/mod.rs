@@ -26,6 +26,9 @@ pub(crate) struct Emojis {
     #[serde(default = "default_fork")]
     pub(crate) fork: ConfigEmoji,
 
+    #[serde(default = "default_issue")]
+    pub(crate) issue: ConfigEmoji,
+
     #[serde(default = "default_created")]
     pub(crate) created: ConfigEmoji,
 
@@ -69,6 +72,7 @@ impl Default for Emojis {
             star: default_star(),
             subscriber: default_watcher(),
             fork: default_fork(),
+            issue: default_issue(),
             created: default_created(),
             updated: default_updated(),
             size: default_size(),
@@ -93,6 +97,10 @@ fn default_watcher() -> String {
 
 fn default_fork() -> String {
     emojis::FORK.into()
+}
+
+fn default_issue() -> String {
+    emojis::ISSUE.into()
 }
 
 fn default_created() -> String {

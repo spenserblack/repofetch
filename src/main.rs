@@ -72,6 +72,32 @@ async fn main() {
     println_stat!("stargazers", repo_stats.stargazers_count(), emojis.star);
     println_stat!("subscribers", repo_stats.subscribers_count(), emojis.subscriber);
     println_stat!("forks", repo_stats.forks_count(), emojis.fork);
+
+    let open_issues = Query::new()
+        .repo(owner, repo)
+        .is("issue")
+        .is("open");
+    let open_issues = Search::issues(&open_issues)
+        .search(user_agent!())
+        .await;
+    let closed_issues = Query::new()
+        .repo(owner, repo)
+        .is("issue")
+        .is("closed");
+    let closed_issues = Search::issues(&closed_issues)
+        .search(user_agent!())
+        .await;
+    let open_issues = match open_issues {
+        Ok(open) => open.total_count().to_string(),
+        _ => "???".into(),
+    };
+    let closed_issues = match closed_issues {
+        Ok(closed) => closed.total_count().to_string(),
+        _ => "???".into(),
+    };
+    println_stat!("open/closed issues", format!("{}/{}", open_issues, closed_issues), emojis.issue);
+
+
     println_stat!("created", repo_stats.created_at(), emojis.created);
     println_stat!("updated", repo_stats.updated_at(), emojis.updated);
     println_stat!("size", {
