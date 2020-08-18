@@ -47,7 +47,7 @@ impl RepofetchConfig {
             Ok(f) => serde_yaml::from_reader(f).
                 context("Couldn't deserialize config file"),
             Err(_) => {
-                let mut f = File::create(path)
+                let f = File::create(path)
                     .context("Couldn't open config file to write")?;
                 let default_config = RepofetchConfig::default();
                 serde_yaml::to_writer(f, &default_config)
