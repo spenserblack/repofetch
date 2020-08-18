@@ -21,7 +21,7 @@ Made with `repofetch spenserblack/repofetch`.
 cargo install repofetch
 ```
 
-### Manually
+### From [this repo](https://github.com/spenserblack/repofetch)
 
 ```bash
 git clone https://github.com/spenserblack/repofetch.git
