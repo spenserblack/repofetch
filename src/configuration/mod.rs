@@ -1,5 +1,8 @@
-use config::{ConfigError, Config, File};
+use anyhow::{Result, Context};
 use serde::Deserialize;
+use std::{
+    fs::File,
+};
 
 type ConfigEmoji = String;
 
@@ -39,12 +42,11 @@ pub(crate) struct Emojis {
 }
 
 impl RepofetchConfig {
-    pub fn new(path: &str) -> Result<RepofetchConfig, ConfigError> {
-        let mut config = Config::new();
-
-        config.merge(File::with_name(path))?;
-
-        config.try_into()
+    pub fn new(path: &str) -> Result<RepofetchConfig> {
+        let f = File::open(path)
+            .context("Couldn't open config file")?;
+        serde_yaml::from_reader(f)
+            .context("Couldn't deserialize config file")
     }
 }
 

@@ -19,11 +19,12 @@ exclude = [
 ]
 
 [dependencies]
+anyhow = "1"
 big-bytes = "1"
 clap = "2"
 colored = "2"
-config = "0.10"
 dirs = "3"
 github-stats = "0.3"
 serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.8"
 tokio = { version = "0.2", features = ["macros"] }
