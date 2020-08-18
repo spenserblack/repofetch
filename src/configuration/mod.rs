@@ -1,17 +1,17 @@
 use anyhow::{Result, Context};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{
     fs::File,
 };
 
 type ConfigEmoji = String;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 pub(crate) struct RepofetchConfig {
     emojis: Emojis,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub(crate) struct Emojis {
     #[serde(default = "default_url")]
     url: ConfigEmoji,
@@ -43,10 +43,34 @@ pub(crate) struct Emojis {
 
 impl RepofetchConfig {
     pub fn new(path: &str) -> Result<RepofetchConfig> {
-        let f = File::open(path)
-            .context("Couldn't open config file")?;
-        serde_yaml::from_reader(f)
-            .context("Couldn't deserialize config file")
+        match File::open(path) {
+            Ok(f) => serde_yaml::from_reader(f).
+                context("Couldn't deserialize config file"),
+            Err(_) => {
+                let mut f = File::create(path)
+                    .context("Couldn't open config file to write")?;
+                let default_config = RepofetchConfig::default();
+                serde_yaml::to_writer(f, &default_config)
+                    .context("Couldn't serialize initial config file")?;
+                Ok(default_config)
+            }
+        }
+    }
+}
+
+impl Default for Emojis {
+    fn default() -> Emojis {
+        Emojis {
+            url: default_url(),
+            star: default_star(),
+            subscriber: default_watcher(),
+            fork: default_fork(),
+            created: default_created(),
+            updated: default_updated(),
+            size: default_size(),
+            original: default_spoon(),
+            hacktoberfest: default_hacktoberfest(),
+        }
     }
 }
 
