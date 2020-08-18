@@ -14,5 +14,4 @@ define_emoji!{SIZE, "💽"}
 define_emoji!{NOT_FORK, "🥄"}
 define_emoji!{HACKTOBERFEST, "🎃"}
 
-#[allow(dead_code)]
 pub(crate) const EMPTY: &str = "  ";
