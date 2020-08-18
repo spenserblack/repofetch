@@ -2,6 +2,7 @@ use anyhow::{Result, Context};
 use serde::{Deserialize, Serialize};
 use std::{
     fs::File,
+    path::Path,
 };
 
 type ConfigEmoji = String;
@@ -45,12 +46,12 @@ pub(crate) struct Emojis {
 }
 
 impl RepofetchConfig {
-    pub fn new(path: &str) -> Result<RepofetchConfig> {
-        match File::open(path) {
-            Ok(f) => serde_yaml::from_reader(f).
-                context("Couldn't deserialize config file"),
+    pub fn new<P: AsRef<Path>>(path: P) -> Result<RepofetchConfig> {
+        match File::open(&path) {
+            Ok(f) => serde_yaml::from_reader(f)
+                .context("Couldn't deserialize config file"),
             Err(_) => {
-                let f = File::create(path)
+                let f = File::create(&path)
                     .context("Couldn't open config file to write")?;
                 let default_config = RepofetchConfig::default();
                 serde_yaml::to_writer(f, &default_config)

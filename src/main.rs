@@ -26,7 +26,7 @@ async fn main() {
     default_config.push("repofetch.yml");
     let default_config = default_config;
 
-    println!("Config: {:?}", RepofetchConfig::new(&default_config.display().to_string()));
+    let config = RepofetchConfig::new(default_config);
 
     let repo = matches.value_of(cli::REPO_OPTION_NAME).unwrap();
     let (owner, repo) = {
