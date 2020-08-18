@@ -22,5 +22,8 @@ exclude = [
 big-bytes = "1"
 clap = "2"
 colored = "2"
+config = "0.10"
+dirs = "3"
 github-stats = "0.3"
+serde = { version = "1", features = ["derive"] }
 tokio = { version = "0.2", features = ["macros"] }

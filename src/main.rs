@@ -1,7 +1,11 @@
 use big_bytes::BigByte;
 use cli::app;
 use colored::Colorize;
+use dirs::config_dir;
 use github_stats::*;
+
+use configuration::RepofetchConfig;
+use configuration::emojis;
 
 macro_rules! println_stat {
     ($name:expr, $stat:expr, $emoji:expr $(,)?) => {
@@ -18,6 +22,11 @@ macro_rules! user_agent {
 #[tokio::main]
 async fn main() {
     let matches = app().get_matches();
+    let mut default_config = config_dir().unwrap();
+    default_config.push("repofetch");
+    let default_config = default_config;
+
+    println!("Config: {:?}", RepofetchConfig::new(&default_config.display().to_string()));
 
     let repo = matches.value_of(cli::REPO_OPTION_NAME).unwrap();
     let (owner, repo) = {
@@ -69,4 +78,4 @@ async fn main() {
 }
 
 mod cli;
-mod emojis;
+mod configuration;
