@@ -9,40 +9,40 @@ type ConfigEmoji = String;
 
 #[derive(Debug, Default, Deserialize, Serialize)]
 pub(crate) struct RepofetchConfig {
-    emojis: Emojis,
+    pub(crate) emojis: Emojis,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub(crate) struct Emojis {
     #[serde(default = "default_url")]
-    url: ConfigEmoji,
+    pub(crate) url: ConfigEmoji,
 
     #[serde(default = "default_star")]
-    star: ConfigEmoji,
+    pub(crate) star: ConfigEmoji,
 
     #[serde(default = "default_watcher")]
-    subscriber: ConfigEmoji,
+    pub(crate) subscriber: ConfigEmoji,
 
     #[serde(default = "default_fork")]
-    fork: ConfigEmoji,
+    pub(crate) fork: ConfigEmoji,
 
     #[serde(default = "default_created")]
-    created: ConfigEmoji,
+    pub(crate) created: ConfigEmoji,
 
     #[serde(default = "default_updated")]
-    updated: ConfigEmoji,
+    pub(crate) updated: ConfigEmoji,
 
     #[serde(default = "default_size")]
-    size: ConfigEmoji,
+    pub(crate) size: ConfigEmoji,
 
     #[serde(default = "default_spoon")]
-    original: ConfigEmoji,
+    pub(crate) original: ConfigEmoji,
 
     #[serde(default = "default_hacktoberfest")]
-    hacktoberfest: ConfigEmoji,
+    pub(crate) hacktoberfest: ConfigEmoji,
 
     #[serde(default = "default_empty")]
-    placeholder: ConfigEmoji,
+    pub(crate) placeholder: ConfigEmoji,
 }
 
 impl RepofetchConfig {
