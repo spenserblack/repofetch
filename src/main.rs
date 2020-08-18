@@ -1,5 +1,5 @@
 use big_bytes::BigByte;
-use cli::app;
+use clap::{App, Arg, crate_name, crate_version, crate_description};
 use colored::Colorize;
 use dirs::config_dir;
 use github_stats::*;
@@ -19,14 +19,34 @@ macro_rules! user_agent {
     }
 }
 
+pub(crate) const REPO_OPTION_NAME: &str = "repository";
+pub(crate) const CONFIG_OPTION_NAME: &str = "config";
+
 #[tokio::main]
 async fn main() {
-    let matches = app().get_matches();
+
     let mut default_config = config_dir().unwrap();
     default_config.push("repofetch.yml");
-    let default_config = default_config;
+    let default_config = default_config.as_os_str();
 
-    let config = RepofetchConfig::new(default_config);
+    let app = App::new(crate_name!())
+        .version(crate_version!())
+        .about(crate_description!())
+        .arg(
+            Arg::with_name(REPO_OPTION_NAME)
+                .index(1)
+                .help("Your GitHub repository (`username/repo`)")
+        )
+        .arg(
+            Arg::with_name(CONFIG_OPTION_NAME)
+                .short("c")
+                .long("config")
+                .help("Path to config file to use")
+                .default_value_os(default_config)
+        );
+    let matches = app.get_matches();
+
+    let config = RepofetchConfig::new(matches.value_of(CONFIG_OPTION_NAME).unwrap());
 
     let config = match config {
         Ok(config) => config,
@@ -36,7 +56,7 @@ async fn main() {
         }
     };
 
-    let repo = matches.value_of(cli::REPO_OPTION_NAME).unwrap();
+    let repo = matches.value_of(REPO_OPTION_NAME).unwrap();
     let (owner, repo) = {
         let mut repo = repo.split('/');
         let owner = repo.next().expect("No repo owner");
@@ -86,5 +106,4 @@ async fn main() {
     }
 }
 
-mod cli;
 mod configuration;

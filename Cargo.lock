@@ -782,6 +782,7 @@ dependencies = [
  "colored",
  "dirs",
  "github-stats",
+ "lazy_static",
  "serde",
  "serde_yaml",
  "tokio",
