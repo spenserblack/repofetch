@@ -23,6 +23,7 @@ define_emoji!{CREATED, "🐣", created}
 define_emoji!{UPDATED, "📤", updated}
 define_emoji!{SIZE, "💽", size}
 define_emoji!{NOT_FORK, "🥄", spoon}
+define_emoji!{HELP_WANTED, "🙇", help}
 define_emoji!{HACKTOBERFEST, "🎃", jack_lantern}
 
 pub(crate) const EMPTY: &str = "  ";
