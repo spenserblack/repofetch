@@ -861,6 +861,7 @@ dependencies = [
  "serde",
  "serde_yaml",
  "tokio",
+ "unicode-width",
 ]
 
 [[package]]
