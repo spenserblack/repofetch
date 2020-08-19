@@ -97,6 +97,30 @@ async fn main() {
     };
     println_stat!("open/closed issues", format!("{}/{}", open_issues, closed_issues), emojis.issue);
 
+    let open_prs = Query::new()
+        .repo(owner, repo)
+        .is("pr")
+        .is("open");
+    let open_prs = Search::issues(&open_prs)
+        .search(user_agent!())
+        .await;
+    let closed_prs = Query::new()
+        .repo(owner, repo)
+        .is("pr")
+        .is("closed");
+    let closed_prs = Search::issues(&closed_prs)
+        .search(user_agent!())
+        .await;
+    let open_prs = match open_prs {
+        Ok(open) => open.total_count().to_string(),
+        _ => "???".into(),
+    };
+    let closed_prs = match closed_prs {
+        Ok(closed) => closed.total_count().to_string(),
+        _ => "???".into(),
+    };
+    println_stat!("open/closed PRs", format!("{}/{}", open_prs, closed_prs), emojis.pull_request);
+
 
     println_stat!("created", repo_stats.created_at(), emojis.created);
     println_stat!("updated", repo_stats.updated_at(), emojis.updated);

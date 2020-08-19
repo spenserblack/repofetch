@@ -9,6 +9,7 @@ define_emoji!{STAR, "⭐"}
 define_emoji!{WATCHER, "👀"}
 define_emoji!{FORK, "🔱"}
 define_emoji!{ISSUE, "❗"}
+define_emoji!{PULL_REQUEST, "↪️ "}
 define_emoji!{CREATED, "🐣"}
 define_emoji!{UPDATED, "📤"}
 define_emoji!{SIZE, "💽"}

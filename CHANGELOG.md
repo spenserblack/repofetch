@@ -5,6 +5,7 @@
 ### Added
 
 - Issues counts
+- Pull Requests counts
 - Customizable emojis via `repofetch.yml` config file
 
 ## 0.1.0
