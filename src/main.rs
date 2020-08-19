@@ -180,7 +180,12 @@ async fn main() {
     let created = humantime::format_duration(created);
     println_stat!("created", format!("{} ago", created), emojis.created);
 
-    println_stat!("updated", repo_stats.updated_at(), emojis.updated);
+    let updated = repo_stats.updated_at();
+    let updated = Utc::now() - *updated;
+    let updated = Duration::from_secs(updated.num_seconds().try_into().unwrap());
+    let updated = humantime::format_duration(updated);
+    println_stat!("updated", format!("{} ago", updated), emojis.updated);
+
     println_stat!("size", {
         let size = repo_stats.size();
         let size = size * 1_000; // convert from KB to just B
