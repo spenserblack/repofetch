@@ -2,6 +2,7 @@ use big_bytes::BigByte;
 use clap::{App, Arg, crate_name, crate_version, crate_description};
 use colored::Colorize;
 use dirs::config_dir;
+use futures::join;
 use github_stats::*;
 
 use configuration::RepofetchConfig;
@@ -63,9 +64,41 @@ async fn main() {
         let repo = repo.next().expect("No repo name");
         (owner, repo)
     };
-    let repo_stats = Repo::new(owner, repo, user_agent!())
-        .await
-        .expect("Could not fetch remote repo data");
+    let repo_stats = Repo::new(owner, repo, user_agent!());
+
+    let open_issues = Query::new()
+        .repo(owner, repo)
+        .is("issue")
+        .is("open");
+    let open_issues = Search::issues(&open_issues);
+
+    let closed_issues = Query::new()
+        .repo(owner, repo)
+        .is("issue")
+        .is("closed");
+    let closed_issues = Search::issues(&closed_issues);
+
+    let open_prs = Query::new()
+        .repo(owner, repo)
+        .is("pr")
+        .is("open");
+    let open_prs = Search::issues(&open_prs);
+
+    let closed_prs = Query::new()
+        .repo(owner, repo)
+        .is("pr")
+        .is("closed");
+    let closed_prs = Search::issues(&closed_prs);
+
+    let (repo_stats, open_issues, closed_issues, open_prs, closed_prs) = join!(
+        repo_stats,
+        open_issues.search(user_agent!()),
+        closed_issues.search(user_agent!()),
+        open_prs.search(user_agent!()),
+        closed_prs.search(user_agent!()),
+    );
+    let repo_stats = repo_stats.expect("Could not fetch remote repo data");
+
     let emojis = config.emojis;
     println!("{}:", format!("{}/{}", owner, repo).bold());
     println_stat!("URL", repo_stats.clone_url(), emojis.url);
@@ -73,20 +106,6 @@ async fn main() {
     println_stat!("subscribers", repo_stats.subscribers_count(), emojis.subscriber);
     println_stat!("forks", repo_stats.forks_count(), emojis.fork);
 
-    let open_issues = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open");
-    let open_issues = Search::issues(&open_issues)
-        .search(user_agent!())
-        .await;
-    let closed_issues = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("closed");
-    let closed_issues = Search::issues(&closed_issues)
-        .search(user_agent!())
-        .await;
     let open_issues = match open_issues {
         Ok(open) => open.total_count().to_string(),
         _ => "???".into(),
@@ -97,20 +116,6 @@ async fn main() {
     };
     println_stat!("open/closed issues", format!("{}/{}", open_issues, closed_issues), emojis.issue);
 
-    let open_prs = Query::new()
-        .repo(owner, repo)
-        .is("pr")
-        .is("open");
-    let open_prs = Search::issues(&open_prs)
-        .search(user_agent!())
-        .await;
-    let closed_prs = Query::new()
-        .repo(owner, repo)
-        .is("pr")
-        .is("closed");
-    let closed_prs = Search::issues(&closed_prs)
-        .search(user_agent!())
-        .await;
     let open_prs = match open_prs {
         Ok(open) => open.total_count().to_string(),
         _ => "???".into(),
