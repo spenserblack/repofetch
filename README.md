@@ -28,4 +28,12 @@ git clone https://github.com/spenserblack/repofetch.git
 cargo install --path ./repofetch
 ```
 
+## Configuration
+
+The first time you execute `repofetch`, it will create a `repofetch.yml` file in your default
+config folder. You can edit this file to change `repofetch`'s output.
+
+You can find where `repofetch.yml` is saved by default by executing `repofetch --help` and viewing
+the help for the `<config>` option.
+
 [crates.io]: https://crates.io/crates/repofetch
