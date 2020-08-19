@@ -84,10 +84,17 @@ async fn main() {
         .is("open");
     let open_prs = Search::issues(&open_prs);
 
+    let merged_prs = Query::new()
+        .repo(owner, repo)
+        .is("pr")
+        .is("merged");
+    let merged_prs = Search::issues(&merged_prs);
+
     let closed_prs = Query::new()
         .repo(owner, repo)
         .is("pr")
-        .is("closed");
+        .is("closed")
+        .is("unmerged");
     let closed_prs = Search::issues(&closed_prs);
 
     let hacktoberfest = Query::new()
@@ -103,6 +110,7 @@ async fn main() {
         open_issues,
         closed_issues,
         open_prs,
+        merged_prs,
         closed_prs,
         hacktoberfest,
     ) = join!(
@@ -110,6 +118,7 @@ async fn main() {
         open_issues.search(user_agent!()),
         closed_issues.search(user_agent!()),
         open_prs.search(user_agent!()),
+        merged_prs.search(user_agent!()),
         closed_prs.search(user_agent!()),
         hacktoberfest.search(user_agent!()),
     );
@@ -136,11 +145,19 @@ async fn main() {
         Ok(open) => open.total_count().to_string(),
         _ => "???".into(),
     };
+    let merged_prs = match merged_prs {
+        Ok(merged) => merged.total_count().to_string(),
+        _ => "???".into(),
+    };
     let closed_prs = match closed_prs {
         Ok(closed) => closed.total_count().to_string(),
         _ => "???".into(),
     };
-    println_stat!("open/closed PRs", format!("{}/{}", open_prs, closed_prs), emojis.pull_request);
+    println_stat!(
+        "open/merged/closed PRs",
+        format!("{}/{}/{}", open_prs, merged_prs, closed_prs),
+        emojis.pull_request,
+    );
 
 
     println_stat!("created", repo_stats.created_at(), emojis.created);
