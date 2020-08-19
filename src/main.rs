@@ -90,12 +90,28 @@ async fn main() {
         .is("closed");
     let closed_prs = Search::issues(&closed_prs);
 
-    let (repo_stats, open_issues, closed_issues, open_prs, closed_prs) = join!(
+    let hacktoberfest = Query::new()
+        .repo(owner, repo)
+        .is("issue")
+        .is("open")
+        .no("assignee")
+        .label("hacktoberfest");
+    let hacktoberfest = Search::issues(&hacktoberfest);
+
+    let (
+        repo_stats,
+        open_issues,
+        closed_issues,
+        open_prs,
+        closed_prs,
+        hacktoberfest,
+    ) = join!(
         repo_stats,
         open_issues.search(user_agent!()),
         closed_issues.search(user_agent!()),
         open_prs.search(user_agent!()),
         closed_prs.search(user_agent!()),
+        hacktoberfest.search(user_agent!()),
     );
     let repo_stats = repo_stats.expect("Could not fetch remote repo data");
 
@@ -136,15 +152,6 @@ async fn main() {
     }, emojis.size);
     println_stat!("original", !repo_stats.fork(), emojis.original);
 
-    let hacktoberfest = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open")
-        .no("assignee")
-        .label("hacktoberfest");
-    let hacktoberfest = Search::issues(&hacktoberfest)
-        .search(user_agent!())
-        .await;
     let hacktoberfest = hacktoberfest.ok().map(|results| results.total_count());
     let hacktoberfest = match hacktoberfest {
         Some(0) => None,
