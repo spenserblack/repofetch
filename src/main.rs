@@ -6,7 +6,6 @@ use futures::join;
 use github_stats::*;
 
 use configuration::RepofetchConfig;
-use configuration::emojis;
 
 macro_rules! println_stat {
     ($name:expr, $stat:expr, $emoji:expr $(,)?) => {
@@ -199,7 +198,7 @@ async fn main() {
         Some(count) => println_stat!(
             "available hacktoberfest issues",
             count,
-            emojis::HACKTOBERFEST,
+            emojis.hacktoberfest,
         ),
         _ => {},
     }
