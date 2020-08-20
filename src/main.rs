@@ -104,6 +104,14 @@ async fn main() {
         .label(r#""help wanted""#);
     let help_wanted = Search::issues(&help_wanted);
 
+    let good_first_issue = Query::new()
+        .repo(owner, repo)
+        .is("issue")
+        .is("open")
+        .no("assignee")
+        .label(r#""good first issue""#);
+    let good_first_issue = Search::issues(&good_first_issue);
+
     let hacktoberfest = Query::new()
         .repo(owner, repo)
         .is("issue")
@@ -120,6 +128,7 @@ async fn main() {
         merged_prs,
         closed_prs,
         help_wanted,
+        good_first_issue,
         hacktoberfest,
     ) = join!(
         repo_stats,
@@ -129,6 +138,7 @@ async fn main() {
         merged_prs.search(user_agent!()),
         closed_prs.search(user_agent!()),
         help_wanted.search(user_agent!()),
+        good_first_issue.search(user_agent!()),
         hacktoberfest.search(user_agent!()),
     );
     let repo_stats = repo_stats.expect("Could not fetch remote repo data");
@@ -184,6 +194,16 @@ async fn main() {
             r#"available "help wanted" issues"#,
             count,
             emojis.help_wanted,
+        ),
+        _ => {},
+    }
+
+    let good_first_issue = good_first_issue.ok().map(|results| results.total_count());
+    match good_first_issue {
+        Some(count) => println_stat!(
+            r#"available "good first issue" issues"#,
+            count,
+            emojis.good_first_issue,
         ),
         _ => {},
     }

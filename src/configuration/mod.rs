@@ -47,6 +47,9 @@ pub(crate) struct Emojis {
     #[serde(default = "default_help_wanted")]
     pub(crate) help_wanted: ConfigEmoji,
 
+    #[serde(default = "default_first_issue")]
+    pub(crate) good_first_issue: ConfigEmoji,
+
     #[serde(default = "default_hacktoberfest")]
     pub(crate) hacktoberfest: ConfigEmoji,
 
@@ -85,6 +88,7 @@ impl Default for Emojis {
             size: default_size(),
             original: default_spoon(),
             help_wanted: default_help_wanted(),
+            good_first_issue: default_first_issue(),
             hacktoberfest: default_hacktoberfest(),
             placeholder: default_empty(),
         }
@@ -133,6 +137,10 @@ fn default_spoon() -> String {
 
 fn default_help_wanted() -> String {
     emojis::HELP_WANTED.into()
+}
+
+fn default_first_issue() -> String {
+    emojis::GOOD_FIRST_ISSUE.into()
 }
 
 fn default_hacktoberfest() -> String {
