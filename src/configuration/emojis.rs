@@ -7,7 +7,11 @@ macro_rules! define_emoji {
         fn $test_name() {
             use unicode_width::UnicodeWidthStr;
 
-            assert_eq!(UnicodeWidthStr::width($name), 2);
+            assert_eq!(
+                UnicodeWidthStr::width($name),
+                2,
+                concat!(stringify!($name), " should have a unicode width of 2"),
+            );
         }
     }
 
