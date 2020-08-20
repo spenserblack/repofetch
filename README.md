@@ -38,4 +38,28 @@ config folder. You can edit this file to change `repofetch`'s output.
 You can find where `repofetch.yml` is saved by default by executing `repofetch --help` and viewing
 the help for the `<config>` option.
 
+### Config File Contents
+
+```yml
+---
+emojis: # Here you can change which emojis are displayed
+  url: 🌐
+  star: ⭐
+  subscriber: 👀
+  fork: 🔱
+  issue: ❗
+  pull request: 🔀
+  created: 🎉 # This tells repofetch you want to use 🎉 for the `created` stat instead of the default (🐣)
+  updated: 📤
+  size: 💽
+  original: 🥄
+  help wanted: 🙇
+  good first issue: 🔰
+  hacktoberfest: 🎃
+  placeholder: "  " # This is currently unused, but exists for potential future usage
+labels: # Here you can provide aliases for labels
+  help wanted: help wanted
+  good first issue: great first issue # This tells repofetch that you want to search `label:"great first issue"` for good first issues
+```
+
 [crates.io]: https://crates.io/crates/repofetch
