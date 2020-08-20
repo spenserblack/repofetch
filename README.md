@@ -26,8 +26,7 @@ cargo install repofetch
 ### Latest Commit from [this repo](https://github.com/spenserblack/repofetch)
 
 ```bash
-git clone https://github.com/spenserblack/repofetch.git
-cargo install --path ./repofetch
+cargo install --git https://github.com/spenserblack/repofetch.git
 ```
 
 ## Configuration
