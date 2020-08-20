@@ -32,6 +32,7 @@ pub(crate) struct Emojis {
     pub(crate) issue: ConfigEmoji,
 
     #[serde(default = "default_pr")]
+    #[serde(rename = "pull request")]
     pub(crate) pull_request: ConfigEmoji,
 
     #[serde(default = "default_created")]
@@ -47,9 +48,11 @@ pub(crate) struct Emojis {
     pub(crate) original: ConfigEmoji,
 
     #[serde(default = "default_help_wanted")]
+    #[serde(rename = "help wanted")]
     pub(crate) help_wanted: ConfigEmoji,
 
     #[serde(default = "default_first_issue")]
+    #[serde(rename = "good first issue")]
     pub(crate) good_first_issue: ConfigEmoji,
 
     #[serde(default = "default_hacktoberfest")]
@@ -62,9 +65,11 @@ pub(crate) struct Emojis {
 #[derive(Debug, Deserialize, Serialize)]
 pub(crate) struct Labels {
     #[serde(default = "help_wanted_label")]
+    #[serde(rename = "help wanted")]
     pub(crate) help_wanted: ConfigLabel,
 
     #[serde(default = "good_first_issue_label")]
+    #[serde(rename = "good first issue")]
     pub(crate) good_first_issue: ConfigLabel,
 }
 
