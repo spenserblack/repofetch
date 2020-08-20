@@ -6,10 +6,12 @@ use std::{
 };
 
 type ConfigEmoji = String;
+type ConfigLabel = String;
 
 #[derive(Debug, Default, Deserialize, Serialize)]
 pub(crate) struct RepofetchConfig {
     pub(crate) emojis: Emojis,
+    pub(crate) labels: Labels,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -57,6 +59,15 @@ pub(crate) struct Emojis {
     pub(crate) placeholder: ConfigEmoji,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub(crate) struct Labels {
+    #[serde(default = "help_wanted_label")]
+    pub(crate) help_wanted: ConfigLabel,
+
+    #[serde(default = "good_first_issue_label")]
+    pub(crate) good_first_issue: ConfigLabel,
+}
+
 impl RepofetchConfig {
     pub fn new<P: AsRef<Path>>(path: P) -> Result<RepofetchConfig> {
         match File::open(&path) {
@@ -91,6 +102,15 @@ impl Default for Emojis {
             good_first_issue: default_first_issue(),
             hacktoberfest: default_hacktoberfest(),
             placeholder: default_empty(),
+        }
+    }
+}
+
+impl Default for Labels {
+    fn default() -> Labels {
+        Labels {
+            help_wanted: help_wanted_label(),
+            good_first_issue: good_first_issue_label(),
         }
     }
 }
@@ -149,6 +169,14 @@ fn default_hacktoberfest() -> String {
 
 fn default_empty() -> String {
     emojis::EMPTY.into()
+}
+
+fn help_wanted_label() -> String {
+    "help wanted".into()
+}
+
+fn good_first_issue_label() -> String {
+    "good first issue".into()
 }
 
 pub(crate) mod emojis;

@@ -56,6 +56,9 @@ async fn main() {
         }
     };
 
+    let help_wanted_label = config.labels.help_wanted;
+    let good_first_issue_label = config.labels.good_first_issue;
+
     let repo = matches.value_of(REPO_OPTION_NAME).unwrap();
     let (owner, repo) = {
         let mut repo = repo.split('/');
@@ -101,7 +104,7 @@ async fn main() {
         .is("issue")
         .is("open")
         .no("assignee")
-        .label(r#""help wanted""#);
+        .label(&format!(r#""{}""#, help_wanted_label));
     let help_wanted = Search::issues(&help_wanted);
 
     let good_first_issue = Query::new()
@@ -109,7 +112,7 @@ async fn main() {
         .is("issue")
         .is("open")
         .no("assignee")
-        .label(r#""good first issue""#);
+        .label(&format!(r#""{}""#, good_first_issue_label));
     let good_first_issue = Search::issues(&good_first_issue);
 
     let hacktoberfest = Query::new()
@@ -191,7 +194,7 @@ async fn main() {
     let help_wanted = help_wanted.ok().map(|results| results.total_count());
     match help_wanted {
         Some(count) => println_stat!(
-            r#"available "help wanted" issues"#,
+            format!(r#"available "{}" issues"#, help_wanted_label),
             count,
             emojis.help_wanted,
         ),
@@ -201,7 +204,7 @@ async fn main() {
     let good_first_issue = good_first_issue.ok().map(|results| results.total_count());
     match good_first_issue {
         Some(count) => println_stat!(
-            r#"available "good first issue" issues"#,
+            format!(r#"available "{}" issues"#, good_first_issue_label),
             count,
             emojis.good_first_issue,
         ),
