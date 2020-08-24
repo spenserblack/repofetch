@@ -1,9 +1,9 @@
-use big_bytes::BigByte;
 use clap::{App, Arg, crate_name, crate_version, crate_description};
 use colored::Colorize;
 use dirs::config_dir;
 use futures::join;
 use github_stats::*;
+use humansize::{FileSize, file_size_opts};
 
 use configuration::RepofetchConfig;
 
@@ -187,7 +187,7 @@ async fn main() {
     println_stat!("size", {
         let size = repo_stats.size();
         let size = size * 1_000; // convert from KB to just B
-        size.big_byte(2)
+        size.file_size(file_size_opts::BINARY).unwrap_or("???".into())
     }, emojis.size);
     println_stat!("original", !repo_stats.fork(), emojis.original);
 

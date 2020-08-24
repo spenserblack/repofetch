@@ -20,7 +20,7 @@ exclude = [
 
 [dependencies]
 anyhow = "1"
-big-bytes = "1"
+humansize = "1"
 clap = "2"
 colored = "2"
 dirs = "3"
