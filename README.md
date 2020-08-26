@@ -9,8 +9,6 @@ Fetch details about your remote repository
 
 ## Screenshot
 
-Made with `repofetch spenserblack/repofetch`.
-
 *__NOTE__ This screenshot will likely be out-of-date while `repofetch`'s version < 1.0.0*
 
 ![screenshot](https://github.com/spenserblack/repofetch/blob/master/images/screenshot.png?raw=true)
