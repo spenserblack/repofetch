@@ -23,7 +23,7 @@ pub(crate) const REPO_OPTION_NAME: &str = "repository";
 pub(crate) const CONFIG_OPTION_NAME: &str = "config";
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
 
     let mut default_config = config_dir().unwrap();
     default_config.push("repofetch.yml");
@@ -225,6 +225,7 @@ async fn main() {
         ),
         _ => {},
     }
+    Ok(())
 }
 
 mod configuration;
