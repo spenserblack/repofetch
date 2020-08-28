@@ -35,6 +35,7 @@ async fn main() -> Result<()> {
         .arg(
             Arg::with_name(REPO_OPTION_NAME)
                 .index(1)
+                .required(true)
                 .help("Your GitHub repository (`username/repo`)")
         )
         .arg(
@@ -65,7 +66,7 @@ async fn main() -> Result<()> {
     let help_wanted_label = config.labels.help_wanted;
     let good_first_issue_label = config.labels.good_first_issue;
 
-    let repo = matches.value_of(REPO_OPTION_NAME).ok_or("repository must be specified")?;
+    let repo = matches.value_of(REPO_OPTION_NAME).unwrap();
     let (owner, repo) = {
         let mut repo = repo.split('/');
         let owner = repo.next().expect("No repo owner");
