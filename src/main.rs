@@ -50,8 +50,14 @@ async fn main() -> Result<()> {
 
     let config = match config {
         Ok(config) => config,
-        Err(e) => {
-            eprintln!("There was an issue with the config file: {}\nUsing default config.", e);
+        Err(error) => {
+            let error = format!(
+                "{}{}\n{}",
+                "There was an issue with the config file: ".yellow().bold(),
+                error,
+                "Using default config.".yellow(),
+            );
+            eprintln!("{}", error);
             RepofetchConfig::default()
         }
     };
