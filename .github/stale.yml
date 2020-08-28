@@ -9,6 +9,9 @@ exemptLabels:
 # Set to true to ignore issues with an assignee (defaults to false)
 exemptAssignees: true
 
+# Set to true to ignore issues in a milestone (defaults to false)
+exemptMilestones: true
+
 # Label to use when marking as stale
 staleLabel: :coffin: stale
 
