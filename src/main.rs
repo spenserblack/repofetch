@@ -52,13 +52,12 @@ async fn main() -> Result<()> {
     let config = match config {
         Ok(config) => config,
         Err(error) => {
-            let error = format!(
+            eprintln!(
                 "{}{}\n{}",
                 "There was an issue with the config file: ".yellow().bold(),
                 error,
                 "Using default config.".yellow(),
             );
-            eprintln!("{}", error);
             RepofetchConfig::default()
         }
     };
