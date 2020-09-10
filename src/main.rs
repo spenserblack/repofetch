@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use clap::{App, Arg, crate_name, crate_version, crate_description};
 use colored::Colorize;
 use dirs::config_dir;
@@ -64,8 +64,8 @@ async fn main() -> Result<()> {
     let repo = matches.value_of(REPO_OPTION_NAME).unwrap();
     let (owner, repo) = {
         let mut repo = repo.split('/');
-        let owner = repo.next().expect("No repo owner");
-        let repo = repo.next().expect("No repo name");
+        let owner = repo.next().context("No repo owner")?;
+        let repo = repo.next().context("No repo name")?;
         (owner, repo)
     };
 
