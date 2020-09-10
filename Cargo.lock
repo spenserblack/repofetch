@@ -349,9 +349,9 @@ dependencies = [
 
 [[package]]
 name = "github-stats"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6342c2fde6c91d6c7b5a722a7f7f17fd5d9615f4798f07503bafdc51aeaa7eb"
+checksum = "64a60b7c932cfa34c974f758bb5173911a939e1c2df76989ab0a1c79b8da21c6"
 dependencies = [
  "chrono",
  "reqwest",

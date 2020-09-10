@@ -74,29 +74,35 @@ async fn main() -> Result<()> {
     };
     let repo_stats = Repo::new(owner, repo, user_agent!());
 
+    let github_token = &config.github_token;
+
     let open_issues = Query::new()
         .repo(owner, repo)
         .is("issue")
         .is("open");
     let open_issues = Search::issues(&open_issues);
+    let open_issues = apply_authorization(open_issues, github_token);
 
     let closed_issues = Query::new()
         .repo(owner, repo)
         .is("issue")
         .is("closed");
     let closed_issues = Search::issues(&closed_issues);
+    let closed_issues = apply_authorization(closed_issues, github_token);
 
     let open_prs = Query::new()
         .repo(owner, repo)
         .is("pr")
         .is("open");
     let open_prs = Search::issues(&open_prs);
+    let open_prs = apply_authorization(open_prs, github_token);
 
     let merged_prs = Query::new()
         .repo(owner, repo)
         .is("pr")
         .is("merged");
     let merged_prs = Search::issues(&merged_prs);
+    let merged_prs = apply_authorization(merged_prs, github_token);
 
     let closed_prs = Query::new()
         .repo(owner, repo)
@@ -104,6 +110,7 @@ async fn main() -> Result<()> {
         .is("closed")
         .is("unmerged");
     let closed_prs = Search::issues(&closed_prs);
+    let closed_prs = apply_authorization(closed_prs, github_token);
 
     let help_wanted = Query::new()
         .repo(owner, repo)
@@ -112,6 +119,7 @@ async fn main() -> Result<()> {
         .no("assignee")
         .label(&format!(r#""{}""#, help_wanted_label));
     let help_wanted = Search::issues(&help_wanted);
+    let help_wanted = apply_authorization(help_wanted, github_token);
 
     let good_first_issue = Query::new()
         .repo(owner, repo)
@@ -120,6 +128,7 @@ async fn main() -> Result<()> {
         .no("assignee")
         .label(&format!(r#""{}""#, good_first_issue_label));
     let good_first_issue = Search::issues(&good_first_issue);
+    let good_first_issue = apply_authorization(good_first_issue, github_token);
 
     let hacktoberfest = Query::new()
         .repo(owner, repo)
@@ -128,6 +137,7 @@ async fn main() -> Result<()> {
         .no("assignee")
         .label("hacktoberfest");
     let hacktoberfest = Search::issues(&hacktoberfest);
+    let hacktoberfest = apply_authorization(hacktoberfest, github_token);
 
     let (
         repo_stats,
@@ -232,6 +242,13 @@ async fn main() -> Result<()> {
         _ => {},
     }
     Ok(())
+}
+
+fn apply_authorization(search: Search, auth: &Option<String>) -> Search {
+    match auth {
+        Some(token) => search.authorization(token),
+        None => search,
+    }
 }
 
 mod configuration;

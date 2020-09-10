@@ -12,6 +12,10 @@ type ConfigLabel = String;
 pub(crate) struct RepofetchConfig {
     pub(crate) emojis: Emojis,
     pub(crate) labels: Labels,
+
+    #[serde(default = "default_token")]
+    #[serde(rename = "GITHUB TOKEN")]
+    pub(crate) github_token: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -182,6 +186,10 @@ fn help_wanted_label() -> String {
 
 fn good_first_issue_label() -> String {
     "good first issue".into()
+}
+
+fn default_token() -> Option<String> {
+    None
 }
 
 pub(crate) mod emojis;
