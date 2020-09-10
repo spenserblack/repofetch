@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- config option for a personal access token
+
 ## [0.2.0]
 
 ### Added
