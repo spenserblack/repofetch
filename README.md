@@ -56,6 +56,15 @@ emojis: # Here you can change which emojis are displayed
 labels: # Here you can provide aliases for labels
   help wanted: help wanted
   good first issue: great first issue # This tells repofetch that you want to search `label:"great first issue"` for good first issues
+GITHUB TOKEN: ~
 ```
 
+#### `GITHUB TOKEN`
+
+If you run `repofetch` multiple times in a short span of time, you may max out the
+amount of queries you can make to GitHub's search API. This will result in some stats
+being `???`. If you set the `GITHUB TOKEN` config option to a [personal access token][PAC],
+`repofetch` can use this value to query GitHub's search API more often.
+
+[PAC]: https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 [crates.io]: https://crates.io/crates/repofetch
