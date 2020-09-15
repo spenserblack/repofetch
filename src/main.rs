@@ -1,14 +1,10 @@
 use big_bytes::BigByte;
-use chrono::Utc;
 use clap::{App, Arg, crate_name, crate_version, crate_description};
+use chrono_humanize::HumanTime;
 use colored::Colorize;
 use dirs::config_dir;
 use futures::join;
 use github_stats::*;
-use std::{
-    convert::TryInto,
-    time::Duration,
-};
 
 use configuration::RepofetchConfig;
 
@@ -175,16 +171,12 @@ async fn main() {
 
 
     let created = repo_stats.created_at();
-    let created = Utc::now() - *created;
-    let created = Duration::from_secs(created.num_seconds().try_into().unwrap());
-    let created = humantime::format_duration(created);
-    println_stat!("created", format!("{} ago", created), emojis.created);
+    let created = HumanTime::from(*created);
+    println_stat!("created", created, emojis.created);
 
     let updated = repo_stats.updated_at();
-    let updated = Utc::now() - *updated;
-    let updated = Duration::from_secs(updated.num_seconds().try_into().unwrap());
-    let updated = humantime::format_duration(updated);
-    println_stat!("updated", format!("{} ago", updated), emojis.updated);
+    let updated = HumanTime::from(*updated);
+    println_stat!("updated", updated, emojis.updated);
 
     println_stat!("size", {
         let size = repo_stats.size();
