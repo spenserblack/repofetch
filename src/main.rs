@@ -1,10 +1,8 @@
-use big_bytes::BigByte;
+use anyhow::{Context, Result};
 use clap::{App, Arg, crate_name, crate_version, crate_description};
-use chrono_humanize::HumanTime;
 use colored::Colorize;
 use dirs::config_dir;
-use futures::join;
-use github_stats::*;
+use github_stats::Search;
 
 use configuration::RepofetchConfig;
 
@@ -24,7 +22,7 @@ pub(crate) const REPO_OPTION_NAME: &str = "repository";
 pub(crate) const CONFIG_OPTION_NAME: &str = "config";
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
 
     let mut default_config = config_dir().unwrap();
     default_config.push("repofetch.yml");
@@ -36,6 +34,7 @@ async fn main() {
         .arg(
             Arg::with_name(REPO_OPTION_NAME)
                 .index(1)
+                .required(true)
                 .help("Your GitHub repository (`username/repo`)")
         )
         .arg(
@@ -51,8 +50,13 @@ async fn main() {
 
     let config = match config {
         Ok(config) => config,
-        Err(e) => {
-            eprintln!("There was an issue with the config file: {}\nUsing default config.", e);
+        Err(error) => {
+            eprintln!(
+                "{}{}\n{}",
+                "There was an issue with the config file: ".yellow().bold(),
+                error,
+                "Using default config.".yellow(),
+            );
             RepofetchConfig::default()
         }
     };
@@ -60,155 +64,22 @@ async fn main() {
     let repo = matches.value_of(REPO_OPTION_NAME).unwrap();
     let (owner, repo) = {
         let mut repo = repo.split('/');
-        let owner = repo.next().expect("No repo owner");
-        let repo = repo.next().expect("No repo name");
+        let owner = repo.next().context("No repo owner")?;
+        let repo = repo.next().context("No repo name")?;
         (owner, repo)
     };
-    let repo_stats = Repo::new(owner, repo, user_agent!());
 
-    let open_issues = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open");
-    let open_issues = Search::issues(&open_issues);
+    github::main(owner, repo, config).await?;
 
-    let closed_issues = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("closed");
-    let closed_issues = Search::issues(&closed_issues);
+    Ok(())
+}
 
-    let open_prs = Query::new()
-        .repo(owner, repo)
-        .is("pr")
-        .is("open");
-    let open_prs = Search::issues(&open_prs);
-
-    let merged_prs = Query::new()
-        .repo(owner, repo)
-        .is("pr")
-        .is("merged");
-    let merged_prs = Search::issues(&merged_prs);
-
-    let closed_prs = Query::new()
-        .repo(owner, repo)
-        .is("pr")
-        .is("closed")
-        .is("unmerged");
-    let closed_prs = Search::issues(&closed_prs);
-
-    let help_wanted = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open")
-        .no("assignee")
-        .label(r#""help wanted""#);
-    let help_wanted = Search::issues(&help_wanted);
-
-    let hacktoberfest = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open")
-        .no("assignee")
-        .label("hacktoberfest");
-    let hacktoberfest = Search::issues(&hacktoberfest);
-
-    let (
-        repo_stats,
-        open_issues,
-        closed_issues,
-        open_prs,
-        merged_prs,
-        closed_prs,
-        help_wanted,
-        hacktoberfest,
-    ) = join!(
-        repo_stats,
-        open_issues.search(user_agent!()),
-        closed_issues.search(user_agent!()),
-        open_prs.search(user_agent!()),
-        merged_prs.search(user_agent!()),
-        closed_prs.search(user_agent!()),
-        help_wanted.search(user_agent!()),
-        hacktoberfest.search(user_agent!()),
-    );
-    let repo_stats = repo_stats.expect("Could not fetch remote repo data");
-
-    let emojis = config.emojis;
-    println!("{}:", format!("{}/{}", owner, repo).bold());
-    println_stat!("URL", repo_stats.clone_url(), emojis.url);
-    println_stat!("stargazers", repo_stats.stargazers_count(), emojis.star);
-    println_stat!("subscribers", repo_stats.subscribers_count(), emojis.subscriber);
-    println_stat!("forks", repo_stats.forks_count(), emojis.fork);
-
-    let open_issues = match open_issues {
-        Ok(open) => open.total_count().to_string(),
-        _ => "???".into(),
-    };
-    let closed_issues = match closed_issues {
-        Ok(closed) => closed.total_count().to_string(),
-        _ => "???".into(),
-    };
-    println_stat!("open/closed issues", format!("{}/{}", open_issues, closed_issues), emojis.issue);
-
-    let open_prs = match open_prs {
-        Ok(open) => open.total_count().to_string(),
-        _ => "???".into(),
-    };
-    let merged_prs = match merged_prs {
-        Ok(merged) => merged.total_count().to_string(),
-        _ => "???".into(),
-    };
-    let closed_prs = match closed_prs {
-        Ok(closed) => closed.total_count().to_string(),
-        _ => "???".into(),
-    };
-    println_stat!(
-        "open/merged/closed PRs",
-        format!("{}/{}/{}", open_prs, merged_prs, closed_prs),
-        emojis.pull_request,
-    );
-
-
-    let created = repo_stats.created_at();
-    let created = HumanTime::from(*created);
-    println_stat!("created", created, emojis.created);
-
-    let updated = repo_stats.updated_at();
-    let updated = HumanTime::from(*updated);
-    println_stat!("updated", updated, emojis.updated);
-
-    println_stat!("size", {
-        let size = repo_stats.size();
-        let size = size * 1_000; // convert from KB to just B
-        size.big_byte(2)
-    }, emojis.size);
-    println_stat!("original", !repo_stats.fork(), emojis.original);
-
-    let help_wanted = help_wanted.ok().map(|results| results.total_count());
-    match help_wanted {
-        Some(count) => println_stat!(
-            r#"available "help wanted" issues"#,
-            count,
-            emojis.help_wanted,
-        ),
-        _ => {},
-    }
-
-    let hacktoberfest = hacktoberfest.ok().map(|results| results.total_count());
-    let hacktoberfest = match hacktoberfest {
-        Some(0) => None,
-        count => count,
-    };
-
-    match hacktoberfest {
-        Some(count) => println_stat!(
-            "available hacktoberfest issues",
-            count,
-            emojis.hacktoberfest,
-        ),
-        _ => {},
+fn apply_authorization(search: Search, auth: &Option<String>) -> Search {
+    match auth {
+        Some(token) => search.authorization(token),
+        None => search,
     }
 }
 
 mod configuration;
+mod github;

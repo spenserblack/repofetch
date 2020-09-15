@@ -1,6 +1,6 @@
 [package]
 name = "repofetch"
-version = "0.1.0"
+version = "0.2.1"
 authors = ["Spenser Black <spenserblack01@gmail.com>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
@@ -20,15 +20,15 @@ exclude = [
 
 [dependencies]
 anyhow = "1"
-big-bytes = "1"
-chrono = "0.4"
+humansize = "1"
+clap = { version = "2", features = ["wrap_help"] }
 chrono-humanize = "0.1.0"
-clap = "2"
 colored = "2"
 dirs = "3"
 futures = "0.3"
-github-stats = "0.3"
+github-stats = "0.4"
 lazy_static = "1"
+paste = "1"
 serde = { version = "1", features = ["derive"] }
 serde_yaml = "0.8"
 tokio = { version = "0.2", features = ["macros"] }

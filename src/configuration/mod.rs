@@ -6,10 +6,16 @@ use std::{
 };
 
 type ConfigEmoji = String;
+type ConfigLabel = String;
 
 #[derive(Debug, Default, Deserialize, Serialize)]
 pub(crate) struct RepofetchConfig {
     pub(crate) emojis: Emojis,
+    pub(crate) labels: Labels,
+
+    #[serde(default = "default_token")]
+    #[serde(rename = "GITHUB TOKEN")]
+    pub(crate) github_token: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -30,6 +36,7 @@ pub(crate) struct Emojis {
     pub(crate) issue: ConfigEmoji,
 
     #[serde(default = "default_pr")]
+    #[serde(rename = "pull request")]
     pub(crate) pull_request: ConfigEmoji,
 
     #[serde(default = "default_created")]
@@ -45,13 +52,29 @@ pub(crate) struct Emojis {
     pub(crate) original: ConfigEmoji,
 
     #[serde(default = "default_help_wanted")]
+    #[serde(rename = "help wanted")]
     pub(crate) help_wanted: ConfigEmoji,
+
+    #[serde(default = "default_first_issue")]
+    #[serde(rename = "good first issue")]
+    pub(crate) good_first_issue: ConfigEmoji,
 
     #[serde(default = "default_hacktoberfest")]
     pub(crate) hacktoberfest: ConfigEmoji,
 
     #[serde(default = "default_empty")]
     pub(crate) placeholder: ConfigEmoji,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub(crate) struct Labels {
+    #[serde(default = "help_wanted_label")]
+    #[serde(rename = "help wanted")]
+    pub(crate) help_wanted: ConfigLabel,
+
+    #[serde(default = "good_first_issue_label")]
+    #[serde(rename = "good first issue")]
+    pub(crate) good_first_issue: ConfigLabel,
 }
 
 impl RepofetchConfig {
@@ -85,8 +108,18 @@ impl Default for Emojis {
             size: default_size(),
             original: default_spoon(),
             help_wanted: default_help_wanted(),
+            good_first_issue: default_first_issue(),
             hacktoberfest: default_hacktoberfest(),
             placeholder: default_empty(),
+        }
+    }
+}
+
+impl Default for Labels {
+    fn default() -> Labels {
+        Labels {
+            help_wanted: help_wanted_label(),
+            good_first_issue: good_first_issue_label(),
         }
     }
 }
@@ -135,12 +168,28 @@ fn default_help_wanted() -> String {
     emojis::HELP_WANTED.into()
 }
 
+fn default_first_issue() -> String {
+    emojis::GOOD_FIRST_ISSUE.into()
+}
+
 fn default_hacktoberfest() -> String {
     emojis::HACKTOBERFEST.into()
 }
 
 fn default_empty() -> String {
     emojis::EMPTY.into()
+}
+
+fn help_wanted_label() -> String {
+    "help wanted".into()
+}
+
+fn good_first_issue_label() -> String {
+    "good first issue".into()
+}
+
+fn default_token() -> Option<String> {
+    None
 }
 
 pub(crate) mod emojis;
