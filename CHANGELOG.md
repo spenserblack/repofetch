@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Date created and updated to be human-readable durations
+
 ## [0.2.1]
 
 ### Added
