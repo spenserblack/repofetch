@@ -1,5 +1,6 @@
 use anyhow::Result;
 use colored::Colorize;
+use chrono_humanize::HumanTime;
 use github_stats::*;
 use humansize::{FileSize, file_size_opts};
 use futures::join;
@@ -136,8 +137,13 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     );
 
 
-    println_stat!("created", repo_stats.created_at(), emojis.created);
-    println_stat!("updated", repo_stats.updated_at(), emojis.updated);
+    let created = repo_stats.created_at();
+    let created = HumanTime::from(*created);
+    println_stat!("created", created, emojis.created);
+
+    let updated = repo_stats.updated_at();
+    let updated = HumanTime::from(*updated);
+    println_stat!("updated", updated, emojis.updated);
     println_stat!("size", {
         let size = repo_stats.size();
         let size = size * 1_000; // convert from KB to just B
