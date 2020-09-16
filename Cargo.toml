@@ -22,7 +22,7 @@ exclude = [
 anyhow = "1"
 humansize = "1"
 clap = { version = "2", features = ["wrap_help"] }
-chrono-humanize = "0.1.0"
+chrono-humanize = "0.1.1"
 colored = "2"
 dirs = "3"
 futures = "0.3"
