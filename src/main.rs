@@ -3,7 +3,9 @@ use clap::{App, Arg, crate_name, crate_version, crate_description};
 use colored::Colorize;
 use dirs::config_dir;
 use github_stats::Search;
+use git2::Repository;
 use itertools::Itertools;
+use regex::Regex;
 use std::fmt::Display;
 
 use configuration::RepofetchConfig;
@@ -27,8 +29,26 @@ enum RemoteHost {
 }
 
 impl RemoteHost {
-    fn new(_path: &str) -> Option<RemoteHost> {
-        None
+    fn new(path: &str) -> Result<RemoteHost> {
+        use RemoteHost::*;
+
+        let repository = Repository::discover(path)
+            .context("Couldn't discover repository")?;
+        let origin = repository.find_remote("origin")
+            .context("Couldn't get remote origin")?;
+        let origin_url = origin.url()
+            .context("Couldn't decode remote origin to UTF-8")?;
+
+        let github_re = Regex::new(r"(?:(?:git@github\.com:)|(?:https?://github\.com/))(?P<owner>\w+)/(?P<repository>\w+)\.git").unwrap();
+        let captures = github_re.captures(origin_url)
+            .context("Non-GitHub remotes not yet supported")?;
+
+        let remote_host = Github {
+            owner: captures.name("owner").context("no owner")?.as_str().into(),
+            repository: captures.name("repository").context("no repository")?.as_str().into(),
+        };
+
+        Ok(remote_host)
     }
 }
 
