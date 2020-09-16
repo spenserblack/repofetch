@@ -6,6 +6,8 @@ use humansize::{FileSize, file_size_opts};
 use futures::join;
 use super::apply_authorization;
 use super::configuration::RepofetchConfig;
+use super::configuration::ascii;
+use super::{stat_string, write_output};
 
 pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Result<()> {
     let help_wanted_label = config.labels.help_wanted;
@@ -102,11 +104,14 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     let repo_stats = repo_stats.expect("Could not fetch remote repo data");
 
     let emojis = config.emojis;
-    println!("{}:", format!("{}/{}", owner, repo).bold());
-    println_stat!("URL", repo_stats.clone_url(), emojis.url);
-    println_stat!("stargazers", repo_stats.stargazers_count(), emojis.star);
-    println_stat!("subscribers", repo_stats.subscribers_count(), emojis.subscriber);
-    println_stat!("forks", repo_stats.forks_count(), emojis.fork);
+
+    let mut stats = vec![
+        format!("{}:", format!("{}/{}", owner, repo).bold()),
+        stat_string("URL", emojis.url, repo_stats.clone_url()),
+        stat_string("stargazers", emojis.star, repo_stats.stargazers_count()),
+        stat_string("subscribers", emojis.subscriber, repo_stats.subscribers_count()),
+        stat_string("forks", emojis.fork, repo_stats.forks_count()),
+    ];
 
     let open_issues = match open_issues {
         Ok(open) => open.total_count().to_string(),
@@ -116,7 +121,11 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         Ok(closed) => closed.total_count().to_string(),
         _ => "???".into(),
     };
-    println_stat!("open/closed issues", format!("{}/{}", open_issues, closed_issues), emojis.issue);
+    stats.push(stat_string(
+        "open/closed issues",
+        emojis.issue,
+        format!("{}/{}", open_issues, closed_issues)
+    ));
 
     let open_prs = match open_prs {
         Ok(open) => open.total_count().to_string(),
@@ -130,39 +139,43 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         Ok(closed) => closed.total_count().to_string(),
         _ => "???".into(),
     };
-    println_stat!(
+    stats.push(stat_string(
         "open/merged/closed PRs",
-        format!("{}/{}/{}", open_prs, merged_prs, closed_prs),
         emojis.pull_request,
-    );
+        format!("{}/{}/{}", open_prs, merged_prs, closed_prs),
+    ));
 
-    println_stat!("created", repo_stats.created_at().humanize(), emojis.created);
-    println_stat!("updated", repo_stats.updated_at().humanize(), emojis.updated);
+    stats.push(stat_string("created", emojis.created, repo_stats.created_at().humanize()));
+    stats.push(stat_string("updated", emojis.updated, repo_stats.updated_at().humanize()));
 
-    println_stat!("size", {
-        let size = repo_stats.size();
-        let size = size * 1_000; // convert from KB to just B
-        size.file_size(file_size_opts::BINARY).unwrap_or("???".into())
-    }, emojis.size);
-    println_stat!("original", !repo_stats.fork(), emojis.original);
+    stats.push(stat_string(
+        "size",
+        emojis.size,
+        {
+            let size = repo_stats.size();
+            let size = size * 1_000; // convert from KB to just B
+            size.file_size(file_size_opts::BINARY).unwrap_or("???".into())
+        },
+    ));
+    stats.push(stat_string("original", emojis.original, !repo_stats.fork()));
 
     let help_wanted = help_wanted.ok().map(|results| results.total_count());
     match help_wanted {
-        Some(count) => println_stat!(
-            format!(r#"available "{}" issues"#, help_wanted_label),
-            count,
+        Some(count) => stats.push(stat_string(
+            &format!(r#"available "{}" issues"#, help_wanted_label),
             emojis.help_wanted,
-        ),
+            count,
+        )),
         _ => {},
     }
 
     let good_first_issue = good_first_issue.ok().map(|results| results.total_count());
     match good_first_issue {
-        Some(count) => println_stat!(
-            format!(r#"available "{}" issues"#, good_first_issue_label),
-            count,
+        Some(count) => stats.push(stat_string(
+            &format!(r#"available "{}" issues"#, good_first_issue_label),
             emojis.good_first_issue,
-        ),
+            count,
+        )),
         _ => {},
     }
 
@@ -173,12 +186,15 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     };
 
     match hacktoberfest {
-        Some(count) => println_stat!(
+        Some(count) => stats.push(stat_string(
             "available hacktoberfest issues",
-            count,
             emojis.hacktoberfest,
-        ),
+            count,
+        )),
         _ => {},
     }
+
+    write_output(ascii::GITHUB, stats);
+
     Ok(())
 }

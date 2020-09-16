@@ -27,6 +27,7 @@ colored = "2"
 dirs = "3"
 futures = "0.3"
 github-stats = "0.4"
+itertools = "0.9"
 lazy_static = "1"
 serde = { version = "1", features = ["derive"] }
 serde_yaml = "0.8"
