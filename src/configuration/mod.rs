@@ -192,4 +192,5 @@ fn default_token() -> Option<String> {
     None
 }
 
+pub(crate) mod ascii;
 pub(crate) mod emojis;

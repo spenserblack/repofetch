@@ -605,6 +605,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "more-asserts"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0debeb9fcf88823ea64d64e4a815ab1643f33127d995978e099942ce38f25238"
+
+[[package]]
 name = "native-tls"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -856,6 +862,7 @@ dependencies = [
  "github-stats",
  "humansize",
  "lazy_static",
+ "more-asserts",
  "paste",
  "serde",
  "serde_yaml",
