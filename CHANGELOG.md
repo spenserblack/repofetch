@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- GitHub ASCII art
+
 ### Changed
 
 - Date created and updated to be human-readable durations
