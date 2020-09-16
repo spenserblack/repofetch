@@ -3,14 +3,11 @@ use clap::{App, Arg, crate_name, crate_version, crate_description};
 use colored::Colorize;
 use dirs::config_dir;
 use github_stats::Search;
+use itertools::Itertools;
+use std::fmt::Display;
 
 use configuration::RepofetchConfig;
-
-macro_rules! println_stat {
-    ($name:expr, $stat:expr, $emoji:expr $(,)?) => {
-        println!("{emoji}{name}: {stat}", name=$name.bold(), stat=$stat, emoji=$emoji)
-    }
-}
+use configuration::ascii::MAX_WIDTH;
 
 macro_rules! user_agent {
     () => {
@@ -78,6 +75,29 @@ fn apply_authorization(search: Search, auth: &Option<String>) -> Search {
     match auth {
         Some(token) => search.authorization(token),
         None => search,
+    }
+}
+
+fn stat_string<T>(title: &str, emoji: String, data: T)  -> String
+    where T: Display
+{
+    format!("{emoji}{title}: {data}", emoji=emoji, title=title.bold(), data=data)
+}
+
+fn write_output(ascii: &str, stats: Vec<String>) {
+    use itertools::EitherOrBoth::{Both, Left, Right};
+
+    for line in ascii.lines().zip_longest(stats.iter()) {
+        match line {
+            Both(ascii_line, stat) => println!(
+                "{:<ascii_padding$}{}",
+                ascii_line,
+                stat,
+                ascii_padding = MAX_WIDTH + 5,
+            ),
+            Left(ascii_line) => println!("{}", ascii_line),
+            Right(_stats) => unimplemented!("more stats than lines of ASCII"),
+        }
     }
 }
 

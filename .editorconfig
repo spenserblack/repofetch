@@ -8,6 +8,10 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+[*.ascii]
+charset = latin1
+trim_trailing_whitespace = false
+
 [*.md]
 indent_size = 2
 
