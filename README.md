@@ -9,7 +9,7 @@ Fetch details about your remote repository
 ## Screenshot
 
 *__NOTE__ This screenshot is only an example, and does not accurately represent output. This 
-screenshot lacks ASCII art, some new stats, and how some stats are formatted.*
+screenshot lacks ASCII art, some new stats, and some changes to how some stats are formatted.*
 
 ![screenshot](https://github.com/spenserblack/repofetch/blob/master/images/screenshot.png?raw=true)
 
