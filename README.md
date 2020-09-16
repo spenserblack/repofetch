@@ -8,7 +8,8 @@ Fetch details about your remote repository
 
 ## Screenshot
 
-*__NOTE__ This screenshot will likely be out-of-date while `repofetch`'s version < 1.0.0*
+*__NOTE__ This screenshot is only an example, and does not accurately represent output. This 
+screenshot lacks ASCII art, some new stats, and how some stats are formatted.*
 
 ![screenshot](https://github.com/spenserblack/repofetch/blob/master/images/screenshot.png?raw=true)
 
