@@ -20,13 +20,13 @@ exclude = [
 
 [dependencies]
 anyhow = "1"
-humansize = "1"
-clap = { version = "2", features = ["wrap_help"] }
 chrono-humanize = "0.1.1"
+clap = { version = "2", features = ["wrap_help"] }
 colored = "2"
 dirs = "3"
 futures = "0.3"
 github-stats = "0.4"
+humansize = "1"
 itertools = "0.9"
 lazy_static = "1"
 serde = { version = "1", features = ["derive"] }
