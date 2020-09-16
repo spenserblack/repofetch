@@ -1,3 +1,6 @@
+pub(crate) const MAX_WIDTH: usize = 40;
+pub(crate) const MAX_HEIGHT: usize = 20;
+
 macro_rules! define_ascii {
     ($( { $name:ident, $file:literal } )* ,) => {
         $(
@@ -10,15 +13,13 @@ macro_rules! define_ascii {
         mod sizes {
             use paste::paste;
             use more_asserts::*;
-
-            const MAX_WIDTH: usize = 40;
-            const MAX_HEIGHT: usize = 20;
+            use super::*;
 
             $(
                 paste! {
                     #[test]
                     fn [<$name:lower _width>] () {
-                        for (index, line) in super::$name.lines().enumerate() {
+                        for (index, line) in $name.lines().enumerate() {
                             let width = line.len();
                             assert_le!(
                                 width,
@@ -34,7 +35,7 @@ macro_rules! define_ascii {
 
                     #[test]
                     fn [<$name:lower _height>] () {
-                        let height = super::$name.lines().count();
+                        let height = $name.lines().count();
                         assert_le!(
                             height,
                             MAX_HEIGHT,

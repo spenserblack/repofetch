@@ -7,6 +7,7 @@ use itertools::Itertools;
 use std::fmt::Display;
 
 use configuration::RepofetchConfig;
+use configuration::ascii::MAX_WIDTH;
 
 macro_rules! user_agent {
     () => {
@@ -88,7 +89,12 @@ fn write_output(ascii: &str, stats: Vec<String>) {
 
     for line in ascii.lines().zip_longest(stats.iter()) {
         match line {
-            Both(ascii_line, stat) => println!("{:<45}{}", ascii_line, stat),
+            Both(ascii_line, stat) => println!(
+                "{:<ascii_padding$}{}",
+                ascii_line,
+                stat,
+                ascii_padding = MAX_WIDTH + 5,
+            ),
             Left(ascii_line) => println!("{}", ascii_line),
             Right(_stats) => unimplemented!("more stats than lines of ASCII"),
         }
