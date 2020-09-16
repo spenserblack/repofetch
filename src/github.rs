@@ -6,7 +6,6 @@ use humansize::{FileSize, file_size_opts};
 use futures::join;
 use super::apply_authorization;
 use super::configuration::RepofetchConfig;
-use super::configuration::ascii;
 use super::{stat_string, write_output};
 
 pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Result<()> {
@@ -194,7 +193,7 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         _ => {},
     }
 
-    write_output(ascii::GITHUB, stats);
+    write_output(&config.ascii.github, stats);
 
     Ok(())
 }

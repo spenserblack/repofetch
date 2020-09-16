@@ -11,6 +11,7 @@ type ConfigLabel = String;
 #[derive(Debug, Default, Deserialize, Serialize)]
 pub(crate) struct RepofetchConfig {
     pub(crate) emojis: Emojis,
+    pub(crate) ascii: Ascii,
     pub(crate) labels: Labels,
 
     #[serde(default = "default_token")]
@@ -67,6 +68,13 @@ pub(crate) struct Emojis {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub(crate) struct Ascii {
+    #[serde(default = "default_github_ascii")]
+    #[serde(rename = "GitHub")]
+    pub(crate) github: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub(crate) struct Labels {
     #[serde(default = "help_wanted_label")]
     #[serde(rename = "help wanted")]
@@ -111,6 +119,14 @@ impl Default for Emojis {
             good_first_issue: default_first_issue(),
             hacktoberfest: default_hacktoberfest(),
             placeholder: default_empty(),
+        }
+    }
+}
+
+impl Default for Ascii {
+    fn default() -> Ascii {
+        Ascii {
+            github: default_github_ascii(),
         }
     }
 }
@@ -178,6 +194,10 @@ fn default_hacktoberfest() -> String {
 
 fn default_empty() -> String {
     emojis::EMPTY.into()
+}
+
+fn default_github_ascii() -> String {
+    ascii::GITHUB.into()
 }
 
 fn help_wanted_label() -> String {
