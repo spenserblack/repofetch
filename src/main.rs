@@ -15,6 +15,7 @@ macro_rules! user_agent {
     }
 }
 
+pub(crate) const LOCAL_REPO_NAME: &str = "local repository";
 pub(crate) const GITHUB_OPTION_NAME: &str = "github repository";
 pub(crate) const CONFIG_OPTION_NAME: &str = "config";
 
@@ -26,7 +27,7 @@ enum RemoteHost {
 }
 
 impl RemoteHost {
-    fn new() -> Option<RemoteHost> {
+    fn new(_path: &str) -> Option<RemoteHost> {
         None
     }
 }
@@ -41,6 +42,13 @@ async fn main() -> Result<()> {
     let app = App::new(crate_name!())
         .version(crate_version!())
         .about(crate_description!())
+        .arg(
+            Arg::with_name(LOCAL_REPO_NAME)
+                .short("r")
+                .long("repository")
+                .help("Path to a local repository to detect the appropriate remote host")
+                .default_value(".")
+        )
         .arg(
             Arg::with_name(GITHUB_OPTION_NAME)
                 .short("g")
@@ -81,7 +89,7 @@ async fn main() -> Result<()> {
         }
         None => {
             use RemoteHost::*;
-            let remote_host = RemoteHost::new()
+            let remote_host = RemoteHost::new(matches.value_of(LOCAL_REPO_NAME).unwrap())
                 .context("Repository not found")?;
             match remote_host {
                 Github{owner: o, repository: r} => {
