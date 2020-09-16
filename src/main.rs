@@ -15,8 +15,21 @@ macro_rules! user_agent {
     }
 }
 
-pub(crate) const REPO_OPTION_NAME: &str = "repository";
+pub(crate) const GITHUB_OPTION_NAME: &str = "github repository";
 pub(crate) const CONFIG_OPTION_NAME: &str = "config";
+
+enum RemoteHost {
+    Github {
+        owner: String,
+        repository: String,
+    },
+}
+
+impl RemoteHost {
+    fn new() -> Option<RemoteHost> {
+        None
+    }
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -29,9 +42,10 @@ async fn main() -> Result<()> {
         .version(crate_version!())
         .about(crate_description!())
         .arg(
-            Arg::with_name(REPO_OPTION_NAME)
-                .index(1)
-                .required(true)
+            Arg::with_name(GITHUB_OPTION_NAME)
+                .short("g")
+                .long("github")
+                .takes_value(true)
                 .help("Your GitHub repository (`username/repo`)")
         )
         .arg(
@@ -58,15 +72,25 @@ async fn main() -> Result<()> {
         }
     };
 
-    let repo = matches.value_of(REPO_OPTION_NAME).unwrap();
-    let (owner, repo) = {
-        let mut repo = repo.split('/');
-        let owner = repo.next().context("No repo owner")?;
-        let repo = repo.next().context("No repo name")?;
-        (owner, repo)
-    };
+    match matches.value_of(GITHUB_OPTION_NAME) {
+        Some(repo) => {
+            let mut repo = repo.split('/');
+            let owner = repo.next().context("No repo owner")?;
+            let repo = repo.next().context("No repo name")?;
+            github::main(owner, repo, config).await?;
+        }
+        None => {
+            use RemoteHost::*;
+            let remote_host = RemoteHost::new()
+                .context("Repository not found")?;
+            match remote_host {
+                Github{owner: o, repository: r} => {
+                    github::main(&o, &r, config).await?;
+                }
+            }
+        }
+    }
 
-    github::main(owner, repo, config).await?;
 
     Ok(())
 }
