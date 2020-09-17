@@ -3,7 +3,10 @@ use clap::{App, Arg, crate_name, crate_version, crate_description};
 use colored::Colorize;
 use dirs::config_dir;
 use github_stats::Search;
+use git2::Repository;
 use itertools::Itertools;
+use lazy_static::lazy_static;
+use regex::Regex;
 use std::fmt::Display;
 
 use configuration::RepofetchConfig;
@@ -15,8 +18,43 @@ macro_rules! user_agent {
     }
 }
 
-pub(crate) const REPO_OPTION_NAME: &str = "repository";
+lazy_static! {
+    static ref GITHUB_RE: Regex = Regex::new(r"(?:(?:git@github\.com:)|(?:https?://github\.com/))(?P<owner>[\w\.\-]+)/(?P<repository>[\w\.\-]+)\.git").unwrap();
+}
+
+pub(crate) const LOCAL_REPO_NAME: &str = "local repository";
+pub(crate) const GITHUB_OPTION_NAME: &str = "github repository";
 pub(crate) const CONFIG_OPTION_NAME: &str = "config";
+
+enum RemoteHost {
+    Github {
+        owner: String,
+        repository: String,
+    },
+}
+
+impl RemoteHost {
+    fn new(path: &str) -> Result<RemoteHost> {
+        use RemoteHost::*;
+
+        let repository = Repository::discover(path)
+            .context("Couldn't discover repository")?;
+        let origin = repository.find_remote("origin")
+            .context("Couldn't get remote origin")?;
+        let origin_url = origin.url()
+            .context("Couldn't decode remote origin to UTF-8")?;
+
+        let captures = GITHUB_RE.captures(origin_url)
+            .context("Non-GitHub remotes not yet supported")?;
+
+        let remote_host = Github {
+            owner: captures.name("owner").context("no owner")?.as_str().into(),
+            repository: captures.name("repository").context("no repository")?.as_str().into(),
+        };
+
+        Ok(remote_host)
+    }
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -29,9 +67,17 @@ async fn main() -> Result<()> {
         .version(crate_version!())
         .about(crate_description!())
         .arg(
-            Arg::with_name(REPO_OPTION_NAME)
-                .index(1)
-                .required(true)
+            Arg::with_name(LOCAL_REPO_NAME)
+                .short("r")
+                .long("repository")
+                .help("Path to a local repository to detect the appropriate remote host")
+                .default_value(".")
+        )
+        .arg(
+            Arg::with_name(GITHUB_OPTION_NAME)
+                .short("g")
+                .long("github")
+                .takes_value(true)
                 .help("Your GitHub repository (`username/repo`)")
         )
         .arg(
@@ -58,15 +104,25 @@ async fn main() -> Result<()> {
         }
     };
 
-    let repo = matches.value_of(REPO_OPTION_NAME).unwrap();
-    let (owner, repo) = {
-        let mut repo = repo.split('/');
-        let owner = repo.next().context("No repo owner")?;
-        let repo = repo.next().context("No repo name")?;
-        (owner, repo)
-    };
+    match matches.value_of(GITHUB_OPTION_NAME) {
+        Some(repo) => {
+            let mut repo = repo.split('/');
+            let owner = repo.next().context("No repo owner")?;
+            let repo = repo.next().context("No repo name")?;
+            github::main(owner, repo, config).await?;
+        }
+        None => {
+            use RemoteHost::*;
+            let remote_host = RemoteHost::new(matches.value_of(LOCAL_REPO_NAME).unwrap())
+                .context("Repository not found")?;
+            match remote_host {
+                Github{owner: o, repository: r} => {
+                    github::main(&o, &r, config).await?;
+                }
+            }
+        }
+    }
 
-    github::main(owner, repo, config).await?;
 
     Ok(())
 }
@@ -103,3 +159,56 @@ fn write_output(ascii: &str, stats: Vec<String>) {
 
 mod configuration;
 mod github;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    mod regex {
+        use super::GITHUB_RE;
+
+        mod github {
+            use super::GITHUB_RE;
+
+            #[test]
+            fn http() {
+                const URL: &str = "http://github.com/o/r.git";
+
+                let captures = GITHUB_RE.captures(URL).expect("no captures");
+
+                assert_eq!(Some("o"), captures.name("owner").map(|c| c.as_str()));
+                assert_eq!(Some("r"), captures.name("repository").map(|c| c.as_str()));
+            }
+
+            #[test]
+            fn https() {
+                const URL: &str = "https://github.com/o/r.git";
+
+                let captures = GITHUB_RE.captures(URL).expect("no captures");
+
+                assert_eq!(Some("o"), captures.name("owner").map(|c| c.as_str()));
+                assert_eq!(Some("r"), captures.name("repository").map(|c| c.as_str()));
+            }
+
+            #[test]
+            fn ssh() {
+                const URL: &str = "git@github.com:o/r.git";
+
+                let captures = GITHUB_RE.captures(URL).expect("no captures");
+
+                assert_eq!(Some("o"), captures.name("owner").map(|c| c.as_str()));
+                assert_eq!(Some("r"), captures.name("repository").map(|c| c.as_str()));
+            }
+
+            #[test]
+            fn weird_url() {
+                const URL: &str = "https://github.com/us3r-nam3/r3p0-with.special.git";
+
+                let captures = GITHUB_RE.captures(URL).expect("no captures");
+
+                assert_eq!(Some("us3r-nam3"), captures.name("owner").map(|c| c.as_str()));
+                assert_eq!(Some("r3p0-with.special"), captures.name("repository").map(|c| c.as_str()));
+            }
+        }
+    }
+}

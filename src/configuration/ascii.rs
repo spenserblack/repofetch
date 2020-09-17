@@ -1,4 +1,6 @@
 pub(crate) const MAX_WIDTH: usize = 40;
+
+#[cfg(test)]
 pub(crate) const MAX_HEIGHT: usize = 20;
 
 macro_rules! define_ascii {
