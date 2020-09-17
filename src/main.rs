@@ -39,7 +39,7 @@ impl RemoteHost {
         let origin_url = origin.url()
             .context("Couldn't decode remote origin to UTF-8")?;
 
-        let github_re = Regex::new(r"(?:(?:git@github\.com:)|(?:https?://github\.com/))(?P<owner>\w+)/(?P<repository>\w+)\.git").unwrap();
+        let github_re = Regex::new(r"(?:(?:git@github\.com:)|(?:https?://github\.com/))(?P<owner>[\w\.\-]+)/(?P<repository>[\w\.\-]+)\.git").unwrap();
         let captures = github_re.captures(origin_url)
             .context("Non-GitHub remotes not yet supported")?;
 
