@@ -5,6 +5,7 @@
 ### Added
 
 - GitHub ASCII art
+- Option to select local repository to detect remote owner and repository
 
 ### Changed
 
