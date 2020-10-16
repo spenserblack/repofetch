@@ -33,7 +33,7 @@ lazy_static = "1"
 regex = "1"
 serde = { version = "1", features = ["derive"] }
 serde_yaml = "0.8"
-tokio = { version = "0.3", features = ["macros"] }
+tokio = { version = "0.3", features = ["macros", "rt-multi-thread"] }
 
 [dev-dependencies]
 more-asserts = "0.2"
