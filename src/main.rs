@@ -67,6 +67,7 @@ async fn main() -> Result<()> {
         .version(crate_version!())
         .about(crate_description!())
         .global_setting(AppSettings::ColoredHelp)
+        .global_setting(AppSettings::DeriveDisplayOrder)
         .arg(
             Arg::with_name(LOCAL_REPO_NAME)
                 .short("r")
