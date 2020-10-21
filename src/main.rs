@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use clap::{App, Arg, crate_name, crate_version, crate_description};
+use clap::{App, AppSettings, Arg, crate_name, crate_version, crate_description};
 use colored::Colorize;
 use dirs::config_dir;
 use github_stats::Search;
@@ -66,6 +66,7 @@ async fn main() -> Result<()> {
     let app = App::new(crate_name!())
         .version(crate_version!())
         .about(crate_description!())
+        .global_setting(AppSettings::ColoredHelp)
         .arg(
             Arg::with_name(LOCAL_REPO_NAME)
                 .short("r")
