@@ -2,6 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/repofetch?logo=rust)](https://crates.io/crates/repofetch)
 ![Crates.io](https://img.shields.io/crates/d/repofetch?logo=rust)
+![CI](https://github.com/spenserblack/repofetch/workflows/CI/badge.svg)
 [![Build Status](https://travis-ci.com/spenserblack/repofetch.svg?branch=master)](https://travis-ci.com/spenserblack/repofetch)
 
 Fetch details about your remote repository
