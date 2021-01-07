@@ -53,6 +53,6 @@ macro_rules! define_ascii {
     }
 }
 
-define_ascii!{
+define_ascii! {
     {GITHUB, "ascii/github.ascii"},
 }

@@ -1,9 +1,6 @@
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
-use std::{
-    fs::File,
-    path::Path,
-};
+use std::{fs::File, path::Path};
 
 type ConfigEmoji = String;
 type ConfigLabel = String;
@@ -88,11 +85,9 @@ pub(crate) struct Labels {
 impl RepofetchConfig {
     pub fn new<P: AsRef<Path>>(path: P) -> Result<RepofetchConfig> {
         match File::open(&path) {
-            Ok(f) => serde_yaml::from_reader(f)
-                .context("Couldn't deserialize config file"),
+            Ok(f) => serde_yaml::from_reader(f).context("Couldn't deserialize config file"),
             Err(_) => {
-                let f = File::create(&path)
-                    .context("Couldn't open config file to write")?;
+                let f = File::create(&path).context("Couldn't open config file to write")?;
                 let default_config = RepofetchConfig::default();
                 serde_yaml::to_writer(f, &default_config)
                     .context("Couldn't serialize initial config file")?;

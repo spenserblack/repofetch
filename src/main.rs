@@ -1,21 +1,21 @@
 use anyhow::{Context, Result};
-use clap::{App, AppSettings, Arg, crate_name, crate_version, crate_description};
+use clap::{crate_description, crate_name, crate_version, App, AppSettings, Arg};
 use colored::Colorize;
 use dirs::config_dir;
-use github_stats::Search;
 use git2::Repository;
+use github_stats::Search;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::fmt::Display;
 
-use configuration::RepofetchConfig;
 use configuration::ascii::MAX_WIDTH;
+use configuration::RepofetchConfig;
 
 macro_rules! user_agent {
     () => {
         concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"))
-    }
+    };
 }
 
 lazy_static! {
@@ -27,29 +27,32 @@ pub(crate) const GITHUB_OPTION_NAME: &str = "github repository";
 pub(crate) const CONFIG_OPTION_NAME: &str = "config";
 
 enum RemoteHost {
-    Github {
-        owner: String,
-        repository: String,
-    },
+    Github { owner: String, repository: String },
 }
 
 impl RemoteHost {
     fn new(path: &str) -> Result<RemoteHost> {
         use RemoteHost::*;
 
-        let repository = Repository::discover(path)
-            .context("Couldn't discover repository")?;
-        let origin = repository.find_remote("origin")
+        let repository = Repository::discover(path).context("Couldn't discover repository")?;
+        let origin = repository
+            .find_remote("origin")
             .context("Couldn't get remote origin")?;
-        let origin_url = origin.url()
+        let origin_url = origin
+            .url()
             .context("Couldn't decode remote origin to UTF-8")?;
 
-        let captures = GITHUB_RE.captures(origin_url)
+        let captures = GITHUB_RE
+            .captures(origin_url)
             .context("Non-GitHub remotes not yet supported")?;
 
         let remote_host = Github {
             owner: captures.name("owner").context("no owner")?.as_str().into(),
-            repository: captures.name("repository").context("no repository")?.as_str().into(),
+            repository: captures
+                .name("repository")
+                .context("no repository")?
+                .as_str()
+                .into(),
         };
 
         Ok(remote_host)
@@ -58,7 +61,6 @@ impl RemoteHost {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-
     let mut default_config = config_dir().unwrap();
     default_config.push("repofetch.yml");
     let default_config = default_config.as_os_str();
@@ -73,21 +75,21 @@ async fn main() -> Result<()> {
                 .short("r")
                 .long("repository")
                 .help("Path to a local repository to detect the appropriate remote host")
-                .default_value(".")
+                .default_value("."),
         )
         .arg(
             Arg::with_name(GITHUB_OPTION_NAME)
                 .short("g")
                 .long("github")
                 .takes_value(true)
-                .help("Your GitHub repository (`username/repo`)")
+                .help("Your GitHub repository (`username/repo`)"),
         )
         .arg(
             Arg::with_name(CONFIG_OPTION_NAME)
                 .short("c")
                 .long("config")
                 .help("Path to config file to use")
-                .default_value_os(default_config)
+                .default_value_os(default_config),
         );
     let matches = app.get_matches();
 
@@ -118,13 +120,15 @@ async fn main() -> Result<()> {
             let remote_host = RemoteHost::new(matches.value_of(LOCAL_REPO_NAME).unwrap())
                 .context("Repository not found")?;
             match remote_host {
-                Github{owner: o, repository: r} => {
+                Github {
+                    owner: o,
+                    repository: r,
+                } => {
                     github::main(&o, &r, config).await?;
                 }
             }
         }
     }
-
 
     Ok(())
 }
@@ -136,10 +140,16 @@ fn apply_authorization(search: Search, auth: &Option<String>) -> Search {
     }
 }
 
-fn stat_string<T>(title: &str, emoji: String, data: T)  -> String
-    where T: Display
+fn stat_string<T>(title: &str, emoji: String, data: T) -> String
+where
+    T: Display,
 {
-    format!("{emoji}{title}: {data}", emoji=emoji, title=title.bold(), data=data)
+    format!(
+        "{emoji}{title}: {data}",
+        emoji = emoji,
+        title = title.bold(),
+        data = data
+    )
 }
 
 fn write_output(ascii: &str, stats: Vec<String>) {
@@ -208,8 +218,14 @@ mod tests {
 
                 let captures = GITHUB_RE.captures(URL).expect("no captures");
 
-                assert_eq!(Some("us3r-nam3"), captures.name("owner").map(|c| c.as_str()));
-                assert_eq!(Some("r3p0-with.special"), captures.name("repository").map(|c| c.as_str()));
+                assert_eq!(
+                    Some("us3r-nam3"),
+                    captures.name("owner").map(|c| c.as_str())
+                );
+                assert_eq!(
+                    Some("r3p0-with.special"),
+                    captures.name("repository").map(|c| c.as_str())
+                );
             }
         }
     }

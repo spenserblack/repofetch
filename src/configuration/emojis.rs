@@ -29,7 +29,7 @@ macro_rules! define_emojis {
     }
 }
 
-define_emojis!{
+define_emojis! {
     {URL, "🌐"},
     {STAR, "⭐"},
     {WATCHER, "👀"},

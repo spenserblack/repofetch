@@ -1,12 +1,12 @@
-use anyhow::Result;
-use colored::Colorize;
-use chrono_humanize::Humanize;
-use github_stats::*;
-use humansize::{FileSize, file_size_opts};
-use futures::join;
 use super::apply_authorization;
 use super::configuration::RepofetchConfig;
 use super::{stat_string, write_output};
+use anyhow::Result;
+use chrono_humanize::Humanize;
+use colored::Colorize;
+use futures::join;
+use github_stats::*;
+use humansize::{file_size_opts, FileSize};
 
 pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Result<()> {
     let help_wanted_label = config.labels.help_wanted;
@@ -16,31 +16,19 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
 
     let github_token = &config.github_token;
 
-    let open_issues = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open");
+    let open_issues = Query::new().repo(owner, repo).is("issue").is("open");
     let open_issues = Search::issues(&open_issues);
     let open_issues = apply_authorization(open_issues, github_token);
 
-    let closed_issues = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("closed");
+    let closed_issues = Query::new().repo(owner, repo).is("issue").is("closed");
     let closed_issues = Search::issues(&closed_issues);
     let closed_issues = apply_authorization(closed_issues, github_token);
 
-    let open_prs = Query::new()
-        .repo(owner, repo)
-        .is("pr")
-        .is("open");
+    let open_prs = Query::new().repo(owner, repo).is("pr").is("open");
     let open_prs = Search::issues(&open_prs);
     let open_prs = apply_authorization(open_prs, github_token);
 
-    let merged_prs = Query::new()
-        .repo(owner, repo)
-        .is("pr")
-        .is("merged");
+    let merged_prs = Query::new().repo(owner, repo).is("pr").is("merged");
     let merged_prs = Search::issues(&merged_prs);
     let merged_prs = apply_authorization(merged_prs, github_token);
 
@@ -108,7 +96,11 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         format!("{}:", format!("{}/{}", owner, repo).bold()),
         stat_string("URL", emojis.url, repo_stats.clone_url()),
         stat_string("stargazers", emojis.star, repo_stats.stargazers_count()),
-        stat_string("subscribers", emojis.subscriber, repo_stats.subscribers_count()),
+        stat_string(
+            "subscribers",
+            emojis.subscriber,
+            repo_stats.subscribers_count(),
+        ),
         stat_string("forks", emojis.fork, repo_stats.forks_count()),
     ];
 
@@ -123,7 +115,7 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     stats.push(stat_string(
         "open/closed issues",
         emojis.issue,
-        format!("{}/{}", open_issues, closed_issues)
+        format!("{}/{}", open_issues, closed_issues),
     ));
 
     let open_prs = match open_prs {
@@ -144,18 +136,23 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         format!("{}/{}/{}", open_prs, merged_prs, closed_prs),
     ));
 
-    stats.push(stat_string("created", emojis.created, repo_stats.created_at().humanize()));
-    stats.push(stat_string("updated", emojis.updated, repo_stats.updated_at().humanize()));
-
     stats.push(stat_string(
-        "size",
-        emojis.size,
-        {
-            let size = repo_stats.size();
-            let size = size * 1_000; // convert from KB to just B
-            size.file_size(file_size_opts::BINARY).unwrap_or("???".into())
-        },
+        "created",
+        emojis.created,
+        repo_stats.created_at().humanize(),
     ));
+    stats.push(stat_string(
+        "updated",
+        emojis.updated,
+        repo_stats.updated_at().humanize(),
+    ));
+
+    stats.push(stat_string("size", emojis.size, {
+        let size = repo_stats.size();
+        let size = size * 1_000; // convert from KB to just B
+        size.file_size(file_size_opts::BINARY)
+            .unwrap_or("???".into())
+    }));
     stats.push(stat_string("original", emojis.original, !repo_stats.fork()));
 
     let help_wanted = help_wanted.ok().map(|results| results.total_count());
@@ -165,7 +162,7 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
             emojis.help_wanted,
             count,
         )),
-        _ => {},
+        _ => {}
     }
 
     let good_first_issue = good_first_issue.ok().map(|results| results.total_count());
@@ -175,7 +172,7 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
             emojis.good_first_issue,
             count,
         )),
-        _ => {},
+        _ => {}
     }
 
     let hacktoberfest = hacktoberfest.ok().map(|results| results.total_count());
@@ -190,7 +187,7 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
             emojis.hacktoberfest,
             count,
         )),
-        _ => {},
+        _ => {}
     }
 
     write_output(&config.ascii.github, stats);
