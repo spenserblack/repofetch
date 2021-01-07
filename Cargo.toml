@@ -26,14 +26,14 @@ colored = "2"
 dirs = "3"
 futures = "0.3"
 git2 = { version = "0.13", default-features = false }
-github-stats = "0.4"
+github-stats = "0.5"
 humansize = "1"
 itertools = "0.10"
 lazy_static = "1"
 regex = "1"
 serde = { version = "1", features = ["derive"] }
 serde_yaml = "0.8"
-tokio = { version = "0.2", features = ["macros"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 [dev-dependencies]
 more-asserts = "0.2"
