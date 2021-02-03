@@ -20,7 +20,7 @@ exclude = [
 
 [dependencies]
 anyhow = "1"
-chrono-humanize = "0.1.1"
+chrono-humanize = "0.1.2"
 clap = { version = "2", features = ["wrap_help"] }
 colored = "2"
 dirs = "3"
