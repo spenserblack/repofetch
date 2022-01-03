@@ -1,6 +1,6 @@
 [package]
 name = "repofetch"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Spenser Black <spenserblack01@gmail.com>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
