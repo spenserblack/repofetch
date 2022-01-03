@@ -8,11 +8,21 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Make Release Notes File
+        run: 'echo "$(git tag -l --format="%(contents:body)" $GITHUB_REF_NAME) > RELEASE_NOTES'
+      - name: Publish GitHub Release
+        run: 'gh release create "$GITHUB_REF_NAME" -F RELEASE_NOTES'
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Publish
-      env:
-        CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-      run: cargo publish
+      - uses: actions/checkout@v2
+      - name: Publish to Crates.io
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cargo publish
