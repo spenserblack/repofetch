@@ -1,18 +1,24 @@
-use super::apply_authorization;
 use super::configuration::RepofetchConfig;
 use super::{stat_string, write_output};
 use anyhow::Result;
 use chrono_humanize::Humanize;
 use colored::Colorize;
 use futures::join;
-use github_stats::*;
 use humansize::{file_size_opts, FileSize};
+use octocrab::OctocrabBuilder;
 
 pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Result<()> {
     let help_wanted_label = config.labels.help_wanted;
     let good_first_issue_label = config.labels.good_first_issue;
+    let octocrab = {
+        let mut builder = OctocrabBuilder::new();
+        if let Some(token) = config.github_token {
+            builder.personal_token(token);
+        }
+        builder.build()?
+    };
 
-    let repo_stats = Repo::new(owner, repo, user_agent!());
+    let repo_stats = octocrab.repos(owner, repo).get();
 
     let github_token = &config.github_token;
 
@@ -88,20 +94,16 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         good_first_issue.search(user_agent!()),
         hacktoberfest.search(user_agent!()),
     );
-    let repo_stats = repo_stats.expect("Could not fetch remote repo data");
+    let repo_stats = repo_stats?;
 
     let emojis = config.emojis;
 
     let mut stats = vec![
         format!("{}:", format!("{}/{}", owner, repo).bold()),
-        stat_string("URL", emojis.url, repo_stats.clone_url()),
-        stat_string("stargazers", emojis.star, repo_stats.stargazers_count()),
-        stat_string(
-            "subscribers",
-            emojis.subscriber,
-            repo_stats.subscribers_count(),
-        ),
-        stat_string("forks", emojis.fork, repo_stats.forks_count()),
+        stat_string("URL", emojis.url, repo_stats.clone_url.map(String::from).unwrap_or("???".into())),
+        stat_string("stargazers", emojis.star, repo_stats.stargazers_count.unwrap_or_default()),
+        stat_string("subscribers", emojis.subscriber, repo_stats.subscribers_count.unwrap_or_default()),
+        stat_string("forks", emojis.fork, repo_stats.forks_count.unwrap_or_default()),
     ];
 
     let open_issues = match open_issues {
@@ -139,21 +141,21 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     stats.push(stat_string(
         "created",
         emojis.created,
-        repo_stats.created_at().humanize(),
+        repo_stats.created_at.map(|d| d.humanize()).unwrap_or("???".into()),
     ));
     stats.push(stat_string(
         "updated",
         emojis.updated,
-        repo_stats.updated_at().humanize(),
+        repo_stats.updated_at.map(|d| d.humanize()).unwrap_or("???".into()),
     ));
 
     stats.push(stat_string("size", emojis.size, {
-        let size = repo_stats.size();
+        let size = repo_stats.size.unwrap_or_default();
         let size = size * 1_000; // convert from KB to just B
         size.file_size(file_size_opts::BINARY)
             .unwrap_or("???".into())
     }));
-    stats.push(stat_string("original", emojis.original, !repo_stats.fork()));
+    stats.push(stat_string("original", emojis.original, !repo_stats.fork.unwrap_or(false)));
 
     let help_wanted = help_wanted.ok().map(|results| results.total_count());
     match help_wanted {
