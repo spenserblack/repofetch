@@ -68,25 +68,24 @@ async fn main() -> Result<()> {
     let app = App::new(crate_name!())
         .version(crate_version!())
         .about(crate_description!())
-        .global_setting(AppSettings::ColoredHelp)
         .global_setting(AppSettings::DeriveDisplayOrder)
         .arg(
-            Arg::with_name(LOCAL_REPO_NAME)
-                .short("r")
+            Arg::new(LOCAL_REPO_NAME)
+                .short('r')
                 .long("repository")
                 .help("Path to a local repository to detect the appropriate remote host")
                 .default_value("."),
         )
         .arg(
-            Arg::with_name(GITHUB_OPTION_NAME)
-                .short("g")
+            Arg::new(GITHUB_OPTION_NAME)
+                .short('g')
                 .long("github")
                 .takes_value(true)
                 .help("Your GitHub repository (`username/repo`)"),
         )
         .arg(
-            Arg::with_name(CONFIG_OPTION_NAME)
-                .short("c")
+            Arg::new(CONFIG_OPTION_NAME)
+                .short('c')
                 .long("config")
                 .help("Path to config file to use")
                 .default_value_os(default_config),
