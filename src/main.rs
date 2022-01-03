@@ -72,21 +72,21 @@ async fn main() -> Result<()> {
         .global_setting(AppSettings::DeriveDisplayOrder)
         .arg(
             Arg::with_name(LOCAL_REPO_NAME)
-                .short("r")
+                .short('r')
                 .long("repository")
                 .help("Path to a local repository to detect the appropriate remote host")
                 .default_value("."),
         )
         .arg(
             Arg::with_name(GITHUB_OPTION_NAME)
-                .short("g")
+                .short('g')
                 .long("github")
                 .takes_value(true)
                 .help("Your GitHub repository (`username/repo`)"),
         )
         .arg(
             Arg::with_name(CONFIG_OPTION_NAME)
-                .short("c")
+                .short('c')
                 .long("config")
                 .help("Path to config file to use")
                 .default_value_os(default_config),
