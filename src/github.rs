@@ -13,65 +13,72 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     let octocrab = {
         let mut builder = OctocrabBuilder::new();
         if let Some(token) = config.github_token {
-            builder.personal_token(token);
+            builder = builder.personal_token(token);
         }
         builder.build()?
     };
 
-    let repo_stats = octocrab.repos(owner, repo).get();
+    let repo_stats = octocrab.repos(owner, repo);
+    let repo_stats = repo_stats.get();
 
-    let github_token = &config.github_token;
+    let gh_repo = format!("{}/{}", owner, repo);
 
-    let open_issues = Query::new().repo(owner, repo).is("issue").is("open");
-    let open_issues = Search::issues(&open_issues);
-    let open_issues = apply_authorization(open_issues, github_token);
+    let open_issues = format!("repo:{repo} is:issue is:open", repo=gh_repo);
+    let open_issues = octocrab.search()
+        .issues_and_pull_requests(&open_issues)
+        .per_page(1)
+        .send();
 
-    let closed_issues = Query::new().repo(owner, repo).is("issue").is("closed");
-    let closed_issues = Search::issues(&closed_issues);
-    let closed_issues = apply_authorization(closed_issues, github_token);
+    let closed_issues = format!("repo:{repo} is:issue is:closed", repo=gh_repo);
+    let closed_issues = octocrab.search()
+        .issues_and_pull_requests(&closed_issues)
+        .per_page(1)
+        .send();
 
-    let open_prs = Query::new().repo(owner, repo).is("pr").is("open");
-    let open_prs = Search::issues(&open_prs);
-    let open_prs = apply_authorization(open_prs, github_token);
+    let open_prs = format!("repo:{repo} is:pr is:open", repo=gh_repo);
+    let open_prs = octocrab.search()
+        .issues_and_pull_requests(&open_prs)
+        .per_page(1)
+        .send();
 
-    let merged_prs = Query::new().repo(owner, repo).is("pr").is("merged");
-    let merged_prs = Search::issues(&merged_prs);
-    let merged_prs = apply_authorization(merged_prs, github_token);
+    let merged_prs = format!("repo:{repo} is:pr is:merged", repo=gh_repo);
+    let merged_prs = octocrab.search()
+        .issues_and_pull_requests(&merged_prs)
+        .per_page(1)
+        .send();
 
-    let closed_prs = Query::new()
-        .repo(owner, repo)
-        .is("pr")
-        .is("closed")
-        .is("unmerged");
-    let closed_prs = Search::issues(&closed_prs);
-    let closed_prs = apply_authorization(closed_prs, github_token);
+    let closed_prs = format!("repo:{repo} is:pr is:closed is:unmerged", repo=gh_repo);
+    let closed_prs = octocrab.search()
+        .issues_and_pull_requests(&closed_prs)
+        .per_page(1)
+        .send();
 
-    let help_wanted = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open")
-        .no("assignee")
-        .label(&format!(r#""{}""#, help_wanted_label));
-    let help_wanted = Search::issues(&help_wanted);
-    let help_wanted = apply_authorization(help_wanted, github_token);
+    let help_wanted = format!(
+                r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
+                repo=gh_repo,
+                label=help_wanted_label,
+            );
+    let help_wanted = octocrab.search()
+        .issues_and_pull_requests(&help_wanted)
+        .send();
 
-    let good_first_issue = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open")
-        .no("assignee")
-        .label(&format!(r#""{}""#, good_first_issue_label));
-    let good_first_issue = Search::issues(&good_first_issue);
-    let good_first_issue = apply_authorization(good_first_issue, github_token);
+    let good_first_issue = format!(
+                r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
+                repo=gh_repo,
+                label=good_first_issue_label,
+            );
+    let good_first_issue = octocrab.search()
+        .issues_and_pull_requests(&good_first_issue)
+        .send();
 
-    let hacktoberfest = Query::new()
-        .repo(owner, repo)
-        .is("issue")
-        .is("open")
-        .no("assignee")
-        .label("hacktoberfest");
-    let hacktoberfest = Search::issues(&hacktoberfest);
-    let hacktoberfest = apply_authorization(hacktoberfest, github_token);
+    let hacktoberfest = format!(
+                r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
+                repo=gh_repo,
+                label="hacktoberfest",
+            );
+    let hacktoberfest = octocrab.search()
+        .issues_and_pull_requests(&hacktoberfest)
+        .send();
 
     let (
         repo_stats,
@@ -85,14 +92,14 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         hacktoberfest,
     ) = join!(
         repo_stats,
-        open_issues.search(user_agent!()),
-        closed_issues.search(user_agent!()),
-        open_prs.search(user_agent!()),
-        merged_prs.search(user_agent!()),
-        closed_prs.search(user_agent!()),
-        help_wanted.search(user_agent!()),
-        good_first_issue.search(user_agent!()),
-        hacktoberfest.search(user_agent!()),
+        open_issues,
+        closed_issues,
+        open_prs,
+        merged_prs,
+        closed_prs,
+        help_wanted,
+        good_first_issue,
+        hacktoberfest,
     );
     let repo_stats = repo_stats?;
 
@@ -107,11 +114,11 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     ];
 
     let open_issues = match open_issues {
-        Ok(open) => open.total_count().to_string(),
+        Ok(open) => open.total_count.unwrap_or_default().to_string(),
         _ => "???".into(),
     };
     let closed_issues = match closed_issues {
-        Ok(closed) => closed.total_count().to_string(),
+        Ok(closed) => closed.total_count.unwrap_or_default().to_string(),
         _ => "???".into(),
     };
     stats.push(stat_string(
@@ -121,15 +128,15 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     ));
 
     let open_prs = match open_prs {
-        Ok(open) => open.total_count().to_string(),
+        Ok(open) => open.total_count.unwrap_or_default().to_string(),
         _ => "???".into(),
     };
     let merged_prs = match merged_prs {
-        Ok(merged) => merged.total_count().to_string(),
+        Ok(merged) => merged.total_count.unwrap_or_default().to_string(),
         _ => "???".into(),
     };
     let closed_prs = match closed_prs {
-        Ok(closed) => closed.total_count().to_string(),
+        Ok(closed) => closed.total_count.unwrap_or_default().to_string(),
         _ => "???".into(),
     };
     stats.push(stat_string(
@@ -157,7 +164,7 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     }));
     stats.push(stat_string("original", emojis.original, !repo_stats.fork.unwrap_or(false)));
 
-    let help_wanted = help_wanted.ok().map(|results| results.total_count());
+    let help_wanted = help_wanted.ok().map(|results| results.total_count.unwrap_or_default());
     match help_wanted {
         Some(count) => stats.push(stat_string(
             &format!(r#"available "{}" issues"#, help_wanted_label),
@@ -167,7 +174,7 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         _ => {}
     }
 
-    let good_first_issue = good_first_issue.ok().map(|results| results.total_count());
+    let good_first_issue = good_first_issue.ok().map(|results| results.total_count.unwrap_or_default());
     match good_first_issue {
         Some(count) => stats.push(stat_string(
             &format!(r#"available "{}" issues"#, good_first_issue_label),
@@ -177,7 +184,7 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         _ => {}
     }
 
-    let hacktoberfest = hacktoberfest.ok().map(|results| results.total_count());
+    let hacktoberfest = hacktoberfest.ok().map(|results| results.total_count.unwrap_or_default());
     let hacktoberfest = match hacktoberfest {
         Some(0) => None,
         count => count,
