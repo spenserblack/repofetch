@@ -23,60 +23,68 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
 
     let gh_repo = format!("{}/{}", owner, repo);
 
-    let open_issues = format!("repo:{repo} is:issue is:open", repo=gh_repo);
-    let open_issues = octocrab.search()
+    let open_issues = format!("repo:{repo} is:issue is:open", repo = gh_repo);
+    let open_issues = octocrab
+        .search()
         .issues_and_pull_requests(&open_issues)
         .per_page(1)
         .send();
 
-    let closed_issues = format!("repo:{repo} is:issue is:closed", repo=gh_repo);
-    let closed_issues = octocrab.search()
+    let closed_issues = format!("repo:{repo} is:issue is:closed", repo = gh_repo);
+    let closed_issues = octocrab
+        .search()
         .issues_and_pull_requests(&closed_issues)
         .per_page(1)
         .send();
 
-    let open_prs = format!("repo:{repo} is:pr is:open", repo=gh_repo);
-    let open_prs = octocrab.search()
+    let open_prs = format!("repo:{repo} is:pr is:open", repo = gh_repo);
+    let open_prs = octocrab
+        .search()
         .issues_and_pull_requests(&open_prs)
         .per_page(1)
         .send();
 
-    let merged_prs = format!("repo:{repo} is:pr is:merged", repo=gh_repo);
-    let merged_prs = octocrab.search()
+    let merged_prs = format!("repo:{repo} is:pr is:merged", repo = gh_repo);
+    let merged_prs = octocrab
+        .search()
         .issues_and_pull_requests(&merged_prs)
         .per_page(1)
         .send();
 
-    let closed_prs = format!("repo:{repo} is:pr is:closed is:unmerged", repo=gh_repo);
-    let closed_prs = octocrab.search()
+    let closed_prs = format!("repo:{repo} is:pr is:closed is:unmerged", repo = gh_repo);
+    let closed_prs = octocrab
+        .search()
         .issues_and_pull_requests(&closed_prs)
         .per_page(1)
         .send();
 
     let help_wanted = format!(
-                r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
-                repo=gh_repo,
-                label=help_wanted_label,
-            );
-    let help_wanted = octocrab.search()
+        r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
+        repo = gh_repo,
+        label = help_wanted_label,
+    );
+    let help_wanted = octocrab
+        .search()
         .issues_and_pull_requests(&help_wanted)
         .send();
 
     let good_first_issue = format!(
-                r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
-                repo=gh_repo,
-                label=good_first_issue_label,
-            );
-    let good_first_issue = octocrab.search()
+        r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
+        repo = gh_repo,
+        label = good_first_issue_label,
+    );
+    let good_first_issue = octocrab
+        .search()
         .issues_and_pull_requests(&good_first_issue)
         .send();
 
     let hacktoberfest = format!(
-                r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
-                repo=gh_repo,
-                label="hacktoberfest",
-            );
-    let hacktoberfest = octocrab.search()
+        r#"repo:{repo} is:issue is:open no:assignee label:"{label}""#,
+        repo = gh_repo,
+        label = "hacktoberfest",
+    );
+    let hacktoberfest = octocrab
+        .search()
         .issues_and_pull_requests(&hacktoberfest)
         .send();
 
@@ -107,10 +115,29 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
 
     let mut stats = vec![
         format!("{}:", format!("{}/{}", owner, repo).bold()),
-        stat_string("URL", emojis.url, repo_stats.clone_url.map(String::from).unwrap_or("???".into())),
-        stat_string("stargazers", emojis.star, repo_stats.stargazers_count.unwrap_or_default()),
-        stat_string("subscribers", emojis.subscriber, repo_stats.subscribers_count.unwrap_or_default()),
-        stat_string("forks", emojis.fork, repo_stats.forks_count.unwrap_or_default()),
+        stat_string(
+            "URL",
+            emojis.url,
+            repo_stats
+                .clone_url
+                .map(String::from)
+                .unwrap_or("???".into()),
+        ),
+        stat_string(
+            "stargazers",
+            emojis.star,
+            repo_stats.stargazers_count.unwrap_or_default(),
+        ),
+        stat_string(
+            "subscribers",
+            emojis.subscriber,
+            repo_stats.subscribers_count.unwrap_or_default(),
+        ),
+        stat_string(
+            "forks",
+            emojis.fork,
+            repo_stats.forks_count.unwrap_or_default(),
+        ),
     ];
 
     let open_issues = match open_issues {
@@ -148,12 +175,18 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
     stats.push(stat_string(
         "created",
         emojis.created,
-        repo_stats.created_at.map(|d| d.humanize()).unwrap_or("???".into()),
+        repo_stats
+            .created_at
+            .map(|d| d.humanize())
+            .unwrap_or("???".into()),
     ));
     stats.push(stat_string(
         "updated",
         emojis.updated,
-        repo_stats.updated_at.map(|d| d.humanize()).unwrap_or("???".into()),
+        repo_stats
+            .updated_at
+            .map(|d| d.humanize())
+            .unwrap_or("???".into()),
     ));
 
     stats.push(stat_string("size", emojis.size, {
@@ -162,9 +195,15 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         size.file_size(file_size_opts::BINARY)
             .unwrap_or("???".into())
     }));
-    stats.push(stat_string("original", emojis.original, !repo_stats.fork.unwrap_or(false)));
+    stats.push(stat_string(
+        "original",
+        emojis.original,
+        !repo_stats.fork.unwrap_or(false),
+    ));
 
-    let help_wanted = help_wanted.ok().map(|results| results.total_count.unwrap_or_default());
+    let help_wanted = help_wanted
+        .ok()
+        .map(|results| results.total_count.unwrap_or_default());
     match help_wanted {
         Some(count) => stats.push(stat_string(
             &format!(r#"available "{}" issues"#, help_wanted_label),
@@ -174,7 +213,9 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         _ => {}
     }
 
-    let good_first_issue = good_first_issue.ok().map(|results| results.total_count.unwrap_or_default());
+    let good_first_issue = good_first_issue
+        .ok()
+        .map(|results| results.total_count.unwrap_or_default());
     match good_first_issue {
         Some(count) => stats.push(stat_string(
             &format!(r#"available "{}" issues"#, good_first_issue_label),
@@ -184,7 +225,9 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
         _ => {}
     }
 
-    let hacktoberfest = hacktoberfest.ok().map(|results| results.total_count.unwrap_or_default());
+    let hacktoberfest = hacktoberfest
+        .ok()
+        .map(|results| results.total_count.unwrap_or_default());
     let hacktoberfest = match hacktoberfest {
         Some(0) => None,
         count => count,
