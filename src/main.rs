@@ -3,7 +3,6 @@ use clap::{crate_description, crate_name, crate_version, App, AppSettings, Arg};
 use colored::Colorize;
 use dirs::config_dir;
 use git2::Repository;
-use github_stats::Search;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -11,12 +10,6 @@ use std::fmt::Display;
 
 use configuration::ascii::MAX_WIDTH;
 use configuration::RepofetchConfig;
-
-macro_rules! user_agent {
-    () => {
-        concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"))
-    };
-}
 
 lazy_static! {
     static ref GITHUB_RE: Regex = Regex::new(r"(?:(?:git@github\.com:)|(?:https?://github\.com/))(?P<owner>[\w\.\-]+)/(?P<repository>[\w\.\-]+)\.git").unwrap();
@@ -130,13 +123,6 @@ async fn main() -> Result<()> {
     }
 
     Ok(())
-}
-
-fn apply_authorization(search: Search, auth: &Option<String>) -> Search {
-    match auth {
-        Some(token) => search.authorization(token),
-        None => search,
-    }
 }
 
 fn stat_string<T>(title: &str, emoji: String, data: T) -> String
