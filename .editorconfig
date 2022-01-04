@@ -12,9 +12,6 @@ insert_final_newline = true
 charset = latin1
 trim_trailing_whitespace = false
 
-[*.graphql]
-indent_size = 2
-
 [*.md]
 indent_size = 2
 
