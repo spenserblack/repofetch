@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use clap::{crate_description, crate_name, crate_version, App, AppSettings, Arg};
+use clap::{crate_description, crate_name, crate_version, AppSettings, Arg, Command};
 use colored::Colorize;
 use dirs::config_dir;
 use git2::Repository;
@@ -58,7 +58,7 @@ async fn main() -> Result<()> {
     default_config.push("repofetch.yml");
     let default_config = default_config.as_os_str();
 
-    let app = App::new(crate_name!())
+    let app = Command::new(crate_name!())
         .version(crate_version!())
         .about(crate_description!())
         .global_setting(AppSettings::DeriveDisplayOrder)
