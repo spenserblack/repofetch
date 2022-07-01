@@ -1,5 +1,8 @@
 use anyhow::{Context, Result};
-use clap::{crate_description, crate_name, crate_version, AppSettings, Arg, Command};
+use clap::{
+    builder::NonEmptyStringValueParser, crate_description, crate_name, crate_version, value_parser,
+    AppSettings, Arg, Command,
+};
 use colored::Colorize;
 use dirs::config_dir;
 use git2::Repository;
@@ -7,6 +10,7 @@ use itertools::Itertools;
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::fmt::Display;
+use std::path::PathBuf;
 
 use configuration::ascii::MAX_WIDTH;
 use configuration::RepofetchConfig;
@@ -66,6 +70,7 @@ async fn main() -> Result<()> {
             Arg::new(LOCAL_REPO_NAME)
                 .short('r')
                 .long("repository")
+                .value_parser(value_parser!(PathBuf))
                 .help("Path to a local repository to detect the appropriate remote host")
                 .default_value("."),
         )
@@ -74,6 +79,7 @@ async fn main() -> Result<()> {
                 .short('g')
                 .long("github")
                 .takes_value(true)
+                .value_parser(NonEmptyStringValueParser::new())
                 .help("Your GitHub repository (`username/repo`)"),
         )
         .arg(
@@ -81,11 +87,12 @@ async fn main() -> Result<()> {
                 .short('c')
                 .long("config")
                 .help("Path to config file to use")
+                .value_parser(value_parser!(PathBuf))
                 .default_value_os(default_config),
         );
     let matches = app.get_matches();
 
-    let config = RepofetchConfig::new(matches.value_of(CONFIG_OPTION_NAME).unwrap());
+    let config = RepofetchConfig::new(matches.get_one::<PathBuf>(CONFIG_OPTION_NAME).unwrap());
 
     let config = match config {
         Ok(config) => config,
@@ -100,7 +107,7 @@ async fn main() -> Result<()> {
         }
     };
 
-    match matches.value_of(GITHUB_OPTION_NAME) {
+    match matches.get_one::<String>(GITHUB_OPTION_NAME) {
         Some(repo) => {
             let mut repo = repo.split('/');
             let owner = repo.next().context("No repo owner")?;
@@ -109,7 +116,7 @@ async fn main() -> Result<()> {
         }
         None => {
             use RemoteHost::*;
-            let remote_host = RemoteHost::new(matches.value_of(LOCAL_REPO_NAME).unwrap())
+            let remote_host = RemoteHost::new(matches.get_one::<String>(LOCAL_REPO_NAME).unwrap())
                 .context("Repository not found")?;
             match remote_host {
                 Github {
