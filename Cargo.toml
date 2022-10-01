@@ -26,7 +26,7 @@ colored = "2"
 dirs = "4"
 futures = "0.3"
 git2 = { version = "0.15", default-features = false }
-humansize = "1"
+humansize = "2"
 itertools = "0.10"
 lazy_static = "1"
 octocrab = "0.17"
