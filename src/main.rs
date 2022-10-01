@@ -6,6 +6,7 @@ use clap::{
 use colored::Colorize;
 use dirs::config_dir;
 use git2::Repository;
+use humansize::{BaseUnit, FormatSizeOptions, Kilo};
 use itertools::Itertools;
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -22,6 +23,19 @@ lazy_static! {
 pub(crate) const LOCAL_REPO_NAME: &str = "local repository";
 pub(crate) const GITHUB_OPTION_NAME: &str = "github repository";
 pub(crate) const CONFIG_OPTION_NAME: &str = "config";
+
+pub(crate) fn format_size_options() -> FormatSizeOptions {
+    let options: FormatSizeOptions = Default::default();
+    options
+        .base_unit(BaseUnit::Byte)
+        .kilo(Kilo::Decimal)
+        .units(Kilo::Binary)
+        .decimal_places(2)
+        .decimal_zeroes(2)
+        .fixed_at(None)
+        .long_units(false)
+        .space_after_value(true)
+}
 
 enum RemoteHost {
     Github { owner: String, repository: String },
