@@ -70,7 +70,7 @@ async fn main() -> Result<()> {
             Arg::new(LOCAL_REPO_NAME)
                 .short('r')
                 .long("repository")
-                .value_parser(value_parser!(PathBuf))
+                .value_parser(NonEmptyStringValueParser::new())
                 .help("Path to a local repository to detect the appropriate remote host")
                 .default_value("."),
         )
