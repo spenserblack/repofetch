@@ -16,15 +16,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
-      - name: Get Release Subject
-        id: subject
-        run: 'echo ::set-output name=SUBJECT::$(git tag -l --format="%(contents:subject)" $GITHUB_REF_NAME)'
-      - name: Make Release Notes File
-        run: 'echo "$(git tag -l --format="%(contents:body)" $GITHUB_REF_NAME)" > RELEASE_NOTES'
       - name: Publish GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: 'gh release create "$GITHUB_REF_NAME" -F RELEASE_NOTES -t "${{ steps.subject.outputs.SUBJECT }}"'
+        uses: spenserblack/actions-tag-to-release@v1
   publish:
     runs-on: ubuntu-latest
     steps:
