@@ -154,57 +154,23 @@ mod github;
 mod tests {
     use super::*;
 
-    mod regex {
-        use super::GITHUB_RE;
+    mod github_tests {
+        use super::github;
 
-        mod github {
-            use super::GITHUB_RE;
-
-            #[test]
-            fn http() {
-                const URL: &str = "http://github.com/o/r.git";
-
-                let captures = GITHUB_RE.captures(URL).expect("no captures");
-
-                assert_eq!(Some("o"), captures.name("owner").map(|c| c.as_str()));
-                assert_eq!(Some("r"), captures.name("repository").map(|c| c.as_str()));
-            }
-
-            #[test]
-            fn https() {
-                const URL: &str = "https://github.com/o/r.git";
-
-                let captures = GITHUB_RE.captures(URL).expect("no captures");
-
-                assert_eq!(Some("o"), captures.name("owner").map(|c| c.as_str()));
-                assert_eq!(Some("r"), captures.name("repository").map(|c| c.as_str()));
-            }
-
-            #[test]
-            fn ssh() {
-                const URL: &str = "git@github.com:o/r.git";
-
-                let captures = GITHUB_RE.captures(URL).expect("no captures");
-
-                assert_eq!(Some("o"), captures.name("owner").map(|c| c.as_str()));
-                assert_eq!(Some("r"), captures.name("repository").map(|c| c.as_str()));
-            }
-
-            #[test]
-            fn weird_url() {
-                const URL: &str = "https://github.com/us3r-nam3/r3p0-with.special.git";
-
-                let captures = GITHUB_RE.captures(URL).expect("no captures");
-
-                assert_eq!(
-                    Some("us3r-nam3"),
-                    captures.name("owner").map(|c| c.as_str())
-                );
-                assert_eq!(
-                    Some("r3p0-with.special"),
-                    captures.name("repository").map(|c| c.as_str())
-                );
-            }
+        macro_rules! passing_repo_from_remote {
+            ($name:ident, $url:literal, $owner:literal, $repo:literal) => {
+                #[test]
+                fn $name() {
+                    let (owner, repo) = github::repo_from_remote($url).unwrap();
+                    assert_eq!(owner, $owner);
+                    assert_eq!(repo, $repo);
+                }
+            };
         }
+
+        passing_repo_from_remote!(http, "http://github.com/owner/repo.git", "owner", "repo");
+        passing_repo_from_remote!(https, "https://github.com/owner/repo.git", "owner", "repo");
+        passing_repo_from_remote!(ssh, "git@github.com:owner/repo.git", "owner", "repo");
+        passing_repo_from_remote!(complex_url, "https://github.com/us3r-nam3/r3p0-with.special.git", "us3r-nam3", "r3p0-with.special");
     }
 }
