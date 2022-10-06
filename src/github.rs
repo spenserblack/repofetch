@@ -10,16 +10,16 @@ use octocrab::OctocrabBuilder;
 use regex::Regex;
 
 lazy_static! {
-    static ref GITHUB_RE: Regex = Regex::new(r"(?:(?:git@github\.com:)|(?:https?://github\.com/))(?P<owner>[\w\.\-]+)/(?P<repository>[\w\.\-]+)\.git").unwrap();
+    static ref GITHUB_RE: Regex = Regex::new(r"(?:(?:git@github\.com:)|(?:https?://github\.com/))(?P<owner>[\w\.\-]+)/(?P<repository>[\w\.\-]+)").unwrap();
 }
 
 /// Creates an `owner/repo` tuple from a GitHub URL.
 pub(crate) fn repo_from_remote(remote: &str) -> Result<(String, String)> {
     let captures = GITHUB_RE.captures(remote).context("no GitHub match")?;
-    Ok((
-        captures.name("owner").unwrap().as_str().into(),
-        captures.name("repository").unwrap().as_str().into(),
-    ))
+    let owner = captures.name("owner").unwrap().as_str();
+    let repository = captures.name("repository").unwrap().as_str();
+    let repository = repository.strip_suffix(".git").unwrap_or(repository);
+    Ok((owner.into(), repository.into()))
 }
 
 pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Result<()> {
