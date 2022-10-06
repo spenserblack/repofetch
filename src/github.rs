@@ -277,13 +277,33 @@ mod tests {
         };
     }
 
+    macro_rules! failing_repo_from_remote {
+        ($name:ident, $url:literal) => {
+            #[test]
+            fn $name() {
+                let result = repo_from_remote($url);
+                assert!(result.is_err());
+            }
+        };
+    }
+
     passing_repo_from_remote!(http, "http://github.com/owner/repo.git", "owner", "repo");
     passing_repo_from_remote!(https, "https://github.com/owner/repo.git", "owner", "repo");
+    passing_repo_from_remote!(
+        https_no_suffix,
+        "https://github.com/owner/repo",
+        "owner",
+        "repo"
+    );
     passing_repo_from_remote!(ssh, "git@github.com:owner/repo.git", "owner", "repo");
+    passing_repo_from_remote!(ssh_no_suffix, "git@github.com:owner/repo", "owner", "repo");
     passing_repo_from_remote!(
         complex_url,
         "https://github.com/us3r-nam3/r3p0-with.special.git",
         "us3r-nam3",
         "r3p0-with.special"
     );
+
+    failing_repo_from_remote!(https_bad_suffix, "https://github.com/owner/repo.goat");
+    failing_repo_from_remote!(ssh_bad_suffix, "git@github.com:owner/repo.goat");
 }
