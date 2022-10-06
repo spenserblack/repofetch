@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Crash caused by `-r`/`--repository` type mismatch
+- Crash caused by `-r`/`--repository` type mismatch (@orhun)
 - GitHub repository names not being detected when they didn't have the optional
   `.git` suffix
 
