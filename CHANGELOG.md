@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Crash caused by `-r`/`--repository` type mismatch
+- Crash caused by `-r`/`--repository` type mismatch (@orhun)
 
 ## [0.3.2]
 
