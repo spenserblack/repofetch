@@ -16,7 +16,10 @@ lazy_static! {
 /// Creates an `owner/repo` tuple from a GitHub URL.
 pub(crate) fn repo_from_remote(remote: &str) -> Result<(String, String)> {
     let captures = GITHUB_RE.captures(remote).context("no GitHub match")?;
-    Ok((captures.name("owner").unwrap().as_str().into(), captures.name("repository").unwrap().as_str().into()))
+    Ok((
+        captures.name("owner").unwrap().as_str().into(),
+        captures.name("repository").unwrap().as_str().into(),
+    ))
 }
 
 pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Result<()> {

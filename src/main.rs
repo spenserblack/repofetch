@@ -33,8 +33,8 @@ impl RemoteHost {
             .url()
             .context("Couldn't decode remote origin to UTF-8")?;
 
-        let (owner, repository) = github::repo_from_remote(origin_url)
-            .context("Non-GitHub remotes not yet supported")?;
+        let (owner, repository) =
+            github::repo_from_remote(origin_url).context("Non-GitHub remotes not yet supported")?;
 
         let remote_host = Github { owner, repository };
 
