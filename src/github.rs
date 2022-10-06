@@ -261,3 +261,29 @@ pub(crate) async fn main(owner: &str, repo: &str, config: RepofetchConfig) -> Re
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    macro_rules! passing_repo_from_remote {
+        ($name:ident, $url:literal, $owner:literal, $repo:literal) => {
+            #[test]
+            fn $name() {
+                let (owner, repo) = repo_from_remote($url).unwrap();
+                assert_eq!(owner, $owner);
+                assert_eq!(repo, $repo);
+            }
+        };
+    }
+
+    passing_repo_from_remote!(http, "http://github.com/owner/repo.git", "owner", "repo");
+    passing_repo_from_remote!(https, "https://github.com/owner/repo.git", "owner", "repo");
+    passing_repo_from_remote!(ssh, "git@github.com:owner/repo.git", "owner", "repo");
+    passing_repo_from_remote!(
+        complex_url,
+        "https://github.com/us3r-nam3/r3p0-with.special.git",
+        "us3r-nam3",
+        "r3p0-with.special"
+    );
+}
