@@ -7,17 +7,11 @@ use colored::Colorize;
 use dirs::config_dir;
 use git2::Repository;
 use itertools::Itertools;
-use lazy_static::lazy_static;
-use regex::Regex;
 use std::fmt::Display;
 use std::path::PathBuf;
 
 use configuration::ascii::MAX_WIDTH;
 use configuration::RepofetchConfig;
-
-lazy_static! {
-    static ref GITHUB_RE: Regex = Regex::new(r"(?:(?:git@github\.com:)|(?:https?://github\.com/))(?P<owner>[\w\.\-]+)/(?P<repository>[\w\.\-]+)\.git").unwrap();
-}
 
 pub(crate) const LOCAL_REPO_NAME: &str = "local repository";
 pub(crate) const GITHUB_OPTION_NAME: &str = "github repository";
@@ -39,18 +33,10 @@ impl RemoteHost {
             .url()
             .context("Couldn't decode remote origin to UTF-8")?;
 
-        let captures = GITHUB_RE
-            .captures(origin_url)
+        let (owner, repository) = github::repo_from_remote(origin_url)
             .context("Non-GitHub remotes not yet supported")?;
 
-        let remote_host = Github {
-            owner: captures.name("owner").context("no owner")?.as_str().into(),
-            repository: captures
-                .name("repository")
-                .context("no repository")?
-                .as_str()
-                .into(),
-        };
+        let remote_host = Github { owner, repository };
 
         Ok(remote_host)
     }
