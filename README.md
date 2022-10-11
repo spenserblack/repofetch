@@ -27,6 +27,23 @@ cargo install repofetch
 cargo install --git https://github.com/spenserblack/repofetch.git
 ```
 
+### NetBSD
+Pre-compiled binaries are available from the [official repositories](https://pkgsrc.se/sysutils/repofetch)
+To install this, simply run:
+
+```bash
+pkgin install repofetch
+```
+
+Or, if you prefer to build it from source:
+
+```
+cd /usr/pkgsrc/sysutils/repofetch
+make install
+```
+
+You need to have `rust` and `libgit2` installed in order to build the package.
+
 ## Configuration
 
 The first time you execute `repofetch`, it will create a `repofetch.yml` file in your default
