@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Other
+
+- NetBSD installation option (@0323pin)
+
 ## [0.3.3]
 
 ### Fixed
