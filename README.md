@@ -28,6 +28,7 @@ cargo install --git https://github.com/spenserblack/repofetch.git
 ```
 
 ### NetBSD
+
 Pre-compiled binaries are available from the [official repositories](https://pkgsrc.se/sysutils/repofetch)
 To install this, simply run:
 
