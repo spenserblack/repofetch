@@ -1,5 +1,8 @@
 # `repofetch`
 
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](./CREDITS.md)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Crates.io](https://img.shields.io/crates/v/repofetch?logo=rust)](https://crates.io/crates/repofetch)
 ![Crates.io](https://img.shields.io/crates/d/repofetch?logo=rust)
 ![CI](https://github.com/spenserblack/repofetch/workflows/CI/badge.svg)
