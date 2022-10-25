@@ -1,0 +1,11 @@
+{
+  "projectName": "repofetch",
+  "projectOwner": "spenserblack",
+  "files": [
+    "README.md",
+    "CREDITS.md"
+  ],
+  "commitConvention": "atom",
+  "contributorsSortAlphabetically": true,
+  "contributors": []
+}
