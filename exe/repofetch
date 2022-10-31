@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'optparse'
+require 'repofetch'
+
+command = OptionParser.new do |opts|
+  opts.banner = 'Usage: repofetch [options]'
+  opts.separator ''
+  opts.separator 'Does nothing useful right now'
+end
+
+command.parse!
+
+puts "2 + 2 = #{Repofetch.add2 2}"

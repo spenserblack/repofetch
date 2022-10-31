@@ -1,0 +1,17 @@
+require:
+  - rubocop-rake
+  - rubocop-rspec
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'bin/*'
+    - 'vendor/**/*'
+  Include:
+    - 'exe/*'
+    - '**/*.rb'
+    - '**/*.gemfile'
+    - '**/*.gemspec'
+    - '**/*.rake'
+    - '**/*.ru'
+    - '**/Gemfile'
+    - '**/Rakefile'

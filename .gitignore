@@ -1,3 +1,10 @@
+*.gem
+/.bundle/
+/coverage/
+
+# Bundler Binstubs
+/bin/
+
 # Legacy ignores from Rust version
 /target
 **/*.rs.bk
