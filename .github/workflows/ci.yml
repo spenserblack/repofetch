@@ -8,10 +8,14 @@ on:
 
 jobs:
   test:
-    name: Test
-    runs-on: ubuntu-latest
+    name: Test (${{ matrix.os }}, Ruby ${{ matrix.ruby-version }})
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
         ruby-version:
           - '2.6'
           - '2.7'
