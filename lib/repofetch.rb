@@ -18,6 +18,34 @@ class Repofetch
     end
   end
 
+  # Base class for stats.
+  class Stat
+    attr_reader :label, :value, :emoji
+
+    # Creates a stat
+    #
+    # @param [String] label The label of the stat
+    # @param value The value of the stat
+    # @param [String] emoji An optional emoji for the stat
+    def initialize(label, value, emoji: nil)
+      @label = label
+      @value = value
+      @emoji = emoji
+    end
+
+    def to_s
+      "#{@emoji || ''}#{@label}: #{@value}"
+    end
+
+    # Formats the value
+    #
+    # This simply converts the value to a string, but can be overridden but
+    # subclasses to affect +to_s+.
+    def format_value
+      @value.to_s
+    end
+  end
+
   def self.clear_plugins
     @plugins = []
   end
