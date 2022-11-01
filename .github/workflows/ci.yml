@@ -11,6 +11,7 @@ jobs:
     name: Test (${{ matrix.os }}, Ruby ${{ matrix.ruby-version }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest
