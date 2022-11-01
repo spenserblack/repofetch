@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'action_view'
+
 # Main class for repofetch
 class Repofetch
   @plugins = []
@@ -43,6 +45,16 @@ class Repofetch
     # subclasses to affect +to_s+.
     def format_value
       @value.to_s
+    end
+  end
+
+  # Timespan stat for "x units ago" stats.
+  class TimespanStat < Stat
+    include ActionView::Helpers::DateHelper
+
+    # Formats the value as "x units ago".
+    def format_value(now = 0)
+      "#{distance_of_time_in_words(@value, now)} ago"
     end
   end
 
