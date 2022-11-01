@@ -18,7 +18,6 @@ jobs:
           - macos-latest
           # - windows-latest  # TODO: Figure out why rspec is breaking in Windows
         ruby-version:
-          - '2.6'
           - '2.7'
           - '3.0'
 
