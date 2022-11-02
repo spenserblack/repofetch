@@ -104,6 +104,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler (~> 2.0)
   rake (~> 13.0)
   repofetch!
   rspec (~> 3.11)
