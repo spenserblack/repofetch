@@ -87,4 +87,14 @@ RSpec.describe Repofetch do
       end
     end
   end
+
+  describe Repofetch::Plugin, '#use?' do
+    context 'when a plugin subclass does not override the use? method' do
+      let(:mock_plugin) { Class.new(described_class) }
+
+      it 'will never be used' do
+        expect(mock_plugin.new('foo').use?).to be(false)
+      end
+    end
+  end
 end
