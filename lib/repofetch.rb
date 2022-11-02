@@ -13,6 +13,21 @@ class Repofetch
     @plugins << plugin
   end
 
+  # Replaces an existing plugin. If the existing plugin does not exist,
+  # then it registers the plugin instead.
+  #
+  # @param [Plugin] old The plugin to be replaced
+  # @param [Plugin] new The new plugin
+  def self.replace_or_register_plugin(old, new)
+    index = @plugins.find_index(old)
+    if index.nil?
+      register_plugin(new)
+    else
+      @plugins[index] = new
+      @plugins
+    end
+  end
+
   # Gets the name of the default remote to use.
   #
   # Will try to pick "origin", but if that is not found then it will
@@ -55,6 +70,14 @@ class Repofetch
     # Registers this plugin class for repofetch.
     def self.register
       Repofetch.register_plugin(self)
+    end
+
+    # Tries to replace another plugin. An example use case might be if this plugin
+    # extends another registered plugin.
+    #
+    # @param [Plugin] old The plugin to replace
+    def self.replace_or_register(old)
+      Repofetch.replace_or_register_plugin(old, self)
     end
 
     # Detects that this plugin should be used. Should be overridden by subclasses.
