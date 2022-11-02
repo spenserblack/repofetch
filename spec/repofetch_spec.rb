@@ -77,4 +77,39 @@ RSpec.describe Repofetch do
       end
     end
   end
+
+  describe Repofetch::Plugin, '#ascii' do
+    context 'when a plugin subclass does not override the ascii method' do
+      let(:mock_plugin) { Class.new(described_class) }
+      let(:placeholder) do
+        <<~ASCII
+          REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+          REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE  the plugin creator forgot to  CH
+          RE    define their own ascii!!    CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          RE                                CH
+          REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+          REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+        ASCII
+      end
+
+      it 'returns the placeholder ascii' do
+        expect(mock_plugin.new('foo').ascii).to eq(placeholder)
+      end
+    end
+  end
 end
