@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'action_view'
+require 'git'
 
 # Main class for repofetch
 class Repofetch
@@ -12,11 +13,86 @@ class Repofetch
     @plugins << plugin
   end
 
+  # Gets the name of the default remote to use.
+  #
+  # Will try to pick "origin", but if that is not found then it will
+  # pick the first one found, or nil if there aren't any available.
+  #
+  # @param [String] path The path to the repository.
+  #
+  # @returns [Git::Remote]
+  def self.default_remote(path)
+    git = Git.open(path)
+    remotes = git.remotes
+    found_remote = remotes.find { |remote| remote.name == 'origin' }
+    found_remote = remotes[0] if found_remote.nil?
+    found_remote
+  end
+
+  # Just wrapper around +default_remote+ since this is likely the most common
+  # use case (and it's easier than referencing the +Git::Remote+ docs to ensure
+  # correct usage in each plugin).
+  #
+  # @param [String] path The path to the repository.
+  #
+  # @return [String]
+  def self.default_remote_url(path)
+    default_remote(path)&.url
+  end
+
   # Base class for plugins.
   class Plugin
+    attr_reader :path, :stats
+
+    # @param [String] path
+    #
+    # The path to the git repository. Should be provided by the binary.
+    def initialize(path)
+      @path = path
+      @stats = []
+    end
+
     # Registers this plugin class for repofetch.
     def self.register
       Repofetch.register_plugin(self)
+    end
+
+    # Detects that this plugin should be used. Should be overridden by subclasses.
+    #
+    # An example implementation is checking if +Repofetch.default_remote_url+ matches
+    # a regular expression.
+    def use?
+      false
+    end
+
+    # The ASCII to be printed alongside the stats.
+    #
+    # This should be overridden by the plugin subclass.
+    # Should be within the bounds 40x20 (width x height).
+    def ascii
+      <<~ASCII
+        REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+        REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE  the plugin creator forgot to  CH
+        RE    define their own ascii!!    CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        RE                                CH
+        REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+        REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+      ASCII
     end
   end
 
