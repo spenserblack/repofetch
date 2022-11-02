@@ -5,6 +5,29 @@ require 'git'
 
 # Main class for repofetch
 class Repofetch
+  PLACEHOLDER_ASCII = <<~ASCII
+    REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+    REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE  the plugin creator forgot to  CH
+    RE    define their own ascii!!    CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    RE                                CH
+    REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+    REPOFETCHREPOFETCHREPOFETCHREPOFETCH
+  ASCII
   @plugins = []
   # Registers a plugin.
   #
@@ -93,29 +116,7 @@ class Repofetch
     # This should be overridden by the plugin subclass.
     # Should be within the bounds 40x20 (width x height).
     def ascii
-      <<~ASCII
-        REPOFETCHREPOFETCHREPOFETCHREPOFETCH
-        REPOFETCHREPOFETCHREPOFETCHREPOFETCH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE  the plugin creator forgot to  CH
-        RE    define their own ascii!!    CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        RE                                CH
-        REPOFETCHREPOFETCHREPOFETCHREPOFETCH
-        REPOFETCHREPOFETCHREPOFETCHREPOFETCH
-      ASCII
+      Repofetch::PLACEHOLDER_ASCII
     end
   end
 
