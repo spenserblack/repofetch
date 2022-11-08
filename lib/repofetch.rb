@@ -59,8 +59,7 @@ class Repofetch
   # @param [String] path The path to the repository.
   #
   # @returns [Git::Remote]
-  def self.default_remote(path)
-    git = Git.open(path)
+  def self.default_remote(git)
     remotes = git.remotes
     found_remote = remotes.find { |remote| remote.name == 'origin' }
     found_remote = remotes[0] if found_remote.nil?
@@ -107,7 +106,9 @@ class Repofetch
     #
     # An example implementation is checking if +Repofetch.default_remote_url+ matches
     # a regular expression.
-    def use?
+    #
+    # @param [Git::Base] _git The Git repository object
+    def matches_repo?(_git)
       false
     end
 

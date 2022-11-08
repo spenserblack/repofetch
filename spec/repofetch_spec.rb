@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'git'
 require 'repofetch'
 
 RSpec.describe Repofetch do
@@ -88,12 +89,12 @@ RSpec.describe Repofetch do
     end
   end
 
-  describe Repofetch::Plugin, '#use?' do
-    context 'when a plugin subclass does not override the use? method' do
+  describe Repofetch::Plugin, '#matches_repo?' do
+    context 'when a plugin subclass does not override the matches_repo? method' do
       let(:mock_plugin) { Class.new(described_class) }
 
       it 'will never be used' do
-        expect(mock_plugin.new('foo').use?).to be(false)
+        expect(mock_plugin.matches_repo?(Git::Base.new)).to be(false)
       end
     end
   end
