@@ -28,7 +28,13 @@ class Repofetch
     REPOFETCHREPOFETCHREPOFETCHREPOFETCH
     REPOFETCHREPOFETCHREPOFETCHREPOFETCH
   ASCII
+
   @plugins = []
+
+  class << self
+    attr_reader :plugins
+  end
+
   # Registers a plugin.
   #
   # @param [Plugin] plugin The plugin to register

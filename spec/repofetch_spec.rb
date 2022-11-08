@@ -11,7 +11,8 @@ RSpec.describe Repofetch do
       let(:mock_plugin) { Class.new(described_class::Plugin) }
 
       it 'adds a plugin to the list of plugins' do
-        expect(described_class.register_plugin(mock_plugin)).to eq [mock_plugin]
+        described_class.register_plugin(mock_plugin)
+        expect(described_class.plugins).to eq [mock_plugin]
       end
     end
   end
@@ -24,7 +25,8 @@ RSpec.describe Repofetch do
       after { described_class.send(:clear_plugins) }
 
       it 'adds a plugin to the list of plugins' do
-        expect(described_class.replace_or_register_plugin(old_plugin, new_plugin)).to eq [new_plugin]
+        described_class.replace_or_register_plugin(old_plugin, new_plugin)
+        expect(described_class.plugins).to eq [new_plugin]
       end
     end
 
@@ -33,11 +35,13 @@ RSpec.describe Repofetch do
       after { described_class.send(:clear_plugins) }
 
       it 'replaces the old plugin' do
-        expect(described_class.replace_or_register_plugin(old_plugin, new_plugin)).to eq [new_plugin]
+        described_class.replace_or_register_plugin(old_plugin, new_plugin)
+        expect(described_class.plugins).to eq [new_plugin]
       end
 
       it 'does not contain the old plugin' do
-        expect(described_class.replace_or_register_plugin(old_plugin, new_plugin)).not_to include(old_plugin)
+        described_class.replace_or_register_plugin(old_plugin, new_plugin)
+        expect(described_class.plugins).not_to include(old_plugin)
       end
     end
   end
@@ -49,7 +53,8 @@ RSpec.describe Repofetch do
       let(:mock_plugin) { Class.new(described_class) }
 
       it 'adds a plugin to the list of plugins' do
-        expect(mock_plugin.register).to eq [mock_plugin]
+        mock_plugin.register
+        expect(Repofetch.plugins).to eq [mock_plugin]
       end
     end
   end
@@ -62,7 +67,8 @@ RSpec.describe Repofetch do
 
     context 'when there is no old plugin to replace' do
       it 'adds a plugin to the list of plugins' do
-        expect(new_plugin.replace_or_register(old_plugin)).to eq [new_plugin]
+        new_plugin.replace_or_register(old_plugin)
+        expect(Repofetch.plugins).to eq [new_plugin]
       end
     end
 
@@ -70,11 +76,13 @@ RSpec.describe Repofetch do
       before { Repofetch.register_plugin(old_plugin) }
 
       it 'replaces the old plugin' do
-        expect(new_plugin.replace_or_register(old_plugin)).to eq [new_plugin]
+        new_plugin.replace_or_register(old_plugin)
+        expect(Repofetch.plugins).to eq [new_plugin]
       end
 
       it 'does not contain the old plugin' do
-        expect(new_plugin.replace_or_register(old_plugin)).not_to include(old_plugin)
+        new_plugin.replace_or_register(old_plugin)
+        expect(Repofetch.plugins).not_to include(old_plugin)
       end
     end
   end
