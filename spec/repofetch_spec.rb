@@ -91,8 +91,8 @@ RSpec.describe Repofetch do
     context 'when a plugin subclass does not override the ascii method' do
       let(:mock_plugin) { Class.new(described_class) }
 
-      it 'returns the placeholder ascii' do
-        expect(mock_plugin.new('foo').ascii).to eq(Repofetch::PLACEHOLDER_ASCII)
+      it 'raises NoMethodError' do
+        expect { mock_plugin.new('foo').ascii }.to raise_error(NoMethodError)
       end
     end
   end
@@ -101,8 +101,8 @@ RSpec.describe Repofetch do
     context 'when a plugin subclass does not override the matches_repo? method' do
       let(:mock_plugin) { Class.new(described_class) }
 
-      it 'will never be used' do
-        expect(mock_plugin.matches_repo?(Git::Base.new)).to be(false)
+      it 'raises NoMethodError' do
+        expect { mock_plugin.matches_repo?(Git::Base.new) }.to raise_error(NoMethodError)
       end
     end
   end

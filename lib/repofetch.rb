@@ -6,30 +6,6 @@ require 'repofetch/exceptions'
 
 # Main class for repofetch
 class Repofetch
-  PLACEHOLDER_ASCII = <<~ASCII
-    REPOFETCHREPOFETCHREPOFETCHREPOFETCH
-    REPOFETCHREPOFETCHREPOFETCHREPOFETCH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE  the plugin creator forgot to  CH
-    RE    define their own ascii!!    CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    RE                                CH
-    REPOFETCHREPOFETCHREPOFETCHREPOFETCH
-    REPOFETCHREPOFETCHREPOFETCHREPOFETCH
-  ASCII
-
   @plugins = []
 
   class << self
@@ -66,7 +42,12 @@ class Repofetch
   #
   # @returns [Plugin] A plugin to use.
   def self.get_plugin(git)
-    available_plugins = @plugins.filter { |plugin_class| plugin_class.matches_repo?(git) }
+    available_plugins = @plugins.filter do |plugin_class|
+      plugin_class.matches_repo?(git)
+    rescue NoMethodError
+      warn "#{plugin_class} Does not implement +matches_repo?+"
+      false
+    end
     raise NoPluginsError if available_plugins.empty?
 
     raise TooManyPluginsError if available_plugins.length > 1
@@ -130,7 +111,7 @@ class Repofetch
     #
     # @param [Git::Base] _git The Git repository object
     def self.matches_repo?(_git)
-      false
+      raise NoMethodError, 'matches_repo? must be overridden by the plugin subclass'
     end
 
     # This should use a git instance and call +Plugin.new+.
@@ -139,7 +120,7 @@ class Repofetch
     #
     # @returns [Plugin]
     def self.from_git(_git)
-      new
+      raise NoMethodError, 'from_git must be overridden by the plugin subclass'
     end
 
     # This will receive an array of strings (e.g. +ARGV+) and call +Plugin.new+.
@@ -148,7 +129,7 @@ class Repofetch
     #
     # @returns [Plugin]
     def self.from_args(_args)
-      new
+      raise NoMethodError, 'from_args must be overridden by the plugin subclass'
     end
 
     # The ASCII to be printed alongside the stats.
@@ -156,7 +137,7 @@ class Repofetch
     # This should be overridden by the plugin subclass.
     # Should be within the bounds 40x20 (width x height).
     def ascii
-      Repofetch::PLACEHOLDER_ASCII
+      raise NoMethodError, 'ascii must be overridden by the plugin subclass'
     end
   end
 
