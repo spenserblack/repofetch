@@ -79,13 +79,11 @@ class Repofetch
 
   # Base class for plugins.
   class Plugin
-    attr_reader :path, :stats
+    attr_reader :stats
 
-    # @param [String] path
-    #
-    # The path to the git repository. Should be provided by the binary.
-    def initialize(path)
-      @path = path
+    # Plugin intializer arguments should come from either the CLI or from the +use+
+    # class method.
+    def initialize(*)
       @stats = []
     end
 
@@ -108,8 +106,17 @@ class Repofetch
     # a regular expression.
     #
     # @param [Git::Base] _git The Git repository object
-    def matches_repo?(_git)
+    def self.matches_repo?(_git)
       false
+    end
+
+    # This should use a git instance and call +Plugin.new+.
+    #
+    # @param [Git::Base] _git The Git repository object to use when calling +Plugin.new+.
+    #
+    # @returns [Plugin]
+    def self.from_git(_git)
+      new
     end
 
     # The ASCII to be printed alongside the stats.
