@@ -142,6 +142,15 @@ class Repofetch
       new
     end
 
+    # This will receive an array of strings (e.g. +ARGV+) and call +Plugin.new+.
+    #
+    # @param [Array] _args The arguments to process.
+    #
+    # @returns [Plugin]
+    def self.from_args(_args)
+      new
+    end
+
     # The ASCII to be printed alongside the stats.
     #
     # This should be overridden by the plugin subclass.
