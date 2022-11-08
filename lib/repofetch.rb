@@ -2,6 +2,7 @@
 
 require 'action_view'
 require 'git'
+require 'repofetch/exceptions'
 
 # Main class for repofetch
 class Repofetch
@@ -55,6 +56,22 @@ class Repofetch
       @plugins[index] = new
       @plugins
     end
+  end
+
+  # Returns the plugin that should be used.
+  # Raises a +Repofetch::NoPluginsError+ if no plugins are found.
+  # Raises a +Repofetch::TooManyPluginsError+ if more than one plugin is found.
+  #
+  # @param [String] git An instance of +Git::Base+
+  #
+  # @returns [Plugin] A plugin to use.
+  def self.get_plugin(git)
+    available_plugins = @plugins.filter { |plugin_class| plugin_class.matches_repo?(git) }
+    raise NoPluginsError if available_plugins.empty?
+
+    raise TooManyPluginsError if available_plugins.length > 1
+
+    available_plugins[0].from_git(git)
   end
 
   # Gets the name of the default remote to use.
