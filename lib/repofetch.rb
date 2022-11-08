@@ -104,8 +104,8 @@ class Repofetch
   class Plugin
     attr_reader :stats
 
-    # Plugin intializer arguments should come from either the CLI or from the +use+
-    # class method.
+    # Plugin intializer arguments should come from the +from_git+ or +from_args+
+    # class methods.
     def initialize(*)
       @stats = []
     end
