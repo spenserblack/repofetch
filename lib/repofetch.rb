@@ -6,6 +6,8 @@ require 'repofetch/exceptions'
 
 # Main class for repofetch
 class Repofetch
+  MAX_ASCII_WIDTH = 40
+  MAX_ASCII_HEIGHT = 20
   @plugins = []
 
   class << self
@@ -138,6 +140,19 @@ class Repofetch
     # Should be within the bounds 40x20 (width x height).
     def ascii
       raise NoMethodError, 'ascii must be overridden by the plugin subclass'
+    end
+
+    # Combines lines with the plugin's ASCII for proper spacing.
+    #
+    # @param [Array] lines An array of strings
+    #
+    # @returns [String]
+    def lines_with_ascii(lines)
+      ascii_lines = ascii.lines.map(&:strip)
+      zipped = ascii_lines.length > lines.length ? ascii_lines.zip(lines) : lines.zip(ascii_lines).map(&:reverse)
+      zipped = zipped.map { |left, right| [left || '', right || ''] }
+
+      zipped.map { |ascii_line, line| ascii_line.ljust(Repofetch::MAX_ASCII_WIDTH + 5) + line }.join("\n")
     end
   end
 
