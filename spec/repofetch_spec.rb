@@ -106,4 +106,27 @@ RSpec.describe Repofetch do
       end
     end
   end
+
+  describe Repofetch::Plugin, '#lines_with_ascii' do
+    let(:mock_plugin) do
+      Class.new described_class do
+        def ascii
+          <<~ASCII
+            1234567890
+            ABCDEFGHIJ
+          ASCII
+        end
+      end
+    end
+
+    context 'when there are more data lines than ASCII lines' do
+      it 'writes all lines aligned' do
+        expected = <<~EXPECTED
+          1234567890                                   field 1: OK
+          ABCDEFGHIJ                                   field 2: Yes
+        EXPECTED
+        expect(mock_plugin.new.lines_with_ascii(['field 1: OK', 'field 2: Yes'])).to eq expected
+      end
+    end
+  end
 end

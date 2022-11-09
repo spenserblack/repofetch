@@ -152,7 +152,7 @@ class Repofetch
       zipped = ascii_lines.length > lines.length ? ascii_lines.zip(lines) : lines.zip(ascii_lines).map(&:reverse)
       zipped = zipped.map { |left, right| [left || '', right || ''] }
 
-      zipped.map { |ascii_line, line| ascii_line.ljust(Repofetch::MAX_ASCII_WIDTH + 5) + line }.join("\n")
+      zipped.map { |ascii_line, line| ascii_line.ljust(Repofetch::MAX_ASCII_WIDTH + 5) + line }.join("\n") + "\n"
     end
   end
 
