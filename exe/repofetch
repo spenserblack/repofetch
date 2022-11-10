@@ -4,12 +4,40 @@
 require 'optparse'
 require 'repofetch'
 
+config = Repofetch::Config.load!
+
+config.plugins.each { |plugin| require plugin }
+
+options = {
+  plugin: nil,
+  repository: '.'
+}
+
+available_plugins = Repofetch.plugins.to_h { |plugin| [plugin.name, plugin] }
+
 command = OptionParser.new do |opts|
-  opts.banner = 'Usage: repofetch [options]'
+  opts.banner = 'Usage: repofetch [options] -- [plugin arguments]'
+
+  opts.on('-r', '--repository PATH', 'Use the provided repository. Defaults to the current directory.') do |path|
+    options[:repository] = path
+  end
+
+  opts.on('-p', '--plugin PLUGIN', 'Use the specified plugin') do |plugin|
+    options[:plugin] = available_plugins[plugin]
+  end
+
+  Repofetch.plugins.each do |plugin|
+    opts.on("--#{plugin.name.sub(/::/, '-').downcase}", "Shortcut for --plugin #{plugin.name}") do
+      options[:plugin] = plugin
+    end
+  end
+
   opts.separator ''
-  opts.separator 'Does nothing useful right now'
+  opts.separator "You config file is at #{Repofetch::Config::PATH}"
+  opts.separator "Installed plugins: #{available_plugins.keys.join(', ')}"
 end
 
 command.parse!
 
-puts "2 + 2 = #{Repofetch.add2 2}"
+puts "Repository path: #{options[:repository]}"
+puts "Plugin: #{options[:plugin]}"

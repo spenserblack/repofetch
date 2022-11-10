@@ -2,6 +2,7 @@
 
 require 'action_view'
 require 'git'
+require 'repofetch/config'
 require 'repofetch/exceptions'
 
 # Main class for repofetch
