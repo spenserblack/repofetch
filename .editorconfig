@@ -12,6 +12,10 @@ insert_final_newline = true
 charset = latin1
 trim_trailing_whitespace = false
 
+[**/ASCII]
+charset = latin1
+trim_trailing_whitespace = false
+
 [*.snap]
 indent_style = unset
 indent_size = unset
