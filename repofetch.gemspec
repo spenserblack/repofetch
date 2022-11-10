@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.11'
+  spec.add_development_dependency 'rspec-snapshot', '~> 2.0'
   spec.add_development_dependency 'rubocop', '~> 1.36'
   spec.add_development_dependency 'rubocop-rake', '~> 0.6'
   spec.add_development_dependency 'rubocop-rspec', '~> 2.13'
