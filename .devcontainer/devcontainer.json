@@ -7,5 +7,6 @@
     "EditorConfig.EditorConfig",
     "rebornix.Ruby"
   ],
+  "postCreateCommand": "bundle install",
   "remoteUser": "vscode"
 }
