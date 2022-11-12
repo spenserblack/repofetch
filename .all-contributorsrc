@@ -1,0 +1,31 @@
+{
+  "projectName": "repofetch",
+  "projectOwner": "spenserblack",
+  "files": [
+    "CREDITS.md"
+  ],
+  "commitConvention": "atom",
+  "contributorsSortAlphabetically": true,
+  "contributors": [
+    {
+      "login": "0323pin",
+      "name": "pin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/90570748?v=4",
+      "profile": "https://github.com/0323pin",
+      "contributions": [
+        "platform"
+      ]
+    },
+    {
+      "login": "orhun",
+      "name": "Orhun Parmaksız",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24392180?v=4",
+      "profile": "http://orhun.dev",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
