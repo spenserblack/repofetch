@@ -1,0 +1,11 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": { "VARIANT": "2.7-buster" }
+  },
+  "extensions": [
+    "EditorConfig.EditorConfig",
+    "rebornix.Ruby"
+  ],
+  "remoteUser": "vscode"
+}
