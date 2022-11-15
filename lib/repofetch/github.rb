@@ -14,7 +14,6 @@ class Repofetch
     # Initializes the GitHub plugin.
     def initialize(owner, repository)
       super
-      # raise ArgumentError, 'must use the format OWNER/REPO' if split.length != 2
 
       @owner = owner
       @repository = repository
