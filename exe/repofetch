@@ -44,6 +44,11 @@ git = Git.open(options[:repository])
 plugin_class = options[:plugin]
 # NOTE: If the user explicitly selected a plugin, then it is constructed from CLI args.
 # Otherwise, we try to build it from the repository.
-plugin = plugin_class.nil? ? Repofetch.get_plugin(git) : plugin_class.from_args(ARGV)
+begin
+  plugin = plugin_class.nil? ? Repofetch.get_plugin(git) : plugin_class.from_args(ARGV)
+rescue ArgumentError => e
+  warn e
+  exit 1
+end
 
 puts plugin

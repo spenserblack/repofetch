@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'optparse'
 require 'repofetch'
 
 class Repofetch
@@ -39,9 +40,13 @@ class Repofetch
 
     # Creates an instance from CLI args.
     def self.from_args(args)
+      parser = OptionParser.new do |opts|
+        opts.banner = 'Usage: <plugin activation> -- [options] OWNER/REPOSITORY'
+      end
+      parser.parse(args)
       split = args[0]&.split('/')
 
-      raise ArgumentError, 'must have an argument in the format OWNER/REPO' unless split&.length == 2
+      raise ArgumentError, parser.to_s unless split&.length == 2
 
       new(*split)
     end
