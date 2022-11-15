@@ -163,7 +163,7 @@ class Repofetch
     #
     # @returns [String]
     def lines_with_ascii(lines)
-      ascii_lines = ascii.lines.map(&:strip)
+      ascii_lines = ascii.lines.map(&:chomp)
       zipped = ascii_lines.length > lines.length ? ascii_lines.zip(lines) : lines.zip(ascii_lines).map(&:reverse)
 
       # NOTE: to_s to convert nil to an empty string
