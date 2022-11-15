@@ -143,6 +143,20 @@ class Repofetch
       raise NoMethodError, 'ascii must be overridden by the plugin subclass'
     end
 
+    # The header to show for the plugin.
+    #
+    # This should be overridden by the plugin subclass.
+    # For example, "foo/bar @ GitHub".
+    def header
+      raise NoMethodError, 'header must be overridden by the plugin subclass'
+    end
+
+    def to_s
+      head = header
+      separator = '-' * head.length
+      lines_with_ascii([head, separator, *@stats.map(&:to_s)])
+    end
+
     # Combines lines with the plugin's ASCII for proper spacing.
     #
     # @param [Array] lines An array of strings

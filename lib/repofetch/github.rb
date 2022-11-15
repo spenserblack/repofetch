@@ -46,6 +46,10 @@ class Repofetch
       new(*split)
     end
 
+    def header
+      "#{@owner}/#{@repository} @ GitHub"
+    end
+
     def ascii
       ASCII
     end
