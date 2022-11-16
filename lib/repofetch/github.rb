@@ -28,7 +28,9 @@ class Repofetch
     end
 
     # Creates an instance from a +Git::Base+ instance.
-    def self.from_git(git)
+    def self.from_git(git, args, _config)
+      raise ArgumentError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
+
       default_remote = Repofetch.default_remote(git)
       url = default_remote&.url
       match = HTTP_REMOTE_REGEX.match(url)
@@ -38,8 +40,8 @@ class Repofetch
       new(match[:owner], match[:repository])
     end
 
-    # Creates an instance from CLI args.
-    def self.from_args(args)
+    # Creates an instance from CLI args and configuration.
+    def self.from_args(args, _config)
       parser = OptionParser.new do |opts|
         opts.banner = 'Usage: <plugin activation> -- [options] OWNER/REPOSITORY'
       end

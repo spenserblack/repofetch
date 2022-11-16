@@ -42,9 +42,11 @@ class Repofetch
   # Raises a +Repofetch::TooManyPluginsError+ if more than one plugin is found.
   #
   # @param [String] git An instance of +Git::Base+
+  # @param [Array<String>] args The arguments passed to the program.
+  # @param [Repofetch::Config] config The configuration to use.
   #
   # @returns [Plugin] A plugin to use.
-  def self.get_plugin(git)
+  def self.get_plugin(git, args, config)
     available_plugins = @plugins.filter do |plugin_class|
       plugin_class.matches_repo?(git)
     rescue NoMethodError
@@ -55,7 +57,7 @@ class Repofetch
 
     raise TooManyPluginsError if available_plugins.length > 1
 
-    available_plugins[0].from_git(git)
+    available_plugins[0].from_git(git, args, config)
   end
 
   # Gets the name of the default remote to use.
@@ -120,18 +122,21 @@ class Repofetch
     # This should use a git instance and call +Plugin.new+.
     #
     # @param [Git::Base] _git The Git repository object to use when calling +Plugin.new+.
+    # @param [Array] _args The arguments to process.
+    # @param [Config] _config The configuration loaded by the CLI.
     #
     # @returns [Plugin]
-    def self.from_git(_git)
+    def self.from_git(_git, _args, _config)
       raise NoMethodError, 'from_git must be overridden by the plugin subclass'
     end
 
     # This will receive an array of strings (e.g. +ARGV+) and call +Plugin.new+.
     #
     # @param [Array] _args The arguments to process.
+    # @param [Config] _config The configuration loaded by the CLI.
     #
     # @returns [Plugin]
-    def self.from_args(_args)
+    def self.from_args(_args, _config)
       raise NoMethodError, 'from_args must be overridden by the plugin subclass'
     end
 

@@ -45,7 +45,7 @@ plugin_class = options[:plugin]
 # NOTE: If the user explicitly selected a plugin, then it is constructed from CLI args.
 # Otherwise, we try to build it from the repository.
 begin
-  plugin = plugin_class.nil? ? Repofetch.get_plugin(git) : plugin_class.from_args(ARGV)
+  plugin = plugin_class.nil? ? Repofetch.get_plugin(git, ARGV, config) : plugin_class.from_args(ARGV, config)
 rescue ArgumentError => e
   warn e
   exit 1
