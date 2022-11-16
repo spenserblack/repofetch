@@ -20,7 +20,14 @@ require 'simplecov'
 SimpleCov.start
 
 require 'simplecov-cobertura'
-SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+SimpleCov.formatter = if ENV['CI']
+                        SimpleCov::Formatter::CoberturaFormatter
+                      else
+                        SimpleCov::Formatter::MultiFormatter.new([
+                                                                   SimpleCov::Formatter::HTMLFormatter,
+                                                                   SimpleCov::Formatter::CoberturaFormatter
+                                                                 ])
+                      end
 
 require 'rspec/snapshot'
 
