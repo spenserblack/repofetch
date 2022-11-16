@@ -29,6 +29,7 @@ class Repofetch
 
     # Creates an instance from a +Git::Base+ instance.
     def self.from_git(git, args, _config)
+      # TODO: Raise a better exception than ArgumentError
       raise ArgumentError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
 
       default_remote = Repofetch.default_remote(git)
@@ -48,6 +49,7 @@ class Repofetch
       parser.parse(args)
       split = args[0]&.split('/')
 
+      # TODO: Raise a better exception than ArgumentError
       raise ArgumentError, parser.to_s unless split&.length == 2
 
       new(*split)
