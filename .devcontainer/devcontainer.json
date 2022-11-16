@@ -7,6 +7,12 @@
     "EditorConfig.EditorConfig",
     "rebornix.Ruby"
   ],
+  "portsAttributes": {
+    "3000": {
+      "label": "Coverage",
+      "onAutoForward": "notify"
+    }
+  },
   "postCreateCommand": "bundle install",
   "remoteUser": "vscode"
 }
