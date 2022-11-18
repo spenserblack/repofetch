@@ -4,6 +4,7 @@ require 'action_view'
 require 'git'
 require 'repofetch/config'
 require 'repofetch/exceptions'
+require 'repofetch/theme'
 
 # Main class for repofetch
 class Repofetch
@@ -152,14 +153,39 @@ class Repofetch
     #
     # This should be overridden by the plugin subclass.
     # For example, "foo/bar @ GitHub".
-    def header
+    #
+    # @param [Theme] theme The theme to use.
+    def header(_theme)
       raise NoMethodError, 'header must be overridden by the plugin subclass'
     end
 
-    def to_s
-      head = header
+    def to_s(theme = nil)
+      theme ||= Theme.new
+      head = header(theme)
       separator = '-' * head.length
-      lines_with_ascii([head, separator, *@stats.map(&:to_s)])
+      lines_with_ascii([head, separator, *@stats.map { |stat| stat.to_s(theme) }], theme)
+    end
+
+    # Cleans color placeholders and newlines from the ASCII.
+    #
+    # @returns [Array<String>]
+    def clean_aligned_ascii_lines
+      ascii.lines.map { |line| line.chomp.gsub(/%{[\w\d]+?}/, '') }
+    end
+
+    def styled_ascii_lines(theme)
+      ascii.lines.map { |line| (line.chomp % theme.to_h) + theme.style(:reset) }
+    end
+
+    # Creates aligned, styled ASCII lines.
+    def ascii_lines(theme)
+      cleaned = clean_aligned_ascii_lines
+      styled = styled_ascii_lines(theme)
+      cleaned.zip(styled).map do |clean_line, styled_line|
+        line = clean_line.ljust(MAX_ASCII_WIDTH + 5)
+        line[0, clean_line.length] = styled_line
+        line
+      end
     end
 
     # Combines lines with the plugin's ASCII for proper spacing.
@@ -167,12 +193,17 @@ class Repofetch
     # @param [Array] lines An array of strings
     #
     # @returns [String]
-    def lines_with_ascii(lines)
-      ascii_lines = ascii.lines.map(&:chomp)
-      zipped = ascii_lines.length > lines.length ? ascii_lines.zip(lines) : lines.zip(ascii_lines).map(&:reverse)
+    def lines_with_ascii(lines, theme)
+      aligned_ascii_lines = ascii_lines(theme)
+
+      zipped = if aligned_ascii_lines.length > lines.length
+                 aligned_ascii_lines.zip(lines)
+               else
+                 lines.zip(aligned_ascii_lines).map(&:reverse)
+               end
 
       # NOTE: to_s to convert nil to an empty string
-      zipped.map { |ascii_line, line| "#{ascii_line.to_s.ljust(Repofetch::MAX_ASCII_WIDTH + 5)}#{line}\n" }.join
+      zipped.map { |ascii_line, line| "#{ascii_line}#{line}\n" }.join
     end
   end
 
@@ -191,8 +222,8 @@ class Repofetch
       @emoji = emoji
     end
 
-    def to_s
-      "#{@emoji || ''}#{@label}: #{@value}"
+    def to_s(theme = nil)
+      "#{@emoji || ''}#{theme.nil? ? @label : theme.format(:bold, @label)}: #{@value}"
     end
 
     # Formats the value
