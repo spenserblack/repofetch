@@ -7,6 +7,9 @@
 
 Fetch details about your remote repository
 
+:warning: The implementation of repofetch is currently undergoing a major revision. Contributions
+to the source code may be rejected during this time.
+
 ## Screenshot
 
 *__NOTE__ This screenshot is only an example, and does not accurately represent output. This 
