@@ -177,33 +177,29 @@ class Repofetch
       ascii.lines.map { |line| (line.chomp % theme.to_h) + theme.style(:reset) }
     end
 
-    # Creates aligned, styled ASCII lines.
-    def ascii_lines(theme)
-      cleaned = clean_aligned_ascii_lines
-      styled = styled_ascii_lines(theme)
-      cleaned.zip(styled).map do |clean_line, styled_line|
-        line = clean_line.ljust(MAX_ASCII_WIDTH + 5)
-        line[0, clean_line.length] = styled_line
-        line
-      end
-    end
-
     # Combines lines with the plugin's ASCII for proper spacing.
     #
     # @param [Array] lines An array of strings
     #
     # @returns [String]
     def lines_with_ascii(lines, theme)
-      aligned_ascii_lines = ascii_lines(theme)
+      ascii_lines = ascii.lines.map(&:chomp)
 
-      zipped = if aligned_ascii_lines.length > lines.length
-                 aligned_ascii_lines.zip(lines)
+      zipped = if ascii_lines.length > lines.length
+                 ascii_lines.zip(lines)
                else
-                 lines.zip(aligned_ascii_lines).map(&:reverse)
+                 lines.zip(ascii_lines).map(&:reverse)
                end
 
-      # NOTE: to_s to convert nil to an empty string
-      zipped.map { |ascii_line, line| "#{ascii_line}#{line}\n" }.join
+      zipped.map do |ascii_line, line|
+        ascii_line ||= ''
+        line ||= ''
+        cleaned_ascii = ascii_line.gsub(/%{[\w\d]+?}/, '')
+        styled_ascii = (ascii_line % theme.to_h) + theme.style(:reset)
+        line = "#{' ' * (MAX_ASCII_WIDTH + 5)}#{line}".dup
+        line[0, cleaned_ascii.length] = styled_ascii
+        "#{line}\n"
+      end.join
     end
   end
 
