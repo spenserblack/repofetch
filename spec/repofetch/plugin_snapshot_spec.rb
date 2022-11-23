@@ -40,13 +40,6 @@ RSpec.describe Repofetch::Plugin do
         Repofetch::Stat.new('field 2', 'Yes'),
         Repofetch::Stat.new('field 3', 'Sure!'),
       ] }
-      let(:expected) do
-        <<~EXPECTED
-          1234567890                                   field 1: OK
-          ABCDEFGHIJ                                   field 2: Yes
-                                                       field 3: Sure!
-        EXPECTED
-      end
 
       it 'writes all lines aligned' do
         out = mock_plugin.new(stats).to_s
