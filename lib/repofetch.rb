@@ -5,6 +5,7 @@ require 'git'
 require 'repofetch/config'
 require 'repofetch/exceptions'
 require 'repofetch/theme'
+require 'repofetch/util'
 
 # Main class for repofetch
 class Repofetch
@@ -153,53 +154,45 @@ class Repofetch
     #
     # This should be overridden by the plugin subclass.
     # For example, "foo/bar @ GitHub".
-    #
-    # @param [Theme] theme The theme to use.
-    def header(_theme)
+    def header
       raise NoMethodError, 'header must be overridden by the plugin subclass'
+    end
+
+    # Creates the separator that appears underneath the header
+    def separator
+      '-' * Repofetch::Util.clean_s(header).length
     end
 
     def to_s(theme = nil)
       theme ||= Theme.new
-      head = header(theme)
-      separator = '-' * head.length
-      lines_with_ascii([head, separator, *@stats.map { |stat| stat.to_s(theme) }], theme)
-    end
 
-    # Cleans color placeholders and newlines from the ASCII.
-    #
-    # @returns [Array<String>]
-    def clean_aligned_ascii_lines
-      ascii.lines.map { |line| line.chomp.gsub(/%{[\w\d]+?}/, '') }
+      zipped_lines.map do |ascii_line, stat_line|
+        cleaned_ascii = Repofetch::Util.clean_s(ascii_line)
+        styled_ascii = (ascii_line % theme.to_h) + theme.style(:reset)
+        aligned_stat_line = "#{' ' * (MAX_ASCII_WIDTH + 5)}#{stat_line}"
+        "#{styled_ascii}#{aligned_stat_line.slice(cleaned_ascii.length..)}\n"
+      end.join
     end
 
     def styled_ascii_lines(theme)
       ascii.lines.map { |line| (line.chomp % theme.to_h) + theme.style(:reset) }
     end
 
-    # Combines lines with the plugin's ASCII for proper spacing.
+    # Makes an array of stat lines, including the header and separator.
+    def stat_lines
+      [header, separator, *@stats]
+    end
+
+    # Zips ASCII lines with stat lines.
     #
-    # @param [Array] lines An array of strings
-    #
-    # @returns [String]
-    def lines_with_ascii(lines, theme)
+    # If there are more of one than the other, than the zip will be padded with empty strings.
+    def zipped_lines
       ascii_lines = ascii.lines.map(&:chomp)
-
-      zipped = if ascii_lines.length > lines.length
-                 ascii_lines.zip(lines)
-               else
-                 lines.zip(ascii_lines).map(&:reverse)
-               end
-
-      zipped.map do |ascii_line, line|
-        ascii_line ||= ''
-        line ||= ''
-        cleaned_ascii = ascii_line.gsub(/%{[\w\d]+?}/, '')
-        styled_ascii = (ascii_line % theme.to_h) + theme.style(:reset)
-        line = "#{' ' * (MAX_ASCII_WIDTH + 5)}#{line}".dup
-        line[0, cleaned_ascii.length] = styled_ascii
-        "#{line}\n"
-      end.join
+      if ascii_lines.length > stat_lines.length
+        ascii_lines.zip(stat_lines)
+      else
+        stat_lines.zip(ascii_lines).map(&:reverse)
+      end.map { |ascii, stat| [ascii.to_s, stat.to_s] }
     end
   end
 

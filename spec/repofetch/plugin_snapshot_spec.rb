@@ -11,7 +11,7 @@ RSpec.describe Repofetch::Plugin do
           @stats.concat(stats)
         end
 
-        def header(_theme)
+        def header
           'plugin header'
         end
 
@@ -35,11 +35,13 @@ RSpec.describe Repofetch::Plugin do
     end
 
     context 'when there are more data lines than ASCII lines' do
-      let(:stats) { [
-        Repofetch::Stat.new('field 1', 'OK'),
-        Repofetch::Stat.new('field 2', 'Yes'),
-        Repofetch::Stat.new('field 3', 'Sure!'),
-      ] }
+      let(:stats) do
+        [
+          Repofetch::Stat.new('field 1', 'OK'),
+          Repofetch::Stat.new('field 2', 'Yes'),
+          Repofetch::Stat.new('field 3', 'Sure!')
+        ]
+      end
 
       it 'writes all lines aligned' do
         out = mock_plugin.new(stats).to_s
