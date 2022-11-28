@@ -13,6 +13,6 @@
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "bundle install",
+  "postCreateCommand": ".devcontainer/postCreate.sh",
   "remoteUser": "vscode"
 }
