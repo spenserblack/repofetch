@@ -9,7 +9,7 @@ Fetch details about your remote repository
 
 ## Screenshot
 
-*__NOTE__ This screenshot is only an example, and does not accurately represent output. This 
+*__NOTE__ This screenshot is only an example, and does not accurately represent output. This
 screenshot lacks ASCII art, some new stats, and some changes to how some stats are formatted.*
 
 ![screenshot](https://github.com/spenserblack/repofetch/blob/master/images/screenshot.png?raw=true)
@@ -59,20 +59,20 @@ the help for the `<config>` option.
 - `emojis`
 
   These configuration settings lets you control which emojis display for each stat
-  
+
   **Example**
   ```yml
   created: 🎉
   ```
-  
+
 - `ascii`
 
   This configuration setting lets you change the ASCII art that is displayed
-  
+
 - `labels`
 
   This configuration setting lets you rename the labels used for certain stats
-  
+
   **Example**
   ```yml
   good first issue: easy
