@@ -92,13 +92,9 @@ class Repofetch
 
   # Base class for plugins.
   class Plugin
-    attr_reader :stats
-
     # Plugin intializer arguments should come from the +from_git+ or +from_args+
     # class methods.
-    def initialize(*)
-      @stats = []
-    end
+    def initialize(*) end
 
     # Registers this plugin class for repofetch.
     def self.register
@@ -179,9 +175,16 @@ class Repofetch
       end.join
     end
 
+    # An array of stats that will be displayed to the right of the ASCII art.
+    #
+    # @returns [Array<Stat>]
+    def stats
+      []
+    end
+
     # Makes an array of stat lines, including the header and separator.
     def stat_lines
-      [header, separator, *@stats]
+      [header, separator, *stats.map(&:to_s)]
     end
 
     # Zips ASCII lines with stat lines.

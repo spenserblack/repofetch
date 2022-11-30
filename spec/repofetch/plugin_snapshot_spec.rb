@@ -6,9 +6,11 @@ RSpec.describe Repofetch::Plugin do
   describe '#to_s' do
     let(:mock_plugin) do
       Class.new described_class do
+        attr_reader :stats
+
         def initialize(stats)
           super
-          @stats.concat(stats)
+          @stats = stats
         end
 
         def header
