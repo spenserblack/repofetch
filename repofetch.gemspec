@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   # TODO: Really seems like overkill to install this just for distance_of_time_in_words
   spec.add_runtime_dependency 'actionview', '~> 7.0', '>= 7.0.4'
 
+  spec.add_runtime_dependency 'dotenv', '~> 2.8'
   spec.add_runtime_dependency 'git', '~> 1.12'
 
   spec.add_development_dependency 'bundler', '~> 2.0'

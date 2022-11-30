@@ -5,6 +5,7 @@ require 'git'
 require 'optparse'
 require 'repofetch'
 
+Repofetch::Env.load
 config = Repofetch::Config.load!
 
 config.plugins.each { |plugin| require plugin }
@@ -33,6 +34,9 @@ command = OptionParser.new do |opts|
     end
   end
 
+  opts.separator ''
+  dotenv_paths = Repofetch::Env::DOTENV_PATHS.join(', ')
+  opts.separator "The following dotenv files can be used to set environment variables: #{dotenv_paths}"
   opts.separator ''
   opts.separator "You config file is at #{Repofetch::Config::PATH}"
   opts.separator "Installed plugins: #{available_plugins.keys.join(', ')}"

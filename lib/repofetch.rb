@@ -3,6 +3,7 @@
 require 'action_view'
 require 'git'
 require 'repofetch/config'
+require 'repofetch/env'
 require 'repofetch/exceptions'
 require 'repofetch/theme'
 require 'repofetch/util'
