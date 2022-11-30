@@ -1,90 +1,30 @@
 # `repofetch`
 
 [![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/spenserblack/repofetch)](./CREDITS.md)
-[![Crates.io](https://img.shields.io/crates/v/repofetch?logo=rust)](https://crates.io/crates/repofetch)
-![Crates.io](https://img.shields.io/crates/d/repofetch?logo=rust)
 ![CI](https://github.com/spenserblack/repofetch/workflows/CI/badge.svg)
 
-Fetch details about your remote repository
+Fetch details about your remote repository.
 
-## Screenshot
+## Description
 
-*__NOTE__ This screenshot is only an example, and does not accurately represent output. This
-screenshot lacks ASCII art, some new stats, and some changes to how some stats are formatted.*
-
-![screenshot](https://github.com/spenserblack/repofetch/blob/master/images/screenshot.png?raw=true)
-
-## Installation
-
-### Latest Release from [Crates.io][crates.io]
-
-```bash
-cargo install repofetch
-```
-
-### Latest Commit from [this repo](https://github.com/spenserblack/repofetch)
-
-```bash
-cargo install --git https://github.com/spenserblack/repofetch.git
-```
-
-### NetBSD
-
-Pre-compiled binaries are available from the [official repositories](https://pkgsrc.se/sysutils/repofetch)
-To install this, simply run:
-
-```bash
-pkgin install repofetch
-```
-
-Or, if you prefer to build it from source:
-
-```
-cd /usr/pkgsrc/sysutils/repofetch
-make install
-```
-
-You need to have `rust` and `libgit2` installed in order to build the package.
+repofetch is a plugin-based CLI tool to fetch details (think [neofetch] or
+[onefetch]). The original version was focused on repository stats, and any official
+plugin will be for repositories, hence the "repo" in repofetch. With 3rd-party plugins,
+however, it can support other types of outputs, too.
 
 ## Configuration
 
-The first time you execute `repofetch`, it will create a `repofetch.yml` file in your default
-config folder. You can edit this file to change `repofetch`'s output.
+A file called `.repofetch.yml` in your home directory will configure repofetch. The
+first time you run `repofetch`, the default configuration will be written to this file.
 
-You can find where `repofetch.yml` is saved by default by executing `repofetch --help` and viewing
-the help for the `<config>` option.
+Files called `.repofetch.env` and `repofetch.env` in your home directory will set
+environment variables for repofetch, via the [dotenv gem][dotenv]. These environment
+variables can be useful for plugins that require secrets. The purpose of these files
+is to separate secrets from configuration, so that, for example, you could add
+`.repofetch.yml` to a dotfiles repository without compromising an API token.
 
-### Config File Contents
+You can find the absolute paths to these files with the `--help` option.
 
-- `emojis`
-
-  These configuration settings lets you control which emojis display for each stat
-
-  **Example**
-  ```yml
-  created: 🎉
-  ```
-
-- `ascii`
-
-  This configuration setting lets you change the ASCII art that is displayed
-
-- `labels`
-
-  This configuration setting lets you rename the labels used for certain stats
-
-  **Example**
-  ```yml
-  good first issue: easy
-  ```
-
-
-- `GITHUB TOKEN`
-
-  If you run `repofetch` multiple times in a short span of time, you may max out the
-  amount of queries you can make to GitHub's search API. This will result in some stats
-  being `???`. If you set the `GITHUB TOKEN` config option to a [personal access token][PAC],
-  `repofetch` can use this value to query GitHub's search API more often.
-
-[PAC]: https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
-[crates.io]: https://crates.io/crates/repofetch
+[dotenv]: https://github.com/bkeepers/dotenv
+[neofetch]: https://github.com/dylanaraps/neofetch
+[onefetch]: https://github.com/o2sh/onefetch
