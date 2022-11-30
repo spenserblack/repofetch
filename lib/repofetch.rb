@@ -206,14 +206,15 @@ class Repofetch
     # @param [String] label The label of the stat
     # @param value The value of the stat
     # @param [String] emoji An optional emoji for the stat
-    def initialize(label, value, emoji: nil)
+    def initialize(label, value, emoji: nil, theme: nil)
       @label = label
       @value = value
       @emoji = emoji
+      @theme = theme
     end
 
     def to_s
-      "#{@emoji || ''}#{theme.nil? ? @label : theme.format(:bold, @label)}: #{@value}"
+      "#{@emoji || ''}#{@theme.nil? ? @label : @theme.format(:bold, @label)}: #{@value}"
     end
 
     # Formats the value
