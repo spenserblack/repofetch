@@ -11,6 +11,7 @@ require 'repofetch/util'
 class Repofetch
   MAX_ASCII_WIDTH = 40
   MAX_ASCII_HEIGHT = 20
+  DEFAULT_THEME = Theme.new.freeze
   @plugins = []
 
   class << self
@@ -142,6 +143,11 @@ class Repofetch
       raise NoMethodError, 'from_args must be overridden by the plugin subclass'
     end
 
+    # Gets the plugin's theme. Override to use a theme besides the default.
+    def theme
+      Repofetch::DEFAULT_THEME
+    end
+
     # The ASCII to be printed alongside the stats.
     #
     # This should be overridden by the plugin subclass.
@@ -163,19 +169,13 @@ class Repofetch
       '-' * Repofetch::Util.clean_s(header).length
     end
 
-    def to_s(theme = nil)
-      theme ||= Theme.new
-
+    def to_s
       zipped_lines.map do |ascii_line, stat_line|
         cleaned_ascii = Repofetch::Util.clean_s(ascii_line)
         styled_ascii = (ascii_line % theme.to_h) + theme.style(:reset)
         aligned_stat_line = "#{' ' * (MAX_ASCII_WIDTH + 5)}#{stat_line}"
         "#{styled_ascii}#{aligned_stat_line.slice(cleaned_ascii.length..)}\n"
       end.join
-    end
-
-    def styled_ascii_lines(theme)
-      ascii.lines.map { |line| (line.chomp % theme.to_h) + theme.style(:reset) }
     end
 
     # Makes an array of stat lines, including the header and separator.
@@ -211,7 +211,7 @@ class Repofetch
       @emoji = emoji
     end
 
-    def to_s(theme = nil)
+    def to_s
       "#{@emoji || ''}#{theme.nil? ? @label : theme.format(:bold, @label)}: #{@value}"
     end
 

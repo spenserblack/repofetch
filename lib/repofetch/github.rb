@@ -55,7 +55,7 @@ class Repofetch
       new(*split)
     end
 
-    def header(theme)
+    def header
       "#{theme.format(:bold, "#{owner}/#{repository}")} @ #{theme.format(:bold, 'GitHub')}"
     end
 
