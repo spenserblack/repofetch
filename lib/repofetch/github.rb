@@ -15,6 +15,7 @@ class Repofetch
 
     # Initializes the GitHub plugin.
     def initialize(owner, repository) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      # TODO: Refactor instead of disabling rules?
       super
 
       @owner = owner
