@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'octokit'
 require 'optparse'
 require 'repofetch'
 
@@ -10,14 +11,28 @@ class Repofetch
     SSH_REMOTE_REGEX = %r{git@github\.com:(?<owner>[\w.\-]+)/(?<repository>[\w.\-]+)}.freeze
     ASCII = File.read(File.expand_path('github/ASCII', __dir__))
 
-    attr_reader :owner, :repository
+    attr_reader :owner, :repository, :stats
 
     # Initializes the GitHub plugin.
-    def initialize(owner, repository)
+    def initialize(owner, repository) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       super
 
       @owner = owner
       @repository = repository
+      @client = Octokit::Client.new(access_token: ENV.fetch('GITHUB_TOKEN', nil))
+
+      repo_resp = @client.repository("#{@owner}/#{@repository}")
+
+      @stats = [
+        ['🌐', 'URL', repo_resp['clone_url']],
+        ['⭐', 'stargazers', repo_resp['stargazers_count']],
+        ['👀', 'subscribers', repo_resp['subscribers_count']],
+        ['🔱', 'forks', repo_resp['forks_count']]
+      ].map { |emoji, label, value| Repofetch::Stat.new(label, value, emoji: emoji, theme: theme) }
+      @stats.concat([
+        ['🐣', 'created', repo_resp['created_at']],
+        ['📤', 'updated', repo_resp['updated_at']]
+      ].map { |emoji, label, value| Repofetch::TimespanStat.new(label, value, emoji: emoji, theme: theme) })
     end
 
     # Detects that the repository is a GitHub repository.
@@ -64,6 +79,8 @@ class Repofetch
     def self.from_args(args, _config)
       parser = OptionParser.new do |opts|
         opts.banner = 'Usage: <plugin activation> -- [options] OWNER/REPOSITORY'
+        opts.separator ''
+        opts.separator 'This plugin can use the GITHUB_TOKEN environment variable increase rate limits'
       end
       parser.parse(args)
       split = args[0]&.split('/')

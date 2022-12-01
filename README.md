@@ -25,6 +25,20 @@ is to separate secrets from configuration, so that, for example, you could add
 
 You can find the absolute paths to these files with the `--help` option.
 
+### Examples
+
+```yaml
+# .repofetch.yml
+plugins:
+  - 'repofetch/github'
+```
+
+```dotenv
+# .repofetch.env
+# Assuming you have gh (the GitHub CLI) installed
+GITHUB_TOKEN=$(gh auth token)
+```
+
 [dotenv]: https://github.com/bkeepers/dotenv
 [neofetch]: https://github.com/dylanaraps/neofetch
 [onefetch]: https://github.com/o2sh/onefetch

@@ -34,7 +34,9 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'actionview', '~> 7.0', '>= 7.0.4'
 
   spec.add_runtime_dependency 'dotenv', '~> 2.8'
+  spec.add_runtime_dependency 'faraday-retry', '~> 2.0'
   spec.add_runtime_dependency 'git', '~> 1.12'
+  spec.add_runtime_dependency 'octokit', '~> 6.0', '>= 6.0.1'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'overcommit', '~> 0.59'
