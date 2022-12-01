@@ -5,7 +5,7 @@ require 'repofetch'
 
 RSpec.describe Repofetch do
   describe '#register_plugin' do
-    after { described_class.send(:clear_plugins) }
+    before { described_class.send(:clear_plugins) }
 
     context 'with empty mock_plugin' do
       let(:mock_plugin) { Class.new(described_class::Plugin) }
@@ -22,7 +22,7 @@ RSpec.describe Repofetch do
     let(:new_plugin) { Class.new(described_class::Plugin) }
 
     context 'when there is no old plugin to replace' do
-      after { described_class.send(:clear_plugins) }
+      before { described_class.send(:clear_plugins) }
 
       it 'adds a plugin to the list of plugins' do
         described_class.replace_or_register_plugin(old_plugin, new_plugin)
@@ -31,8 +31,10 @@ RSpec.describe Repofetch do
     end
 
     context 'when there is an old plugin to replace' do
-      before { described_class.register_plugin(old_plugin) }
-      after { described_class.send(:clear_plugins) }
+      before do
+        described_class.send(:clear_plugins)
+        described_class.register_plugin(old_plugin)
+      end
 
       it 'replaces the old plugin' do
         described_class.replace_or_register_plugin(old_plugin, new_plugin)
@@ -47,7 +49,7 @@ RSpec.describe Repofetch do
   end
 
   describe Repofetch::Plugin, '#register' do
-    after { Repofetch.send(:clear_plugins) }
+    before { Repofetch.send(:clear_plugins) }
 
     context 'with empty mock_plugin' do
       let(:mock_plugin) { Class.new(described_class) }
@@ -60,7 +62,7 @@ RSpec.describe Repofetch do
   end
 
   describe Repofetch::Plugin, '#replace_or_register' do
-    after { Repofetch.send(:clear_plugins) }
+    before { Repofetch.send(:clear_plugins) }
 
     let(:old_plugin) { Class.new(described_class) }
     let(:new_plugin) { Class.new(described_class) }
@@ -73,7 +75,10 @@ RSpec.describe Repofetch do
     end
 
     context 'when there is an old plugin to replace' do
-      before { Repofetch.register_plugin(old_plugin) }
+      before do
+        Repofetch.send(:clear_plugins)
+        Repofetch.register_plugin(old_plugin)
+      end
 
       it 'replaces the old plugin' do
         new_plugin.replace_or_register(old_plugin)

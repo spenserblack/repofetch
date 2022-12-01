@@ -24,7 +24,30 @@ class Repofetch
     def self.matches_repo?(git)
       default_remote = Repofetch.default_remote(git)
       url = default_remote&.url
-      HTTP_REMOTE_REGEX.match?(url) || SSH_REMOTE_REGEX.match?(url)
+      matches_remote?(url)
+    end
+
+    # Detects that the remote URL is for a GitHub repository.
+    def self.matches_remote?(remote)
+      HTTP_REMOTE_REGEX.match?(remote) || SSH_REMOTE_REGEX.match?(remote)
+    end
+
+    # Gets the owner and repository from a GitHub local repository.
+    def self.repo_identifiers(git)
+      default_remote = Repofetch.default_remote(git)
+      url = default_remote&.url
+      remote_identifiers(url)
+    end
+
+    # Gets the owner and repository from a GitHub remote URL.
+    #
+    # Returns nil if there is no match.
+    def self.remote_identifiers(remote)
+      match = HTTP_REMOTE_REGEX.match(remote)
+      match = SSH_REMOTE_REGEX.match(remote) if match.nil?
+      raise "Remote #{remote.inspect} doesn't look like a GitHub remote" if match.nil?
+
+      [match[:owner], match[:repository].delete_suffix('.git')]
     end
 
     # Creates an instance from a +Git::Base+ instance.
@@ -32,13 +55,9 @@ class Repofetch
       # TODO: Raise a better exception than ArgumentError
       raise ArgumentError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
 
-      default_remote = Repofetch.default_remote(git)
-      url = default_remote&.url
-      match = HTTP_REMOTE_REGEX.match(url)
-      match = SSH_REMOTE_REGEX.match(url) if match.nil?
-      raise "Remote #{url.inspect} doesn't look like a GitHub remote" if match.nil?
+      owner, repository = repo_identifiers(git)
 
-      new(match[:owner], match[:repository])
+      new(owner, repository)
     end
 
     # Creates an instance from CLI args and configuration.
