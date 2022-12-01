@@ -12,6 +12,26 @@ repofetch is a plugin-based CLI tool to fetch details (think [neofetch] or
 plugin will be for repositories, hence the "repo" in repofetch. With 3rd-party plugins,
 however, it can support other types of outputs, too.
 
+## Installation
+
+### NetBSD (version <= 0.3.3)
+
+Pre-compiled binaries are available from the [official repositories](https://pkgsrc.se/sysutils/repofetch)
+To install this, simply run:
+
+```bash
+pkgin install repofetch
+```
+
+Or, if you prefer to build it from source:
+
+```
+cd /usr/pkgsrc/sysutils/repofetch
+make install
+```
+
+You need to have `rust` and `libgit2` installed in order to build the package.
+
 ## Configuration
 
 A file called `.repofetch.yml` in your home directory will configure repofetch. The
