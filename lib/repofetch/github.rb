@@ -14,7 +14,7 @@ class Repofetch
     attr_reader :owner, :repository, :stats
 
     # Initializes the GitHub plugin.
-    def initialize(owner, repository) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def initialize(owner, repository) # rubocop:disable Metrics/MethodLength
       # TODO: Refactor instead of disabling rules?
       super
 
@@ -25,15 +25,13 @@ class Repofetch
       repo_resp = @client.repository("#{@owner}/#{@repository}")
 
       @stats = [
-        ['🌐', 'URL', repo_resp['clone_url']],
-        ['⭐', 'stargazers', repo_resp['stargazers_count']],
-        ['👀', 'subscribers', repo_resp['subscribers_count']],
-        ['🔱', 'forks', repo_resp['forks_count']]
-      ].map { |emoji, label, value| Repofetch::Stat.new(label, value, emoji: emoji, theme: theme) }
-      @stats.concat([
-        ['🐣', 'created', repo_resp['created_at']],
-        ['📤', 'updated', repo_resp['updated_at']]
-      ].map { |emoji, label, value| Repofetch::TimespanStat.new(label, value, emoji: emoji, theme: theme) })
+        ['🌐', 'URL', repo_resp['clone_url'], Repofetch::Stat],
+        ['⭐', 'stargazers', repo_resp['stargazers_count'], Repofetch::Stat],
+        ['👀', 'subscribers', repo_resp['subscribers_count'], Repofetch::Stat],
+        ['🔱', 'forks', repo_resp['forks_count'], Repofetch::Stat],
+        ['🐣', 'created', repo_resp['created_at'], Repofetch::TimespanStat],
+        ['📤', 'updated', repo_resp['updated_at'], Repofetch::TimespanStat]
+      ].map { |emoji, label, value, cls| cls.new(label, value, emoji: emoji, theme: theme) }
     end
 
     # Detects that the repository is a GitHub repository.
