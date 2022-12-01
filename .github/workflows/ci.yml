@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: ['ruby']
+    branches: ['master']
   pull_request:
-    branches: ['ruby']
+    branches: ['master']
 
 jobs:
   test:
