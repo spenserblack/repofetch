@@ -5,7 +5,7 @@ require 'repofetch'
 
 class Repofetch
   # Adds support for GitHub repositories.
-  class GitHub < Repofetch::Plugin
+  class Github < Repofetch::Plugin
     HTTP_REMOTE_REGEX = %r{https?://github\.com/(?<owner>[\w.\-]+)/(?<repository>[\w.\-]+)}.freeze
     SSH_REMOTE_REGEX = %r{git@github\.com:(?<owner>[\w.\-]+)/(?<repository>[\w.\-]+)}.freeze
     ASCII = File.read(File.expand_path('github/ASCII', __dir__))
@@ -84,4 +84,4 @@ class Repofetch
   end
 end
 
-Repofetch::GitHub.register
+Repofetch::Github.register

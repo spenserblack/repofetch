@@ -2,7 +2,7 @@
 
 require 'repofetch/github'
 
-RSpec.describe Repofetch::GitHub do
+RSpec.describe Repofetch::Github do
   context 'when the remote is "http://github.com/ghost/boo.git"' do
     let(:remote) { 'http://github.com/ghost/boo.git' }
 
