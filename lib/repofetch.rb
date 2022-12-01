@@ -217,7 +217,7 @@ class Repofetch
     end
 
     def to_s
-      "#{@emoji || ''}#{@theme.nil? ? @label : @theme.format(:bold, @label)}: #{@value}"
+      "#{@emoji || ''}#{@theme.nil? ? @label : @theme.format(:bold, @label)}: #{format_value}"
     end
 
     # Formats the value
