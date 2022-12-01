@@ -234,7 +234,8 @@ class Repofetch
     include ActionView::Helpers::DateHelper
 
     # Formats the value as "x units ago".
-    def format_value(now = 0)
+    def format_value(now = nil)
+      now = Time.now if now.nil?
       "#{distance_of_time_in_words(@value, now)} ago"
     end
   end
