@@ -4,6 +4,8 @@
 require 'git'
 require 'optparse'
 require 'repofetch'
+require 'repofetch/config'
+require 'repofetch/env'
 
 Repofetch::Env.load
 config = Repofetch::Config.load!
