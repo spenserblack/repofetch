@@ -25,7 +25,7 @@ class Repofetch
       @repository = repository
       @client = Octokit::Client.new(access_token: ENV.fetch('GITHUB_TOKEN', nil))
 
-      repo_resp = @client.repository("#{@owner}/#{@repository}")
+      repo_resp = @client.repository(repo_id)
 
       byte_size = number_to_human_size(
         (repo_resp['size'] || 0) * 1024,
@@ -43,6 +43,14 @@ class Repofetch
         ['📤', 'updated', repo_resp['updated_at'], Repofetch::TimespanStat],
         ['💽', 'size', byte_size, Repofetch::Stat]
       ].map { |emoji, label, value, cls| cls.new(label, value, emoji: emoji, theme: theme) }
+
+      issue_search_resp = @client.search_issues("repo:#{repo_id} is:issue", per_page: 1, page: 0)
+
+      @stats << Repofetch::Stat.new('issues', issue_search_resp['total_count'], emoji: '❗', theme: theme)
+    end
+
+    def repo_id
+      "#{@owner}/#{@repository}"
     end
 
     # Detects that the repository is a GitHub repository.
