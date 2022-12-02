@@ -45,8 +45,10 @@ class Repofetch
       ].map { |emoji, label, value, cls| cls.new(label, value, emoji: emoji, theme: theme) }
 
       issue_search_resp = @client.search_issues("repo:#{repo_id} is:issue", per_page: 1, page: 0)
-
       @stats << Repofetch::Stat.new('issues', issue_search_resp['total_count'], emoji: '❗', theme: theme)
+
+      pr_search_resp = @client.search_issues("repo:#{repo_id} is:pr", per_page: 1, page: 0)
+      @stats << Repofetch::Stat.new('pull requests', pr_search_resp['total_count'], emoji: '🔀', theme: theme)
     end
 
     def repo_id
