@@ -48,6 +48,78 @@ RSpec.describe Repofetch do
     end
   end
 
+  describe '#get_plugin' do
+    before { described_class.send(:clear_plugins) }
+
+    context 'when no plugins match the repo' do
+      it 'raises a NoPluginsError' do
+        expect { described_class.get_plugin(nil, nil, nil) }.to raise_error(described_class::NoPluginsError)
+      end
+    end
+
+    context 'when multiple plugins match the repo' do
+      before do
+        2.times do
+          Class.new(described_class::Plugin) do
+            def self.matches_repo?(*)
+              true
+            end
+          end.register
+        end
+      end
+
+      it 'raises a TooManyPluginsError' do
+        expect { described_class.get_plugin(nil, nil, nil) }.to raise_error(Repofetch::TooManyPluginsError)
+      end
+    end
+
+    context 'when one plugin matches the repo' do
+      let(:plugin) do
+        Class.new(described_class::Plugin) do
+          def self.matches_repo?(*)
+            true
+          end
+
+          def self.from_git(*)
+            new
+          end
+        end
+      end
+
+      before { plugin.register }
+
+      it 'returns an instance of that plugin' do
+        expect(described_class.get_plugin(nil, nil, nil).class).to be plugin
+      end
+    end
+
+    context 'when a plugin author forgets to implement #matches_repo?' do
+      let(:ok_plugin) do
+        Class.new(described_class::Plugin) do
+          def self.matches_repo?(*)
+            true
+          end
+
+          def self.from_git(*)
+            new
+          end
+        end
+      end
+
+      let(:bad_plugin) do
+        Class.new(described_class::Plugin)
+      end
+
+      before { [ok_plugin, bad_plugin].each(&:register) }
+
+      it 'generates a warning' do
+        expect do
+          described_class.get_plugin(nil, nil, nil)
+        end.to output(/Does not implement \+matches_repo\?\+/).to_stderr
+      end
+    end
+  end
+
   describe Repofetch::Plugin, '#register' do
     before { Repofetch.send(:clear_plugins) }
 
