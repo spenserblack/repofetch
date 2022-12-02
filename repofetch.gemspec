@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-LONG_DESCRIPTION = 'Fetches repository stats, like onefetch, but with a focus on the remote\'s stats'
+LONG_DESCRIPTION = 'A plugin-based tool to fetch stats, with a GitHub stat fetcher included by default'
 
 Gem::Specification.new do |spec|
   spec.name                               = 'repofetch'
   spec.version                            = '0.4.0'
   spec.authors                            = ['Spenser Black']
 
-  spec.summary                            = 'A plugin-based tool to fetch remote repository stats'
+  spec.summary                            = 'A plugin-based stat fetcher'
   spec.description                        = LONG_DESCRIPTION
 
   spec.homepage                           = 'https://github.com/spenserblack/repofetch'
