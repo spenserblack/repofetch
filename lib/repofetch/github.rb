@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'action_view'
 require 'octokit'
 require 'optparse'
 require 'repofetch'
@@ -7,6 +8,8 @@ require 'repofetch'
 class Repofetch
   # Adds support for GitHub repositories.
   class Github < Repofetch::Plugin
+    include ActionView::Helpers::NumberHelper
+
     HTTP_REMOTE_REGEX = %r{https?://github\.com/(?<owner>[\w.\-]+)/(?<repository>[\w.\-]+)}.freeze
     SSH_REMOTE_REGEX = %r{git@github\.com:(?<owner>[\w.\-]+)/(?<repository>[\w.\-]+)}.freeze
     ASCII = File.read(File.expand_path('github/ASCII', __dir__))
@@ -14,7 +17,7 @@ class Repofetch
     attr_reader :owner, :repository, :stats
 
     # Initializes the GitHub plugin.
-    def initialize(owner, repository) # rubocop:disable Metrics/MethodLength
+    def initialize(owner, repository) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       # TODO: Refactor instead of disabling rules?
       super
 
@@ -24,13 +27,21 @@ class Repofetch
 
       repo_resp = @client.repository("#{@owner}/#{@repository}")
 
+      byte_size = number_to_human_size(
+        (repo_resp['size'] || 0) * 1024,
+        precision: 2,
+        significant: false,
+        strip_insignificant_zeros: false
+      )
+
       @stats = [
         ['🌐', 'URL', repo_resp['clone_url'], Repofetch::Stat],
         ['⭐', 'stargazers', repo_resp['stargazers_count'], Repofetch::Stat],
         ['👀', 'subscribers', repo_resp['subscribers_count'], Repofetch::Stat],
         ['🔱', 'forks', repo_resp['forks_count'], Repofetch::Stat],
         ['🐣', 'created', repo_resp['created_at'], Repofetch::TimespanStat],
-        ['📤', 'updated', repo_resp['updated_at'], Repofetch::TimespanStat]
+        ['📤', 'updated', repo_resp['updated_at'], Repofetch::TimespanStat],
+        ['💽', 'size', byte_size, Repofetch::Stat]
       ].map { |emoji, label, value, cls| cls.new(label, value, emoji: emoji, theme: theme) }
     end
 
