@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rake'
-
 LONG_DESCRIPTION = 'A plugin-based tool to fetch stats, with a GitHub stat fetcher included by default'
 
 Gem::Specification.new do |spec|
+  require 'rake'
+
   spec.name                               = 'repofetch'
   spec.version                            = '0.4.0'
   spec.authors                            = ['Spenser Black']
