@@ -9,10 +9,10 @@ Fetch details about your remote repository.
 
 ## Description
 
-repofetch is a plugin-based CLI tool to fetch details (think [neofetch] or
-[onefetch]). The original version was focused on repository stats, and any official
-plugin will be for repositories, hence the "repo" in repofetch. With 3rd-party plugins,
-however, it can support other types of outputs, too.
+repofetch is a CLI tool to fetch stats (think [neofetch] or
+[onefetch]) that uses plugins for its implementation. The original version was focused on
+repository stats, and any official plugin will be for repositories, hence the "repo" in
+repofetch. With 3rd-party plugins, however, it can support other types of outputs, too.
 
 ## Installation
 
