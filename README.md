@@ -17,6 +17,12 @@ repofetch. With 3rd-party plugins, however, it can support other types of output
 
 ## Installation
 
+### Via RubyGems.org
+
+```bash
+gem install repofetch
+```
+
 ### NetBSD (version <= 0.3.3)
 
 Pre-compiled binaries are available from the [official repositories](https://pkgsrc.se/sysutils/repofetch)
