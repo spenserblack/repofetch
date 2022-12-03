@@ -2,6 +2,7 @@
 
 [![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/spenserblack/repofetch)](./CREDITS.md)
 ![CI](https://github.com/spenserblack/repofetch/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/spenserblack/repofetch/branch/master/graph/badge.svg?token=3572AEWQAY)](https://codecov.io/gh/spenserblack/repofetch)
 
 Fetch details about your remote repository.
 
