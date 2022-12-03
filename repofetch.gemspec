@@ -3,8 +3,6 @@
 LONG_DESCRIPTION = 'A plugin-based tool to fetch stats, with a GitHub stat fetcher included by default'
 
 Gem::Specification.new do |spec|
-  require 'rake'
-
   spec.name                               = 'repofetch'
   spec.version                            = '0.4.0'
   spec.authors                            = ['Spenser Black']
@@ -20,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri']           = spec.homepage
   spec.metadata['source_code_uri']        = 'https://github.com/spenserblack/repofetch'
 
-  spec.files                              = FileList['lib/**/*', 'exe/*', '[A-Z]*'].to_a
+  spec.files                              = Dir['lib/**/*'] + Dir['exe/*'] + Dir['[A-Z]*']
 
   spec.bindir                             = 'exe'
   spec.executables                        = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
