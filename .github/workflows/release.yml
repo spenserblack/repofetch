@@ -18,11 +18,3 @@ jobs:
           ref: ${{ github.ref }}
       - name: Publish GitHub Release
         uses: spenserblack/actions-tag-to-release@v1
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Publish to Crates.io
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-        run: cargo publish
