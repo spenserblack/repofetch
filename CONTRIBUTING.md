@@ -120,4 +120,10 @@ end
 MyCoolPlugin.register
 ```
 
+### Guidelines
+
+- For ASCII art, try to avoid using explicit black and white colors for negative and positive space.
+  This can harm compatibility between light and dark terminals. Instead, simply use whitespace for
+  negative space, and uncolored text for positive space.
+
 [git-base]: https://www.rubydoc.info/github/ruby-git/ruby-git/Git/Base
