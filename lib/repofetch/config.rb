@@ -24,12 +24,17 @@ class Repofetch
       end
     end
 
-    attr_reader :plugins
-
     # @param config_yaml [String] a YAML string
     def initialize(config_yaml = DEFAULT_CONFIG)
-      h = YAML.safe_load(config_yaml, symbolize_names: true)
-      @plugins = h[:plugins] || []
+      @config = YAML.safe_load(config_yaml, symbolize_names: true)
+    end
+
+    def plugins
+      @config[:plugins] || []
+    end
+
+    def [](key)
+      @config[key]
     end
   end
 end
