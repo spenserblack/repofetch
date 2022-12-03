@@ -14,45 +14,23 @@ class Repofetch
     SSH_REMOTE_REGEX = %r{git@github\.com:(?<owner>[\w.\-]+)/(?<repository>[\w.\-]+)}.freeze
     ASCII = File.read(File.expand_path('github/ASCII', __dir__))
 
-    attr_reader :owner, :repository, :stats
+    attr_reader :owner, :repository
 
     # Initializes the GitHub plugin.
-    def initialize(owner, repository) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      # TODO: Refactor instead of disabling rules?
+    def initialize(owner, repository)
       super
 
       @owner = owner
       @repository = repository
       @client = Octokit::Client.new(access_token: ENV.fetch('GITHUB_TOKEN', nil))
-
-      repo_resp = @client.repository(repo_id)
-
-      byte_size = number_to_human_size(
-        (repo_resp['size'] || 0) * 1024,
-        precision: 2,
-        significant: false,
-        strip_insignificant_zeros: false
-      )
-
-      @stats = [
-        ['🌐', 'URL', repo_resp['clone_url'], Repofetch::Stat],
-        ['⭐', 'stargazers', repo_resp['stargazers_count'], Repofetch::Stat],
-        ['👀', 'subscribers', repo_resp['subscribers_count'], Repofetch::Stat],
-        ['🔱', 'forks', repo_resp['forks_count'], Repofetch::Stat],
-        ['🐣', 'created', repo_resp['created_at'], Repofetch::TimespanStat],
-        ['📤', 'updated', repo_resp['updated_at'], Repofetch::TimespanStat],
-        ['💽', 'size', byte_size, Repofetch::Stat]
-      ].map { |emoji, label, value, cls| cls.new(label, value, emoji: emoji, theme: theme) }
-
-      issue_search_resp = @client.search_issues("repo:#{repo_id} is:issue", per_page: 1, page: 0)
-      @stats << Repofetch::Stat.new('issues', issue_search_resp['total_count'], emoji: '❗', theme: theme)
-
-      pr_search_resp = @client.search_issues("repo:#{repo_id} is:pr", per_page: 1, page: 0)
-      @stats << Repofetch::Stat.new('pull requests', pr_search_resp['total_count'], emoji: '🔀', theme: theme)
     end
 
     def repo_id
       "#{@owner}/#{@repository}"
+    end
+
+    def stats
+      [url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
     end
 
     # Detects that the repository is a GitHub repository.
@@ -117,6 +95,57 @@ class Repofetch
 
     def ascii
       ASCII
+    end
+
+    protected
+
+    def repo_stats
+      @repo_stats = @client.repository(repo_id) if @repo_stats.nil?
+      @repo_stats
+    end
+
+    def url
+      Repofetch::Stat.new('URL', repo_stats['clone_url'], emoji: '🌐', theme: theme)
+    end
+
+    def stargazers
+      Repofetch::Stat.new('stargazers', repo_stats['stargazers_count'], emoji: '⭐', theme: theme)
+    end
+
+    def subscribers
+      Repofetch::Stat.new('subscribers', repo_stats['subscribers_count'], emoji: '👀', theme: theme)
+    end
+
+    def forks
+      Repofetch::Stat.new('forks', repo_stats['forks_count'], emoji: '🔱', theme: theme)
+    end
+
+    def created
+      Repofetch::TimespanStat.new('created', repo_stats['created_at'], emoji: '🐣', theme: theme)
+    end
+
+    def updated
+      Repofetch::TimespanStat.new('updated', repo_stats['updated_at'], emoji: '📤', theme: theme)
+    end
+
+    def size
+      byte_size = number_to_human_size(
+        (repo_stats['size'] || 0) * 1024,
+        precision: 2,
+        significant: false,
+        strip_insignificant_zeros: false
+      )
+      Repofetch::Stat.new('size', byte_size, emoji: '💽', theme: theme)
+    end
+
+    def issues
+      @issue_search = @client.search_issues("repo:#{repo_id} is:issue", per_page: 1, page: 0) if @issue_search.nil?
+      Repofetch::Stat.new('issues', @issue_search['total_count'], emoji: '❗', theme: theme)
+    end
+
+    def pull_requests
+      @pr_search = @client.search_issues("repo:#{repo_id} is:pr", per_page: 1, page: 0) if @pr_search.nil?
+      Repofetch::Stat.new('pull requests', @pr_search['total_count'], emoji: '🔀', theme: theme)
     end
   end
 end
