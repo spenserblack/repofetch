@@ -3,6 +3,8 @@
 require 'repofetch'
 
 RSpec.describe Repofetch::Stat do
+  before { Repofetch.config = Repofetch::Config.new }
+
   describe '#format_value' do
     it "calls the value's to_s method" do
       stat = described_class.new('label', 'foo')
@@ -19,11 +21,23 @@ RSpec.describe Repofetch::Stat do
       end
     end
 
-    context 'when it has an emoji' do
+    context 'when it has an emoji and emojis are enabled' do
+      before { Repofetch.config.emojis = true }
+
       let(:stat) { described_class.new('spooky time', 'all the time', emoji: '👻') }
 
       it 'is in the format `<emoji><label>: <value>`' do
         expect(stat.to_s).to eq '👻spooky time: all the time'
+      end
+    end
+
+    context 'when it has an emoji but emojis are not enabled' do
+      before { Repofetch.config.emojis = false }
+
+      let(:stat) { described_class.new('spooky time', 'all the time', emoji: '👻') }
+
+      it 'is in the format `<emoji><label>: <value>`' do
+        expect(stat.to_s).to eq 'spooky time: all the time'
       end
     end
   end
