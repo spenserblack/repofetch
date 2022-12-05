@@ -2,3 +2,5 @@ bin/* linguist-vendored
 *.snap -whitespace
 lib/repofetch/DEFAULT_CONFIG linguist-language=YAML
 **/ASCII -whitespace
+
+RELEASE_NOTES linguist-language=Markdown

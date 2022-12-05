@@ -1,0 +1,6 @@
+## Breaking for 3rd-party plugins
+
+### Changed
+
+- Configuration to be a class variable on `Repofetch` instead of a value that's
+  passed to various instantiation and rendering methods
