@@ -1,5 +1,7 @@
 # Changelog
 
+:warning: Further updates will be tracked in the [release notes](https://github.com/spenserblack/repofetch/releases).
+
 ## [Unreleased]
 
 ### Other
