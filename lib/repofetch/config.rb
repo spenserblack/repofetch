@@ -38,6 +38,10 @@ class Repofetch
       @config[:emojis].nil? || @config[:emojis]
     end
 
+    def emojis=(emojis)
+      @config[:emojis] = emojis
+    end
+
     def [](key)
       @config[key]
     end
