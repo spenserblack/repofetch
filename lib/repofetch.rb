@@ -225,7 +225,9 @@ class Repofetch
     end
 
     def to_s
-      "#{@emoji || ''}#{@theme.nil? ? @label : @theme.format(:bold, @label)}: #{format_value}"
+      emoji = @emoji
+      emoji = nil unless Repofetch.config.nil? || Repofetch.config.emojis?
+      "#{emoji}#{@theme.nil? ? @label : @theme.format(:bold, @label)}: #{format_value}"
     end
 
     # Formats the value

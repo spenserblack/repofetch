@@ -33,6 +33,11 @@ class Repofetch
       @config[:plugins] || []
     end
 
+    # Should emojis be shown
+    def emojis?
+      @config[:emojis].nil? || @config[:emojis]
+    end
+
     def [](key)
       @config[key]
     end
