@@ -86,11 +86,11 @@ class MyCoolPlugin < Repofetch::Plugin
     @arg_count = arg_count
   end
 
-  def self.from_git(git, args, _config)
+  def self.from_git(git, args)
     new(true, args.length)
   end
 
-  def self.from_args(args, _config)
+  def self.from_args(args)
     new(false, args.length)
   end
 

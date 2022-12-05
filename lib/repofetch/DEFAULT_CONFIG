@@ -2,3 +2,4 @@
 # vim: set ft=yaml:
 plugins:
   - 'repofetch/github'
+emojis: true

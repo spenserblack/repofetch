@@ -25,12 +25,21 @@ class Repofetch
     end
 
     # @param config_yaml [String] a YAML string
-    def initialize(config_yaml = DEFAULT_CONFIG)
-      @config = YAML.safe_load(config_yaml, symbolize_names: true)
+    def initialize(config_yaml = '')
+      @config = YAML.safe_load(config_yaml, symbolize_names: true) || {}
     end
 
     def plugins
       @config[:plugins] || []
+    end
+
+    # Should emojis be shown
+    def emojis?
+      @config[:emojis].nil? || @config[:emojis]
+    end
+
+    def emojis=(emojis)
+      @config[:emojis] = emojis
     end
 
     def [](key)

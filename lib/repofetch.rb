@@ -16,7 +16,18 @@ class Repofetch
   @plugins = []
 
   class << self
+    attr_accessor :config
     attr_reader :plugins
+  end
+
+  # Loads the config, without affecting the file system.
+  def self.load_config
+    @config = Config.load
+  end
+
+  # Loads the config, writing a default config if it doesn't exist.
+  def self.load_config!
+    @config = Config.load!
   end
 
   # Registers a plugin.
@@ -47,10 +58,9 @@ class Repofetch
   #
   # @param [String] git An instance of +Git::Base+
   # @param [Array<String>] args The arguments passed to the program.
-  # @param [Repofetch::Config] config The configuration to use.
   #
   # @returns [Plugin] A plugin to use.
-  def self.get_plugin(git, args, config)
+  def self.get_plugin(git, args)
     available_plugins = @plugins.filter do |plugin_class|
       plugin_class.matches_repo?(git)
     rescue NoMethodError
@@ -61,7 +71,7 @@ class Repofetch
 
     raise TooManyPluginsError if available_plugins.length > 1
 
-    available_plugins[0].from_git(git, args, config)
+    available_plugins[0].from_git(git, args)
   end
 
   # Gets the name of the default remote to use.
@@ -123,20 +133,18 @@ class Repofetch
     #
     # @param [Git::Base] _git The Git repository object to use when calling +Plugin.new+.
     # @param [Array] _args The arguments to process.
-    # @param [Config] _config The configuration loaded by the CLI.
     #
     # @returns [Plugin]
-    def self.from_git(_git, _args, _config)
+    def self.from_git(_git, _args)
       raise NoMethodError, 'from_git must be overridden by the plugin subclass'
     end
 
     # This will receive an array of strings (e.g. +ARGV+) and call +Plugin.new+.
     #
     # @param [Array] _args The arguments to process.
-    # @param [Config] _config The configuration loaded by the CLI.
     #
     # @returns [Plugin]
-    def self.from_args(_args, _config)
+    def self.from_args(_args)
       raise NoMethodError, 'from_args must be overridden by the plugin subclass'
     end
 
@@ -217,7 +225,9 @@ class Repofetch
     end
 
     def to_s
-      "#{@emoji || ''}#{@theme.nil? ? @label : @theme.format(:bold, @label)}: #{format_value}"
+      emoji = @emoji
+      emoji = nil unless Repofetch.config.nil? || Repofetch.config.emojis?
+      "#{emoji}#{@theme.nil? ? @label : @theme.format(:bold, @label)}: #{format_value}"
     end
 
     # Formats the value
