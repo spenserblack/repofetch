@@ -8,6 +8,12 @@
 
 Fetch details about your remote repository.
 
+## Usage
+
+![basic demo](./demos/demo.gif)
+
+![advanced plugin usage](./demos/github-plugin.gif)
+
 ## Description
 
 repofetch is a CLI tool to fetch stats (think [neofetch] or
