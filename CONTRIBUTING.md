@@ -86,11 +86,11 @@ class MyCoolPlugin < Repofetch::Plugin
     @arg_count = arg_count
   end
 
-  def self.from_git(git, args, _config)
+  def self.from_git(git, args)
     new(true, args.length)
   end
 
-  def self.from_args(args, _config)
+  def self.from_args(args)
     new(false, args.length)
   end
 
@@ -119,5 +119,11 @@ end
 # When the user adds your plugin to their configuration file, this line will register the plugin
 MyCoolPlugin.register
 ```
+
+### Guidelines
+
+- For ASCII art, try to avoid using explicit black and white colors for negative and positive space.
+  This can harm compatibility between light and dark terminals. Instead, simply use whitespace for
+  negative space, and uncolored text for positive space.
 
 [git-base]: https://www.rubydoc.info/github/ruby-git/ruby-git/Git/Base

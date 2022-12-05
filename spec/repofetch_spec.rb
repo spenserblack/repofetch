@@ -53,7 +53,7 @@ RSpec.describe Repofetch do
 
     context 'when no plugins match the repo' do
       it 'raises a NoPluginsError' do
-        expect { described_class.get_plugin(nil, nil, nil) }.to raise_error(described_class::NoPluginsError)
+        expect { described_class.get_plugin(nil, nil) }.to raise_error(described_class::NoPluginsError)
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Repofetch do
       end
 
       it 'raises a TooManyPluginsError' do
-        expect { described_class.get_plugin(nil, nil, nil) }.to raise_error(Repofetch::TooManyPluginsError)
+        expect { described_class.get_plugin(nil, nil) }.to raise_error(Repofetch::TooManyPluginsError)
       end
     end
 
@@ -89,7 +89,7 @@ RSpec.describe Repofetch do
       before { plugin.register }
 
       it 'returns an instance of that plugin' do
-        expect(described_class.get_plugin(nil, nil, nil).class).to be plugin
+        expect(described_class.get_plugin(nil, nil).class).to be plugin
       end
     end
 
@@ -114,7 +114,7 @@ RSpec.describe Repofetch do
 
       it 'generates a warning' do
         expect do
-          described_class.get_plugin(nil, nil, nil)
+          described_class.get_plugin(nil, nil)
         end.to output(/Does not implement \+matches_repo\?\+/).to_stderr
       end
     end

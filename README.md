@@ -1,18 +1,27 @@
 # `repofetch`
 
+[![Gem Version](https://badge.fury.io/rb/repofetch.svg)](https://badge.fury.io/rb/repofetch)
 [![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/spenserblack/repofetch)](./CREDITS.md)
 ![CI](https://github.com/spenserblack/repofetch/workflows/CI/badge.svg)
+[![CodeQL](https://github.com/spenserblack/repofetch/actions/workflows/codeql.yml/badge.svg)](https://github.com/spenserblack/repofetch/actions/workflows/codeql.yml)
+[![codecov](https://codecov.io/gh/spenserblack/repofetch/branch/master/graph/badge.svg?token=3572AEWQAY)](https://codecov.io/gh/spenserblack/repofetch)
 
 Fetch details about your remote repository.
 
 ## Description
 
-repofetch is a plugin-based CLI tool to fetch details (think [neofetch] or
-[onefetch]). The original version was focused on repository stats, and any official
-plugin will be for repositories, hence the "repo" in repofetch. With 3rd-party plugins,
-however, it can support other types of outputs, too.
+repofetch is a CLI tool to fetch stats (think [neofetch] or
+[onefetch]) that uses plugins for its implementation. The original version was focused on
+repository stats, and any official plugin will be for repositories, hence the "repo" in
+repofetch. With 3rd-party plugins, however, it can support other types of outputs, too.
 
 ## Installation
+
+### Via RubyGems.org
+
+```bash
+gem install repofetch
+```
 
 ### NetBSD (version <= 0.3.3)
 
