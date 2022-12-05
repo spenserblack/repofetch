@@ -4,13 +4,12 @@
 require 'git'
 require 'optparse'
 require 'repofetch'
-require 'repofetch/config'
 require 'repofetch/env'
 
 Repofetch::Env.load
-config = Repofetch::Config.load!
+Repofetch.load_config!
 
-config.plugins.each { |plugin| require plugin }
+Repofetch.config.plugins.each { |plugin| require plugin }
 
 options = {
   plugin: nil,
@@ -51,7 +50,7 @@ plugin_class = options[:plugin]
 # NOTE: If the user explicitly selected a plugin, then it is constructed from CLI args.
 # Otherwise, we try to build it from the repository.
 begin
-  plugin = plugin_class.nil? ? Repofetch.get_plugin(git, ARGV, config) : plugin_class.from_args(ARGV, config)
+  plugin = plugin_class.nil? ? Repofetch.get_plugin(git, ARGV) : plugin_class.from_args(ARGV)
 rescue ArgumentError => e
   warn e
   exit 1
