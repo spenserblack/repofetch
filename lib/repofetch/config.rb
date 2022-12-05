@@ -25,8 +25,8 @@ class Repofetch
     end
 
     # @param config_yaml [String] a YAML string
-    def initialize(config_yaml = DEFAULT_CONFIG)
-      @config = YAML.safe_load(config_yaml, symbolize_names: true)
+    def initialize(config_yaml = '')
+      @config = YAML.safe_load(config_yaml, symbolize_names: true) || {}
     end
 
     def plugins
