@@ -62,7 +62,7 @@ class Repofetch
   # @raise [NoPluginsError] If no plugins were selected.
   # @raise [TooManyPluginsError] If more than one plugin was selected.
   #
-  # @returns [Plugin] A plugin to use.
+  # @return [Plugin] A plugin to use.
   def self.get_plugin(git, args)
     available_plugins = @plugins.filter do |plugin_class|
       plugin_class.matches_repo?(git)
@@ -84,7 +84,7 @@ class Repofetch
   #
   # @param [String] path The path to the repository.
   #
-  # @returns [Git::Remote]
+  # @return [Git::Remote]
   def self.default_remote(git)
     remotes = git.remotes
     found_remote = remotes.find { |remote| remote.name == 'origin' }
@@ -137,7 +137,7 @@ class Repofetch
     # @param [Git::Base] _git The Git repository object to use when calling +Plugin.new+.
     # @param [Array] _args The arguments to process.
     #
-    # @returns [Plugin]
+    # @return [Plugin]
     def self.from_git(_git, _args)
       raise NoMethodError, 'from_git must be overridden by the plugin subclass'
     end
@@ -146,7 +146,7 @@ class Repofetch
     #
     # @param [Array] _args The arguments to process.
     #
-    # @returns [Plugin]
+    # @return [Plugin]
     def self.from_args(_args)
       raise NoMethodError, 'from_args must be overridden by the plugin subclass'
     end
@@ -188,7 +188,7 @@ class Repofetch
 
     # @abstract An array of stats that will be displayed to the right of the ASCII art.
     #
-    # @returns [Array<Stat>]
+    # @return [Array<Stat>]
     def stats
       []
     end
