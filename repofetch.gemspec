@@ -15,18 +15,18 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version              = Gem::Requirement.new('>= 2.7.0')
 
-  spec.metadata['homepage_uri']           = spec.homepage
-  spec.metadata['source_code_uri']        = 'https://github.com/spenserblack/repofetch'
-
   spec.files                              = Dir['lib/**/*'] + Dir['exe/*'] + Dir['[A-Z]*']
 
   spec.bindir                             = 'exe'
   spec.executables                        = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths                      = ['lib']
 
-  spec.metadata['rubygems_mfa_required']  = 'true'
-
-  spec.metadata['github_repo']            = 'ssh://github.com/spenserblack/repofetch'
+  spec.metadata = {
+    'homepage_uri' => spec.homepage,
+    'source_code_uri' => 'https://github.com/spenserblack/repofetch',
+    'github_repo' => 'ssh://github.com/spenserblack/repofetch',
+    'rubygems_mfa_required' => 'true'
+  }
 
   # TODO: Really seems like overkill to install this just for distance_of_time_in_words
   spec.add_runtime_dependency 'actionview', '~> 7.0', '>= 7.0.4'
