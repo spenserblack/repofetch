@@ -126,6 +126,9 @@ GEM
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.3.0)
+    webrick (1.7.0)
+    yard (0.9.28)
+      webrick (~> 1.7.0)
 
 PLATFORMS
   ruby
@@ -142,6 +145,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.13)
   simplecov (~> 0.21)
   simplecov-cobertura (~> 2.1)
+  yard (~> 0.9.28)
 
 BUNDLED WITH
    2.1.2

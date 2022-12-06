@@ -5,6 +5,10 @@
 # Bundler Binstubs
 /bin/
 
+# Yard output
+/.yardoc/
+/doc/
+
 # Legacy ignores from Rust version
 /target
 **/*.rs.bk
