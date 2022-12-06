@@ -56,7 +56,7 @@ class Repofetch
   # Raises a +Repofetch::NoPluginsError+ if no plugins are found.
   # Raises a +Repofetch::TooManyPluginsError+ if more than one plugin is found.
   #
-  # @param [String] git An instance of +Git::Base+
+  # @param [Git::Base] git A repository instance.
   # @param [Array<String>] args The arguments passed to the program.
   #
   # @raise [NoPluginsError] If no plugins were selected.
@@ -82,7 +82,7 @@ class Repofetch
   # Will try to pick "origin", but if that is not found then it will
   # pick the first one found, or nil if there aren't any available.
   #
-  # @param [String] path The path to the repository.
+  # @param [Git::Base] git The repository instance.
   #
   # @return [Git::Remote]
   def self.default_remote(git)
