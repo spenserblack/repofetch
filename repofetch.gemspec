@@ -4,7 +4,7 @@ LONG_DESCRIPTION = 'A plugin-based tool to fetch stats, with a GitHub stat fetch
 
 Gem::Specification.new do |spec|
   spec.name                               = 'repofetch'
-  spec.version                            = '0.4.1-rc.1'
+  spec.version                            = '0.4.1-rc.2'
   spec.authors                            = ['Spenser Black']
 
   spec.summary                            = 'A plugin-based stat fetcher'
