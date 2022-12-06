@@ -51,3 +51,18 @@ jobs:
 
       - name: Check Style
         run: bundle exec rubocop
+
+  docs:
+    name: Check Docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true
+
+      - name: Check Docs
+        run: bundle exec yard stats --fail-on-warning
