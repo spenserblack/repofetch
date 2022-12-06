@@ -23,6 +23,8 @@ Gem::Specification.new do |spec|
 
   spec.metadata = {
     'homepage_uri' => spec.homepage,
+    'changelog_uri' => "#{spec.homepage}/releases",
+    'documentation_uri' => 'https://rubydoc.info/gems/repofetch',
     'source_code_uri' => 'https://github.com/spenserblack/repofetch',
     'github_repo' => 'ssh://github.com/spenserblack/repofetch',
     'rubygems_mfa_required' => 'true'
