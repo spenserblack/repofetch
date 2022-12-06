@@ -15,6 +15,8 @@ jobs:
           ref: ${{ github.ref }}
       - name: Publish GitHub Release
         uses: spenserblack/actions-tag-to-release@v1
+        with:
+          prerelease: auto
 
   publish:
     name: Publish
