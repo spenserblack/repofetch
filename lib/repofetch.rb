@@ -59,6 +59,9 @@ class Repofetch
   # @param [String] git An instance of +Git::Base+
   # @param [Array<String>] args The arguments passed to the program.
   #
+  # @raise [NoPluginsError] If no plugins were selected.
+  # @raise [TooManyPluginsError] If more than one plugin was selected.
+  #
   # @returns [Plugin] A plugin to use.
   def self.get_plugin(git, args)
     available_plugins = @plugins.filter do |plugin_class|
