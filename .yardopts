@@ -4,5 +4,6 @@
 --asset demos
 lib/**/*.rb -
 CONTRIBUTING.md
+CREDITS.md
 LICENSE
 README.md
