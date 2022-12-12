@@ -10,7 +10,7 @@ body:
       description: Tell us which plugin it is
       placeholder: ex. Repofetch::Github
     validations:
-      required: false
+      required: true
   - type: textarea
     id: what-happened
     attributes:
