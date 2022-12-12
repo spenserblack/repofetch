@@ -1,0 +1,21 @@
+name: Bug Report
+description: File a general bug report
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe what happened, including steps to recreate the issue.
+      placeholder: This happened when I did this...
+    validations:
+      required: true
+  - type: textarea
+    id: what-should-happen
+    attributes:
+      label: What should have happened?
+      description: Describe the behavior that you expected.
+      placeholder: It should have...
+    validations:
+      required: true
