@@ -1,0 +1,26 @@
+name: Plugin Support
+description: Request a feature that would make it easier for you to author a plugin
+title: "[Feature Request]: "
+labels: ["plugin-support", "enhancement"]
+body:
+  - type: input
+    id: plugin
+    attributes:
+      label: Your Plugin
+      description: A name or link to your plugin, if it exists.
+    validations:
+      required: false
+  - type: textarea
+    id: attempted-usage
+    attributes:
+      label: What are you trying to do?
+      description: Tell us what your plugin needs to be able to do.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Proposed solution
+      description: Tell us what we can do to make it easier for you to author your plugin.
+    validations:
+      required: true
