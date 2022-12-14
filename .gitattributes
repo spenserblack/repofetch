@@ -1,5 +1,5 @@
 bin/* linguist-vendored
-*.snap -whitespace
+*.snap -whitespace linguist-language=Text
 lib/repofetch/DEFAULT_CONFIG linguist-language=YAML
 **/ASCII -whitespace
 
