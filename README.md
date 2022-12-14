@@ -85,6 +85,13 @@ plugins:
 GITHUB_TOKEN=$(gh auth token)
 ```
 
+## Notes on Rust Implementation (Version `< 0.4.0`)
+
+I switched from Rust to Ruby to rewrite this project to use and support
+plugins. I won't develop new features for the Rust implementation, but I may
+fix bugs, and I'll review pull requests. The Rust implementation is on the
+`rust` branch.
+
 [dotenv]: https://github.com/bkeepers/dotenv
 [neofetch]: https://github.com/dylanaraps/neofetch
 [onefetch]: https://github.com/o2sh/onefetch
