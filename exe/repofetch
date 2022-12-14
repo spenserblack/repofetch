@@ -39,7 +39,7 @@ command = OptionParser.new do |opts|
   dotenv_paths = Repofetch::Env.dotenv_paths.join(', ')
   opts.separator "The following dotenv files can be used to set environment variables: #{dotenv_paths}"
   opts.separator ''
-  opts.separator "You config file is at #{Repofetch::Config::PATH}"
+  opts.separator "You config file is at #{Repofetch::Config.path}"
   opts.separator "Installed plugins: #{available_plugins.keys.join(', ')}"
 end
 
