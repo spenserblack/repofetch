@@ -32,6 +32,5 @@ body:
     attributes:
       label: Additional info
       description: Is there anything else that we should know?
-      placeholder: It should have...
     validations:
       required: false
