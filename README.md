@@ -29,7 +29,18 @@ repofetch. With 3rd-party plugins, however, it can support other types of output
 gem install repofetch
 ```
 
-### NetBSD (version <= 0.3.3)
+### Installing Version `< 0.4.0`
+
+Version 0.3.3 and lower was a different implementation written in Rust. While `>- 0.4.0` is unstable
+and likely buggy, you may want to use a lower version.
+
+#### Via [Crates.io](https://crates.io/crates/repofetch)
+
+```bash
+cargo install repofetch
+```
+
+#### Via NetBSD 
 
 Pre-compiled binaries are available from the [official repositories](https://pkgsrc.se/sysutils/repofetch)
 To install this, simply run:
