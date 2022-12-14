@@ -19,3 +19,10 @@ body:
       placeholder: It should have...
     validations:
       required: true
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional info
+      description: Is there anything else that we should know?
+    validations:
+      required: false

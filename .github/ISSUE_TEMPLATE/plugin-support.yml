@@ -24,3 +24,10 @@ body:
       description: Tell us what we can do to make it easier for you to author your plugin.
     validations:
       required: true
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional info
+      description: Is there anything else that we should know?
+    validations:
+      required: false
