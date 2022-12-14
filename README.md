@@ -31,7 +31,7 @@ gem install repofetch
 
 ### Installing Version `< 0.4.0`
 
-Version 0.3.3 and lower was a different implementation written in Rust. While `>- 0.4.0` is unstable
+Version 0.3.3 and lower was a different implementation written in Rust. While `>= 0.4.0` is unstable
 and likely buggy, you may want to use a lower version.
 
 #### Via [Crates.io](https://crates.io/crates/repofetch)
