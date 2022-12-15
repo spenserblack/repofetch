@@ -3,3 +3,6 @@ contact_links:
   - name: Ask a question
     url: https://github.com/spenserblack/repofetch/discussions/new?category=q-a
     about: Ask any questions here.
+  - name: Show and tell
+    url: https://github.com/spenserblack/repofetch/discussions/new?category=show-and-tell
+    about: Did you make something cool and want to show it off? Start with a "show and tell" discussion!
