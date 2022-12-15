@@ -1,5 +1,10 @@
 0.4.1-rc.2
 
+## Fixed
+
+- Repofetch failing when a git repository was not found even though a plugin was
+  selected from the command-line (#227) (#225)
+
 ## Other
 
 - Fixed and improved generated documentation
