@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'git'
 require 'optparse'
 require 'repofetch'
 require 'repofetch/config'
@@ -19,6 +20,24 @@ class Repofetch
       @repository_path = '.'
     end
 
+    # Run the command line interface.
+    #
+    # @return [Integer] The exit code.
+    def start
+      load_plugins
+      define_options.parse!(@args)
+
+      begin
+        plugin = new_plugin
+      rescue ArgumentError => e
+        warn e
+        return 1
+      end
+
+      puts plugin
+      0
+    end
+
     def define_options
       OptionParser.new do |opts|
         opts.banner = 'Usage: repofetch [options] -- [plugin arguments]'
@@ -27,6 +46,17 @@ class Repofetch
         add_plugin_options(opts)
         add_options_notes(opts)
       end
+    end
+
+    def load_plugins
+      @config.plugins.each { |plugin| require plugin }
+    end
+
+    def new_plugin
+      return plugin_class.from_args(@args) unless @plugin.nil?
+
+      git = Git.open(@repository_path)
+      Repofetch.get_plugin(git, @args)
     end
 
     private
@@ -60,6 +90,10 @@ class Repofetch
 
     def available_plugins
       Repofetch.plugins.to_h { |plugin| [plugin.name, plugin] }
+    end
+
+    def plugin_class
+      available_plugins[@plugin]
     end
   end
 end
