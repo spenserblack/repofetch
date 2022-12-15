@@ -40,13 +40,21 @@ and likely buggy, you may want to use a lower version.
 cargo install repofetch
 ```
 
-#### Via NetBSD 
+#### Via NetBSD
 
 Pre-compiled binaries are available from the [official repositories](https://pkgsrc.se/sysutils/repofetch)
 To install this, simply run:
 
 ```bash
 pkgin install repofetch
+```
+
+#### Via AUR
+
+If you are using an Arch machine, you can install repofetch from the [Aur](https://aur.archlinux.org).
+
+```
+yay -S ruby-repofetch
 ```
 
 Or, if you prefer to build it from source:
