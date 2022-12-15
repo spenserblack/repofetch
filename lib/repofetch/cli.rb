@@ -8,7 +8,7 @@ require 'repofetch/config'
 class Repofetch
   # Command line interface for repofetch.
   class CLI
-    attr_reader :repository_path
+    attr_reader :repository_path, :plugin
 
     # Define the command line interface.
     #
