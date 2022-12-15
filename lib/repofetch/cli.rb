@@ -53,7 +53,7 @@ class Repofetch
     end
 
     def new_plugin
-      return plugin_class.from_args(@args) unless @plugin.nil?
+      return @plugin.from_args(@args) unless @plugin.nil?
 
       git = Git.open(@repository_path)
       Repofetch.get_plugin(git, @args)
@@ -69,7 +69,7 @@ class Repofetch
 
     def add_plugin_options(opts)
       opts.on('-p', '--plugin PLUGIN', 'Use the specified plugin.') do |plugin|
-        @plugin = plugin
+        @plugin = available_plugins[plugin]
       end
 
       Repofetch.plugins.each do |plugin|
@@ -90,10 +90,6 @@ class Repofetch
 
     def available_plugins
       Repofetch.plugins.to_h { |plugin| [plugin.name, plugin] }
-    end
-
-    def plugin_class
-      available_plugins[@plugin]
     end
   end
 end
