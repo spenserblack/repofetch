@@ -89,7 +89,9 @@ plugins:
 
 ```dotenv
 # .repofetch.env
-# Assuming you have gh (the GitHub CLI) installed
+GITHUB_TOKEN=my-token-abcdefg
+
+# Yes, command substitution is supported!
 GITHUB_TOKEN=$(gh auth token)
 ```
 
