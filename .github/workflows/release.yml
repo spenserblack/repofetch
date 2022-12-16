@@ -46,7 +46,6 @@ jobs:
         env:
           GITHUB_GEM_TOKEN: "Bearer ${{ secrets.GITHUB_TOKEN }}"
           RUBYGEMS_TOKEN: ${{ secrets.RUBYGEMS_TOKEN }}
-          OWNER: ${{ github.repository_owner }}
         run: |
           mkdir -p $HOME/.gem
           touch $HOME/.gem/credentials
@@ -54,6 +53,8 @@ jobs:
           printf -- "---\n:rubygems_api_key: ${RUBYGEMS_TOKEN}\n:github: ${GITHUB_GEM_TOKEN}\n" > $HOME/.gem/credentials
       - run: gem build
       - name: Publish to GitHub
+        env:
+          OWNER: ${{ github.repository_owner }}
         run: gem push --KEY github --host https://rubygems.pkg.github.com/${OWNER} *.gem
       - name: Publish to RubyGems
         run: gem push *.gem
