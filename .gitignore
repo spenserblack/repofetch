@@ -3,7 +3,8 @@
 /coverage/
 
 # Bundler Binstubs
-/bin/
+/bin/*
+!/bin/rspec
 
 # Yard output
 /.yardoc/

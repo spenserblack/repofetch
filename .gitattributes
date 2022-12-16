@@ -1,4 +1,4 @@
-bin/* linguist-vendored
+bin/* linguist-vendored -diff
 *.snap -whitespace linguist-language=Text
 lib/repofetch/DEFAULT_CONFIG linguist-language=YAML
 **/ASCII -whitespace
