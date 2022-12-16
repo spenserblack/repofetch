@@ -1,1 +1,6 @@
+0.4.2-rc.3
 
+## Other
+
+- Deploy built gem as GitHub release asset for each release
+- Publish gem with GitHub Actions
