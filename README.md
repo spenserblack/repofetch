@@ -29,6 +29,14 @@ repofetch. With 3rd-party plugins, however, it can support other types of output
 gem install repofetch
 ```
 
+### Via AUR
+
+If you are using an Arch machine, you can install repofetch from the [Aur](https://aur.archlinux.org).
+
+```
+yay -S ruby-repofetch
+```
+
 ### Installing Version `< 0.4.0`
 
 Version 0.3.3 and lower was a different implementation written in Rust. While `>= 0.4.0` is unstable
@@ -47,14 +55,6 @@ To install this, simply run:
 
 ```bash
 pkgin install repofetch
-```
-
-#### Via AUR
-
-If you are using an Arch machine, you can install repofetch from the [Aur](https://aur.archlinux.org).
-
-```
-yay -S ruby-repofetch
 ```
 
 Or, if you prefer to build it from source:
