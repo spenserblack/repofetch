@@ -81,12 +81,6 @@ RSpec.describe Repofetch::CLI do
     # rubocop:enable RSpec/ExpectOutput
 
     describe '#define_options' do
-      it 'notes options and helpful tips in the help text' do
-        cli = described_class.new(config, [])
-
-        expect(cli.define_options.to_s).to match_snapshot('cli_snapshot_1')
-      end
-
       it 'sets the plugin when --plugin is used' do
         args = %w[--plugin Namespace::Myplugin]
         cli = described_class.new(config, args)
