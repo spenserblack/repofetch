@@ -7,7 +7,7 @@ on:
     branches: ['main']
 
 jobs:
-  test:
+  test-unix:
     name: Test (${{ matrix.os }}, Ruby ${{ matrix.ruby-version }})
     runs-on: ${{ matrix.os }}
     strategy:
@@ -16,6 +16,34 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
+        ruby-version:
+          - '2.7'
+          - '3.0'
+          - '3.1'
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Run Tests and Generate Coverage
+        run: bundle exec rspec --exclude-pattern "spec/**/*_windows_spec.rb"
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unix
+
+  test-windows:
+    name: Test (${{ matrix.os }}, Ruby ${{ matrix.ruby-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
           - windows-latest
         ruby-version:
           - '2.7'
@@ -31,11 +59,12 @@ jobs:
           bundler-cache: true
 
       - name: Run Tests and Generate Coverage
-        run: ruby bin/rspec
+        run: ruby bin/rspec --exclude-pattern "spec/**/*_unix_spec.rb"
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: windows
 
   lint:
     name: Check Style
