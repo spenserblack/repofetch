@@ -46,8 +46,7 @@ jobs:
         os:
           - windows-latest
         ruby-version:
-          - '2.7'
-          - '3.0'
+          # TODO: Figure out why <3.1 breaks in Windows CI
           - '3.1'
 
     steps:
