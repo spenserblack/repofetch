@@ -28,6 +28,9 @@ class Repofetch
 
     attr_reader :styles
 
+    # Initializes a new theme.
+    #
+    # @param [Hash] styles A Hash of styles to use. Is merged with the default styles.
     def initialize(styles = {})
       @styles = DEFAULT_STYLES.merge(styles)
     end
