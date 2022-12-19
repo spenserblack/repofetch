@@ -30,7 +30,7 @@ jobs:
           bundler-cache: true
 
       - name: Run Tests and Generate Coverage
-        run: bundle exec rspec --exclude-pattern "spec/**/*_windows_spec.rb"
+        run: bundle exec rake spec
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:
@@ -58,7 +58,7 @@ jobs:
           bundler-cache: true
 
       - name: Run Tests and Generate Coverage
-        run: ruby bin/rspec --exclude-pattern "spec/**/*_unix_spec.rb"
+        run: ruby bin/rake spec
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:

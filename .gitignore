@@ -4,6 +4,7 @@
 
 # Bundler Binstubs
 /bin/*
+!/bin/rake
 !/bin/rspec
 
 # Yard output
