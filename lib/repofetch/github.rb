@@ -30,7 +30,8 @@ class Repofetch
     end
 
     def stats
-      [url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
+      stats = [url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
+      stats.each { |stat| stat.style_label!(:bold) }
     end
 
     # Detects that the repository is a GitHub repository.

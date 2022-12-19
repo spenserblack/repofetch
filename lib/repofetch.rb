@@ -222,12 +222,29 @@ class Repofetch
       @value = value
       @emoji = emoji
       @theme = theme
+      @label_styles = []
     end
 
     def to_s
       emoji = @emoji
       emoji = nil unless Repofetch.config.nil? || Repofetch.config.emojis?
-      "#{emoji}#{@theme.nil? ? @label : @theme.format(:bold, @label)}: #{format_value}"
+      "#{emoji}#{format_label}: #{format_value}"
+    end
+
+    # Adds a style for the label
+    #
+    # @param [Symbol] style The theme's style to add
+    def style_label!(style)
+      @label_styles << style
+    end
+
+    # Formats the label, including styles.
+    #
+    # @return [String]
+    def format_label
+      return @label if @theme.nil?
+
+      @label_styles.inject(@label) { |label, style| @theme.format(style, label) }
     end
 
     # Formats the value
