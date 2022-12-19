@@ -30,7 +30,8 @@ class Repofetch
     end
 
     def stats
-      [url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
+      stats = [url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
+      stats.each { |stat| stat.style_label!(:bold) }
     end
 
     # Detects that the repository is a GitHub repository.
@@ -109,27 +110,27 @@ class Repofetch
     end
 
     def url
-      Repofetch::Stat.new('URL', repo_stats['clone_url'], emoji: '🌐', theme: theme)
+      Repofetch::Stat.new('URL', repo_stats['clone_url'], emoji: '🌐')
     end
 
     def stargazers
-      Repofetch::Stat.new('stargazers', repo_stats['stargazers_count'], emoji: '⭐', theme: theme)
+      Repofetch::Stat.new('stargazers', repo_stats['stargazers_count'], emoji: '⭐')
     end
 
     def subscribers
-      Repofetch::Stat.new('subscribers', repo_stats['subscribers_count'], emoji: '👀', theme: theme)
+      Repofetch::Stat.new('subscribers', repo_stats['subscribers_count'], emoji: '👀')
     end
 
     def forks
-      Repofetch::Stat.new('forks', repo_stats['forks_count'], emoji: '🔱', theme: theme)
+      Repofetch::Stat.new('forks', repo_stats['forks_count'], emoji: '🔱')
     end
 
     def created
-      Repofetch::TimespanStat.new('created', repo_stats['created_at'], emoji: '🐣', theme: theme)
+      Repofetch::TimespanStat.new('created', repo_stats['created_at'], emoji: '🐣')
     end
 
     def updated
-      Repofetch::TimespanStat.new('updated', repo_stats['updated_at'], emoji: '📤', theme: theme)
+      Repofetch::TimespanStat.new('updated', repo_stats['updated_at'], emoji: '📤')
     end
 
     def size
@@ -139,17 +140,17 @@ class Repofetch
         significant: false,
         strip_insignificant_zeros: false
       )
-      Repofetch::Stat.new('size', byte_size, emoji: '💽', theme: theme)
+      Repofetch::Stat.new('size', byte_size, emoji: '💽')
     end
 
     def issues
       @issue_search = @client.search_issues("repo:#{repo_id} is:issue", per_page: 1, page: 0) if @issue_search.nil?
-      Repofetch::Stat.new('issues', @issue_search['total_count'], emoji: '❗', theme: theme)
+      Repofetch::Stat.new('issues', @issue_search['total_count'], emoji: '❗')
     end
 
     def pull_requests
       @pr_search = @client.search_issues("repo:#{repo_id} is:pr", per_page: 1, page: 0) if @pr_search.nil?
-      Repofetch::Stat.new('pull requests', @pr_search['total_count'], emoji: '🔀', theme: theme)
+      Repofetch::Stat.new('pull requests', @pr_search['total_count'], emoji: '🔀')
     end
   end
 end
