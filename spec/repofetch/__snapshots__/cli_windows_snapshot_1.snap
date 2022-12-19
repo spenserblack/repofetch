@@ -1,0 +1,9 @@
+Usage: repofetch [options] -- [plugin arguments]
+    -r, --repository PATH            Use the provided repository. Defaults to the current directory.
+    -p, --plugin PLUGIN              Use the specified plugin.
+        --namespace-myplugin         Shortcut for --plugin Namespace::Myplugin
+
+The following dotenv files can be used to set environment variables: C:/Users/me/repofetch.env, C:/Users/me/.repofetch.env
+
+You config file is at C:/Users/me/.repofetch.yml
+Installed plugins: Namespace::Myplugin

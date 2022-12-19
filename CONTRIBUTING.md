@@ -19,7 +19,11 @@ bundle exec overcommit --install
 configuration files.
 
 You can view an officially supported plugin, like `Repofetch::Github`, as an
-example for writing a plugin.
+example for writing a plugin. Some information for writing a plugin is provided
+below, but you can view more information from the generated documentation. Versioned
+documentation is deployed to [rdoc.info](https://rubydoc.info/gems/repofetch), and
+bleeding-edge documentation is deployed to
+[GitHub Pages](https://spenserblack.github.io/repofetch/).
 
 The easiest way to set up a plugin is to inherit from `Repofetch::Plugin`, which
 will provide several helper methods that repofetch relies on to construct the

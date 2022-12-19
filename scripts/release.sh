@@ -6,6 +6,7 @@ set -e
 
 TAG_NAME=$1
 TAG_TARGET=$2
+REPOFETCH_PRERELEASE=${REPOFETCH_PRERELEASE:-0}
 
 if git config core.commentChar; then
 	HAD_COMMENT_CHAR=1
@@ -24,6 +25,8 @@ else
 	git config --unset core.commentChar
 fi
 
-echo > RELEASE_NOTES
-git add RELEASE_NOTES
-git commit -m "Reset RELEASE_NOTES"
+if [ $REPOFETCH_PRERELEASE -eq 0 ]; then
+	echo > RELEASE_NOTES
+	git add RELEASE_NOTES
+	git commit -m "Reset RELEASE_NOTES"
+fi

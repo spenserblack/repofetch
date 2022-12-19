@@ -65,6 +65,8 @@ class Repofetch
     end
 
     # Creates an instance from a +Git::Base+ instance.
+    #
+    # @raise [ArgumentError] if this plugin was selected *and* arguments were passed.
     def self.from_git(git, args)
       # TODO: Raise a better exception than ArgumentError
       raise ArgumentError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
@@ -75,6 +77,8 @@ class Repofetch
     end
 
     # Creates an instance from CLI args and configuration.
+    #
+    # @raise [ArgumentError] if +args+ couldn't be parsed.
     def self.from_args(args)
       parser = OptionParser.new do |opts|
         opts.banner = 'Usage: <plugin activation> -- [options] OWNER/REPOSITORY'

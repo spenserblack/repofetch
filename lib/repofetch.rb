@@ -56,10 +56,13 @@ class Repofetch
   # Raises a +Repofetch::NoPluginsError+ if no plugins are found.
   # Raises a +Repofetch::TooManyPluginsError+ if more than one plugin is found.
   #
-  # @param [String] git An instance of +Git::Base+
+  # @param [Git::Base] git A repository instance.
   # @param [Array<String>] args The arguments passed to the program.
   #
-  # @returns [Plugin] A plugin to use.
+  # @raise [NoPluginsError] If no plugins were selected.
+  # @raise [TooManyPluginsError] If more than one plugin was selected.
+  #
+  # @return [Plugin] A plugin to use.
   def self.get_plugin(git, args)
     available_plugins = @plugins.filter do |plugin_class|
       plugin_class.matches_repo?(git)
@@ -79,9 +82,9 @@ class Repofetch
   # Will try to pick "origin", but if that is not found then it will
   # pick the first one found, or nil if there aren't any available.
   #
-  # @param [String] path The path to the repository.
+  # @param [Git::Base] git The repository instance.
   #
-  # @returns [Git::Remote]
+  # @return [Git::Remote]
   def self.default_remote(git)
     remotes = git.remotes
     found_remote = remotes.find { |remote| remote.name == 'origin' }
@@ -100,7 +103,7 @@ class Repofetch
     default_remote(path)&.url
   end
 
-  # Base class for plugins.
+  # @abstract Subclass to create a plugin.
   class Plugin
     # Plugin intializer arguments should come from the +from_git+ or +from_args+
     # class methods.
@@ -119,7 +122,7 @@ class Repofetch
       Repofetch.replace_or_register_plugin(old, self)
     end
 
-    # Detects that this plugin should be used. Should be overridden by subclasses.
+    # @abstract Detects that this plugin should be used. Should be overridden by subclasses.
     #
     # An example implementation is checking if +Repofetch.default_remote_url+ matches
     # a regular expression.
@@ -129,21 +132,21 @@ class Repofetch
       raise NoMethodError, 'matches_repo? must be overridden by the plugin subclass'
     end
 
-    # This should use a git instance and call +Plugin.new+.
+    # @abstract This should use a git instance and call +Plugin.new+.
     #
     # @param [Git::Base] _git The Git repository object to use when calling +Plugin.new+.
     # @param [Array] _args The arguments to process.
     #
-    # @returns [Plugin]
+    # @return [Plugin]
     def self.from_git(_git, _args)
       raise NoMethodError, 'from_git must be overridden by the plugin subclass'
     end
 
-    # This will receive an array of strings (e.g. +ARGV+) and call +Plugin.new+.
+    # @abstract This will receive an array of strings (e.g. +ARGV+) and call +Plugin.new+.
     #
     # @param [Array] _args The arguments to process.
     #
-    # @returns [Plugin]
+    # @return [Plugin]
     def self.from_args(_args)
       raise NoMethodError, 'from_args must be overridden by the plugin subclass'
     end
@@ -153,7 +156,7 @@ class Repofetch
       Repofetch::DEFAULT_THEME
     end
 
-    # The ASCII to be printed alongside the stats.
+    # @abstract The ASCII to be printed alongside the stats.
     #
     # This should be overridden by the plugin subclass.
     # Should be within the bounds 40x20 (width x height).
@@ -161,7 +164,7 @@ class Repofetch
       raise NoMethodError, 'ascii must be overridden by the plugin subclass'
     end
 
-    # The header to show for the plugin.
+    # @abstract The header to show for the plugin.
     #
     # This should be overridden by the plugin subclass.
     # For example, "foo/bar @ GitHub".
@@ -183,9 +186,9 @@ class Repofetch
       end.join
     end
 
-    # An array of stats that will be displayed to the right of the ASCII art.
+    # @abstract An array of stats that will be displayed to the right of the ASCII art.
     #
-    # @returns [Array<Stat>]
+    # @return [Array<Stat>]
     def stats
       []
     end
