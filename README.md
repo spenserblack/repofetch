@@ -33,14 +33,13 @@ gem install repofetch
 
 If you are using an Arch machine, you can install repofetch from the [Aur](https://aur.archlinux.org).
 
-- Stable:
+#### Stable
 
 ```
 yay -S ruby-repofetch-bin
 ```
 
-- Development:
-
+#### Development
 
 ```
 yay -S ruby-repofetch
