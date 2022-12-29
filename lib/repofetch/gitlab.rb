@@ -20,7 +20,7 @@ class Repofetch
     end
 
     def stats
-      [Repofetch::Stat.new('Hello', 'World')]
+      [Repofetch::Stat.new('Hello', 'World')].each { |stat| %i[bold red].each { |style| stat.style_label!(style) } }
     end
 
     def ascii
