@@ -1,0 +1,9 @@
+--no-private
+--protected
+--title "Repofetch"
+--asset demos
+lib/**/*.rb -
+CONTRIBUTING.md
+CREDITS.md
+LICENSE
+README.md

@@ -1,6 +1,14 @@
+0.4.2
+
+## Other
+
+- Deploy built gem as GitHub release asset for each release
+- Publish gem with GitHub Actions
+
 ## Breaking for 3rd-party plugins
 
 ### Changed
 
 - Configuration to be a class variable on `Repofetch` instead of a value that's
   passed to various instantiation and rendering methods
+- Stats to automatically receive theme from the base `Plugin` class

@@ -8,3 +8,5 @@ PreCommit:
     exclude:
       - '**.ascii'
       - '**.txt'
+      - '**/ASCII'
+      - '**/__snapshots__/**'

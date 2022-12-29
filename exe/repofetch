@@ -1,59 +1,10 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'git'
-require 'optparse'
 require 'repofetch'
+require 'repofetch/cli'
 require 'repofetch/env'
 
 Repofetch::Env.load
 Repofetch.load_config!
-
-Repofetch.config.plugins.each { |plugin| require plugin }
-
-options = {
-  plugin: nil,
-  repository: '.'
-}
-
-available_plugins = Repofetch.plugins.to_h { |plugin| [plugin.name, plugin] }
-
-command = OptionParser.new do |opts|
-  opts.banner = 'Usage: repofetch [options] -- [plugin arguments]'
-
-  opts.on('-r', '--repository PATH', 'Use the provided repository. Defaults to the current directory.') do |path|
-    options[:repository] = path
-  end
-
-  opts.on('-p', '--plugin PLUGIN', 'Use the specified plugin') do |plugin|
-    options[:plugin] = available_plugins[plugin]
-  end
-
-  Repofetch.plugins.each do |plugin|
-    opts.on("--#{plugin.name.sub(/::/, '-').downcase}", "Shortcut for --plugin #{plugin.name}") do
-      options[:plugin] = plugin
-    end
-  end
-
-  opts.separator ''
-  dotenv_paths = Repofetch::Env::DOTENV_PATHS.join(', ')
-  opts.separator "The following dotenv files can be used to set environment variables: #{dotenv_paths}"
-  opts.separator ''
-  opts.separator "You config file is at #{Repofetch::Config::PATH}"
-  opts.separator "Installed plugins: #{available_plugins.keys.join(', ')}"
-end
-
-command.parse!
-
-git = Git.open(options[:repository])
-plugin_class = options[:plugin]
-# NOTE: If the user explicitly selected a plugin, then it is constructed from CLI args.
-# Otherwise, we try to build it from the repository.
-begin
-  plugin = plugin_class.nil? ? Repofetch.get_plugin(git, ARGV) : plugin_class.from_args(ARGV)
-rescue ArgumentError => e
-  warn e
-  exit 1
-end
-
-puts plugin
+exit Repofetch::CLI.new.start

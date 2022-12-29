@@ -29,7 +29,34 @@ repofetch. With 3rd-party plugins, however, it can support other types of output
 gem install repofetch
 ```
 
-### NetBSD (version <= 0.3.3)
+### Via AUR
+
+If you are using an Arch machine, you can install repofetch from the [Aur](https://aur.archlinux.org).
+
+#### Stable
+
+```
+yay -S ruby-repofetch-bin
+```
+
+#### Development
+
+```
+yay -S ruby-repofetch
+```
+
+### Installing Version `< 0.4.0`
+
+Version 0.3.3 and lower was a different implementation written in Rust. While `>= 0.4.0` is unstable
+and likely buggy, you may want to use a lower version.
+
+#### Via [Crates.io](https://crates.io/crates/repofetch)
+
+```bash
+cargo install repofetch
+```
+
+#### Via NetBSD
 
 Pre-compiled binaries are available from the [official repositories](https://pkgsrc.se/sysutils/repofetch)
 To install this, simply run:
@@ -70,9 +97,18 @@ plugins:
 
 ```dotenv
 # .repofetch.env
-# Assuming you have gh (the GitHub CLI) installed
+GITHUB_TOKEN=my-token-abcdefg
+
+# Yes, command substitution is supported!
 GITHUB_TOKEN=$(gh auth token)
 ```
+
+## Notes on Rust Implementation (Version `< 0.4.0`)
+
+I switched from Rust to Ruby to rewrite this project to use and support
+plugins. I won't develop new features for the Rust implementation, but I may
+fix bugs, and I'll review pull requests. The Rust implementation is on the
+`rust` branch.
 
 [dotenv]: https://github.com/bkeepers/dotenv
 [neofetch]: https://github.com/dylanaraps/neofetch

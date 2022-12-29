@@ -3,7 +3,13 @@
 /coverage/
 
 # Bundler Binstubs
-/bin/
+/bin/*
+!/bin/rake
+!/bin/rspec
+
+# Yard output
+/.yardoc/
+/doc/
 
 # Legacy ignores from Rust version
 /target

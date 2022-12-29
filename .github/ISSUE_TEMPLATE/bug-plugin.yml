@@ -1,0 +1,36 @@
+name: Plugin Bug Report
+description: File this report if you know that a specific plugin is causing the issue
+title: "[Bug]: "
+labels: ["plugin:bug"]
+body:
+  - type: input
+    id: plugin-name
+    attributes:
+      label: Plugin
+      description: Tell us which plugin it is
+      placeholder: ex. Repofetch::Github
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe what happened, including steps to recreate the issue.
+      placeholder: This happened when I did this...
+    validations:
+      required: true
+  - type: textarea
+    id: what-should-happen
+    attributes:
+      label: What should have happened?
+      description: Describe the behavior that you expected.
+      placeholder: It should have...
+    validations:
+      required: true
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional info
+      description: Is there anything else that we should know?
+    validations:
+      required: false

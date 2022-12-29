@@ -10,8 +10,41 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
       - name: Publish GitHub Release
         uses: spenserblack/actions-tag-to-release@v1
+        with:
+          prerelease: auto
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - run: bundle install
+      - name: Set Up Credentials
+        env:
+          GITHUB_GEM_TOKEN: "Bearer ${{ secrets.GITHUB_TOKEN }}"
+          RUBYGEMS_TOKEN: ${{ secrets.RUBYGEMS_TOKEN }}
+        run: |
+          mkdir -p $HOME/.gem
+          touch $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+          printf -- "---\n:rubygems_api_key: ${RUBYGEMS_TOKEN}\n:github: ${GITHUB_GEM_TOKEN}\n" > $HOME/.gem/credentials
+      - run: gem build
+      - name: Publish to GitHub
+        env:
+          OWNER: ${{ github.repository_owner }}
+        run: gem push --KEY github --host https://rubygems.pkg.github.com/${OWNER} *.gem
+      - name: Publish to RubyGems
+        run: gem push *.gem
