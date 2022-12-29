@@ -16,10 +16,12 @@ class Repofetch
     end
 
     def header
+      # NOTE: Use `path_with_namespace`
       "#{@repo_identifier} @ GitLab"
     end
 
     def stats
+      # NOTE: Use `name`
       [Repofetch::Stat.new('Hello', 'World')].each { |stat| %i[bold red].each { |style| stat.style_label!(style) } }
     end
 
