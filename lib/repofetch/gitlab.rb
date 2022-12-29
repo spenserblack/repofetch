@@ -1,20 +1,22 @@
 # frozen_string_literal: true
 
+require 'cgi'
 require 'repofetch'
 
 class Repofetch
   # Adds support for GitLab repositories.
   class Gitlab < Repofetch::Plugin
-    attr_reader :repo_path
+    attr_reader :repo_identifier
 
-    def initialize(repo_path)
+    # @param repo_identifier [String] The repository identifier (either the ID number or the namespaced repo name).
+    def initialize(repo_identifier)
       super
 
-      @repo_path = repo_path
+      @repo_identifier = CGI.escape(repo_identifier)
     end
 
     def header
-      "#{@repo_path} @ GitLab"
+      "#{@repo_identifier} @ GitLab"
     end
 
     def stats
