@@ -7,6 +7,8 @@ require 'sawyer'
 class Repofetch
   # Adds support for GitLab repositories.
   class Gitlab < Repofetch::Plugin
+    ASCII = File.read(File.expand_path('gitlab/ASCII', __dir__))
+
     attr_reader :repo_identifier
 
     # @param repo_identifier [String] The repository identifier (either the ID number or the namespaced repo name).
@@ -30,9 +32,6 @@ class Repofetch
     end
 
     def ascii
-      <<~ASCII
-        HELLO
-        WORLD
       ASCII
     end
 
