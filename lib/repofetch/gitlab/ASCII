@@ -1,17 +1,17 @@
-          GLG                  LGL           
-        GLGLGL                GLGLGL         
-       GLGLGLGL              GLGLGLGL        
-      GLGLGLGLGL            GLGLGLGLGL       
-     GLGLGLGLGLGL          GLGLGLGLGLGL      
-    GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL     
-   GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL    
-   GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL    
-   GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL    
-    GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL     
-     GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL      
-      GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL       
-        GLGLGLGLGLGLGLGLGLGLGLGLGLGLG        
-           GLGLGLGLGLGLGLGLGLGLGLG           
-             GLGLGLGLGLGLGLGLGLG             
-                GLGLGLGLGLGLG                
-                   GLGLGLG                   
+%{red}          GLG                  LGL           
+%{red}        GLGLGL                GLGLGL         
+%{red}       GLGLGLGL              GLGLGLGL        
+%{red}      GLGLGLGLGL            GLGLGLGLGL       
+%{red}     GLGLGLGLGLGL          GLGLGLGLGLGL      
+%{red}    GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL     
+%{red}   GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL    
+%{bold}%{yellow}   GLG%{reset}%{red}LGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLG%{bold}%{yellow}LGL    
+%{bold}%{yellow}   GLGLGL%{reset}%{red}GLGLGLGLGLGLGLGLGLGLGLGLGL%{bold}%{yellow}GLGLGL    
+%{bold}%{yellow}    GLGLGLGL%{reset}%{red}GLGLGLGLGLGLGLGLGLGL%{bold}%{yellow}GLGLGLGL     
+%{bold}%{yellow}     GLGLGLGLGL%{reset}%{red}GLGLGLGLGLGLGL%{bold}%{yellow}GLGLGLGLGL      
+%{bold}%{yellow}      GLGLGLGLGLGL%{reset}%{red}GLGLGLGL%{bold}%{yellow}GLGLGLGLGLGL       
+%{bold}%{yellow}        GLGLGLGLGLGLG%{reset}%{red}LG%{bold}%{yellow}LGLGLGLGLGLGLG        
+%{bold}%{yellow}           GLGLGLG%{reset}%{yellow}LGLGLGLG%{bold}%{yellow}LGLGLGLG           
+%{bold}%{yellow}             GL%{reset}%{yellow}GLGLGLGLGLGLGLG%{bold}%{yellow}LG             
+%{yellow}                GLGLGLGLGLGLG                
+%{yellow}                   GLGLGLG                   
