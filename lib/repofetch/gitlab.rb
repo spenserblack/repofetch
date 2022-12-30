@@ -36,8 +36,7 @@ class Repofetch
     end
 
     def agent
-      @agent ||= @agent = Sawyer::Agent.new('https://gitlab.com/api/v4',
-                                            links_parser: Sawyer::LinkParsers::Simple.new) do |http|
+      @agent ||= Sawyer::Agent.new('https://gitlab.com/api/v4', links_parser: Sawyer::LinkParsers::Simple.new) do |http|
         http.headers['Authorization'] = "Bearer #{token}" unless token.nil?
       end
     end
