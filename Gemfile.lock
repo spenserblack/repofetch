@@ -7,7 +7,7 @@ PATH
       faraday-retry (~> 2.0)
       git (~> 1.12)
       octokit (~> 6.0, >= 6.0.1)
-      sawyer
+      sawyer (~> 0.9)
 
 GEM
   remote: https://rubygems.org/
