@@ -1,17 +1,17 @@
-%{red}          GLG                  LGL           
-%{red}        GLGLGL                GLGLGL         
-%{red}       GLGLGLGL              GLGLGLGL        
-%{red}      GLGLGLGLGL            GLGLGLGLGL       
-%{red}     GLGLGLGLGLGL          GLGLGLGLGLGL      
-%{red}    GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL     
-%{red}   GLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL    
-%{bold}%{yellow}   GLG%{reset}%{red}LGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLG%{bold}%{yellow}LGL    
-%{bold}%{yellow}   GLGLGL%{reset}%{red}GLGLGLGLGLGLGLGLGLGLGLGLGL%{bold}%{yellow}GLGLGL    
-%{bold}%{yellow}    GLGLGLGL%{reset}%{red}GLGLGLGLGLGLGLGLGLGL%{bold}%{yellow}GLGLGLGL     
-%{bold}%{yellow}     GLGLGLGLGL%{reset}%{red}GLGLGLGLGLGLGL%{bold}%{yellow}GLGLGLGLGL      
-%{bold}%{yellow}      GLGLGLGLGLGL%{reset}%{red}GLGLGLGL%{bold}%{yellow}GLGLGLGLGLGL       
-%{bold}%{yellow}        GLGLGLGLGLGLG%{reset}%{red}LG%{bold}%{yellow}LGLGLGLGLGLGLG        
-%{bold}%{yellow}           GLGLGLG%{reset}%{yellow}LGLGLGLG%{bold}%{yellow}LGLGLGLG           
-%{bold}%{yellow}             GL%{reset}%{yellow}GLGLGLGLGLGLGLG%{bold}%{yellow}LG             
-%{yellow}                GLGLGLGLGLGLG                
-%{yellow}                   GLGLGLG                   
+%{red}          OOO                  OOO           
+%{red}        OOOOOO                OOOOOO         
+%{red}       OOOOOOOO              OOOOOOOO        
+%{red}      OOOOOOOOOO            OOOOOOOOOO       
+%{red}     OOOOOOOOOOOO          OOOOOOOOOOOO      
+%{red}    OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO     
+%{red}   OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO    
+%{yellow}   ...%{red}OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO%{yellow}...    
+%{yellow}   ......%{red}OOOOOOOOOOOOOOOOOOOOOOOOOO%{yellow}......    
+%{yellow}    ........%{red}OOOOOOOOOOOOOOOOOOOO%{yellow}........     
+%{yellow}     ..........%{red}OOOOOOOOOOOOOO%{yellow}..........      
+%{yellow}      ............%{red}OOOOOOOO%{yellow}............       
+%{yellow}        .............%{red}OO%{yellow}..............        
+%{yellow}           .......%{yellow}@@@@@@@@%{yellow}........           
+%{yellow}             ..%{yellow}@@@@@@@@@@@@@@@%{yellow}..             
+%{yellow}                @@@@@@@@@@@@@                
+%{yellow}                   @@@@@@@                   
