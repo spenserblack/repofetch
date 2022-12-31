@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'faraday-retry', '~> 2.0'
   spec.add_runtime_dependency 'git', '~> 1.12'
   spec.add_runtime_dependency 'octokit', '~> 6.0', '>= 6.0.1'
+  spec.add_runtime_dependency 'sawyer', '~> 0.9'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'os', '~> 1.1'

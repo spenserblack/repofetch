@@ -1,5 +1,10 @@
 0.4.2
 
+## Added
+
+- GitLab plugin
+  - Enable by adding `- repofetch/gitlab` to your config file
+
 ## Other
 
 - Deploy built gem as GitHub release asset for each release
