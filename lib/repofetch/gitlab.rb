@@ -7,6 +7,8 @@ require 'sawyer'
 class Repofetch
   # Adds support for GitLab repositories.
   class Gitlab < Repofetch::Plugin
+    HTTP_REMOTE_REGEX = %r{https?://gitlab\.com/(?<path>[\w.\-][\w.\-/]+)}.freeze
+    SSH_REMOTE_REGEX = %r{git@gitlab\.com:(?<path>[\w.\-][\w.\-/]+)}.freeze
     ASCII = File.read(File.expand_path('gitlab/ASCII', __dir__))
 
     attr_reader :repo_identifier
@@ -74,8 +76,46 @@ class Repofetch
       Repofetch::Stat.new('open issues', repo_data['open_issues_count'], emoji: '❗')
     end
 
-    def self.from_git(*)
-      false
+    # Gets the path (+owner/subproject/repo+) of the repository.
+    def self.repo_identifier(git)
+      default_remote = Repofetch.default_remote(git)
+      url = default_remote&.url
+      remote_identifier(url)
+    end
+
+    # Gets the path (+owner/subproject/repo+) of the repository.
+    #
+    # Returns nil if there is no match.
+    def self.remote_identifier(remote)
+      match = HTTP_REMOTE_REGEX.match(remote)
+      match = SSH_REMOTE_REGEX.match(remote) if match.nil?
+      raise "Remote #{remote.inspect} doesn't look like a GitLab remote" if match.nil?
+
+      match[:path].delete_suffix('.git')
+    end
+
+    # Detects that the repository is a GitHub repository.
+    def self.matches_repo?(git)
+      default_remote = Repofetch.default_remote(git)
+      url = default_remote&.url
+      matches_remote?(url)
+    end
+
+    # Detects that the remote URL is for a GitHub repository.
+    def self.matches_remote?(remote)
+      HTTP_REMOTE_REGEX.match?(remote) || SSH_REMOTE_REGEX.match?(remote)
+    end
+
+    # Creates an instance from a +Git::Base+ instance.
+    #
+    # @raise [ArgumentError] if this plugin was selected *and* arguments were passed.
+    def self.from_git(git, args)
+      # TODO: Raise a better exception than ArgumentError
+      raise ArgumentError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
+
+      path = repo_identifier(git)
+
+      new(path)
     end
 
     def self.from_args(args)
