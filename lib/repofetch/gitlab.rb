@@ -28,7 +28,7 @@ class Repofetch
       stats = [url, stars, forks, created, updated]
 
       # NOTE: Stats that require authentication
-      stats.concat([open_issues]) unless token.nil?
+      stats << open_issues unless token.nil?
 
       stats.each { |stat| %i[bold red].each { |style| stat.style_label!(style) } }
     end
