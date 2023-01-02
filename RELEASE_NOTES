@@ -1,1 +1,5 @@
+0.4.3
 
+## Added
+
+- Simple help message for the GitLab plugin (`repofetch --plugin Repofetch::Gitlab -- --help`)

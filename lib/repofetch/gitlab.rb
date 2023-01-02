@@ -119,6 +119,13 @@ class Repofetch
     end
 
     def self.from_args(args)
+      parser = OptionParser.new do |opts|
+        opts.banner = 'Usage: <plugin activation> -- [options] OWNER/PROJECT/SUBPROJECT'
+        opts.separator ''
+        opts.separator 'This plugin can use the GITLAB_TOKEN environment variable to fetch more data'
+      end
+      parser.parse(args)
+
       new(args[0])
     end
   end
