@@ -13,6 +13,12 @@ bundle install
 bundle exec overcommit --install
 ```
 
+### Demo Animations
+
+The demo animations are created using [vhs]. If you are going to create or
+update the demo animations, please follow the installation instructions for
+[vhs].
+
 ## Writing a 3rd-party plugin
 
 3rd-party plugins are Ruby gems that users can install and activate in their
@@ -131,3 +137,4 @@ MyCoolPlugin.register
   negative space, and uncolored text for positive space.
 
 [git-base]: https://www.rubydoc.info/github/ruby-git/ruby-git/Git/Base
+[vhs]: https://github.com/charmbracelet/vhs
