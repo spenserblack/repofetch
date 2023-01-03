@@ -1,5 +1,6 @@
 Usage: repofetch [options] -- [plugin arguments]
-    -r, --repository PATH            Use the provided repository. Defaults to the current directory.
+    -r, -p, --repository PATH,       Use the provided path. Defaults to the current directory.
+        --path
     -P, --plugin PLUGIN              Use the specified plugin.
         --namespace-myplugin         Shortcut for --plugin Namespace::Myplugin
 

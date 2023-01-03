@@ -62,7 +62,8 @@ class Repofetch
     private
 
     def add_repository_options(opts)
-      opts.on('-r', '--repository PATH', 'Use the provided repository. Defaults to the current directory.') do |path|
+      opts.on('-r', '--repository', '-p', '--path PATH',
+              'Use the provided path. Defaults to the current directory.') do |path|
         @repository_path = path
       end
     end

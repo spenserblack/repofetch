@@ -3,9 +3,11 @@
 ## Added
 
 - Simple help message for the GitLab plugin (`repofetch --plugin Repofetch::Gitlab -- --help`)
+- `--path` option, which is an alias for `--repository`
 
 ## Breaking for users
 
 ### Changed
 
 - The `--plugin` short option to `-P`
+- `-p` to be the short option for `--path`
