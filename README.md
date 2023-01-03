@@ -12,7 +12,7 @@ Fetch details about your remote repository.
 
 ![basic demo](./demos/demo.gif)
 
-![advanced plugin usage](./demos/github-plugin.gif)
+![advanced plugin usage](./demos/gitlab-plugin.gif)
 
 ## Description
 
