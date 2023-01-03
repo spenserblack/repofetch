@@ -68,7 +68,7 @@ class Repofetch
     end
 
     def add_plugin_options(opts)
-      opts.on('-p', '--plugin PLUGIN', 'Use the specified plugin.') do |plugin|
+      opts.on('-P', '--plugin PLUGIN', 'Use the specified plugin.') do |plugin|
         @plugin = available_plugins[plugin]
       end
 
