@@ -1,6 +1,7 @@
 ---
 # vim: set ft=yaml:
 plugins:
+  - 'repofetch/bitbucket'
   - 'repofetch/github'
   - 'repofetch/gitlab'
 emojis: true
