@@ -4,6 +4,7 @@ require 'git'
 require 'optparse'
 require 'repofetch'
 require 'repofetch/config'
+require 'repofetch/exceptions'
 
 class Repofetch
   # Command line interface for repofetch.
@@ -29,7 +30,7 @@ class Repofetch
 
       begin
         plugin = new_plugin
-      rescue ArgumentError => e
+      rescue Repofetch::PluginUsageError => e
         warn e
         return 1
       end
@@ -62,13 +63,14 @@ class Repofetch
     private
 
     def add_repository_options(opts)
-      opts.on('-r', '--repository PATH', 'Use the provided repository. Defaults to the current directory.') do |path|
+      opts.on('-r', '--repository', '-p', '--path PATH',
+              'Use the provided path. Defaults to the current directory.') do |path|
         @repository_path = path
       end
     end
 
     def add_plugin_options(opts)
-      opts.on('-p', '--plugin PLUGIN', 'Use the specified plugin.') do |plugin|
+      opts.on('-P', '--plugin PLUGIN', 'Use the specified plugin.') do |plugin|
         @plugin = available_plugins[plugin]
       end
 

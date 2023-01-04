@@ -2,6 +2,7 @@
 
 require 'cgi'
 require 'repofetch'
+require 'repofetch/exceptions'
 require 'sawyer'
 
 class Repofetch
@@ -108,10 +109,9 @@ class Repofetch
 
     # Creates an instance from a +Git::Base+ instance.
     #
-    # @raise [ArgumentError] if this plugin was selected *and* arguments were passed.
+    # @raise [Repofetch::PluginUsageError] if this plugin was selected *and* arguments were passed.
     def self.from_git(git, args)
-      # TODO: Raise a better exception than ArgumentError
-      raise ArgumentError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
+      raise Repofetch::PluginUsageError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
 
       path = repo_identifier(git)
 
@@ -125,6 +125,8 @@ class Repofetch
         opts.separator 'This plugin can use the GITLAB_TOKEN environment variable to fetch more data'
       end
       parser.parse(args)
+
+      raise Repofetch::PluginUsageError, parser.to_s unless args.length == 1
 
       new(args[0])
     end
