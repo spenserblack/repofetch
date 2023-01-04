@@ -2,6 +2,7 @@
 
 require 'cgi'
 require 'repofetch'
+require 'repofetch/exceptions'
 require 'sawyer'
 
 class Repofetch
@@ -108,10 +109,9 @@ class Repofetch
 
     # Creates an instance from a +Git::Base+ instance.
     #
-    # @raise [ArgumentError] if this plugin was selected *and* arguments were passed.
+    # @raise [Repofetch::PluginUsageError] if this plugin was selected *and* arguments were passed.
     def self.from_git(git, args)
-      # TODO: Raise a better exception than ArgumentError
-      raise ArgumentError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
+      raise Repofetch::PluginUsageError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
 
       path = repo_identifier(git)
 

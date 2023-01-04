@@ -11,3 +11,9 @@
 
 - The `--plugin` short option to `-P`
 - `-p` to be the short option for `--path`
+
+## Breaking for 3rd-party plugins
+
+### Changed
+
+- The exception that is caught when initializing a plugin from `ArgumentError` to `Repofetch::PluginUsageError`
