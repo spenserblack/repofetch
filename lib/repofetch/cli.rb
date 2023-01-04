@@ -4,6 +4,7 @@ require 'git'
 require 'optparse'
 require 'repofetch'
 require 'repofetch/config'
+require 'repofetch/exceptions'
 
 class Repofetch
   # Command line interface for repofetch.
@@ -29,7 +30,7 @@ class Repofetch
 
       begin
         plugin = new_plugin
-      rescue ArgumentError => e
+      rescue Repofetch::PluginUsageError => e
         warn e
         return 1
       end

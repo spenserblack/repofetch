@@ -4,6 +4,7 @@ require 'action_view'
 require 'octokit'
 require 'optparse'
 require 'repofetch'
+require 'repofetch/exceptions'
 
 class Repofetch
   # Adds support for GitHub repositories.
@@ -66,10 +67,9 @@ class Repofetch
 
     # Creates an instance from a +Git::Base+ instance.
     #
-    # @raise [ArgumentError] if this plugin was selected *and* arguments were passed.
+    # @raise [Repofetch::PluginUsageError] if this plugin was selected *and* arguments were passed.
     def self.from_git(git, args)
-      # TODO: Raise a better exception than ArgumentError
-      raise ArgumentError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
+      raise Repofetch::PluginUsageError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
 
       owner, repository = repo_identifiers(git)
 
@@ -78,7 +78,7 @@ class Repofetch
 
     # Creates an instance from CLI args and configuration.
     #
-    # @raise [ArgumentError] if +args+ couldn't be parsed.
+    # @raise [Repofetch::PluginUsageError] if +args+ couldn't be parsed.
     def self.from_args(args)
       parser = OptionParser.new do |opts|
         opts.banner = 'Usage: <plugin activation> -- [options] OWNER/REPOSITORY'
@@ -88,8 +88,7 @@ class Repofetch
       parser.parse(args)
       split = args[0]&.split('/')
 
-      # TODO: Raise a better exception than ArgumentError
-      raise ArgumentError, parser.to_s unless split&.length == 2
+      raise Repofetch::PluginUsageError, parser.to_s unless split&.length == 2
 
       new(*split)
     end

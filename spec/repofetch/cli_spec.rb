@@ -4,6 +4,7 @@ require 'git'
 require 'repofetch'
 require 'repofetch/cli'
 require 'repofetch/config'
+require 'repofetch/exceptions'
 require 'stringio'
 
 RSpec.describe Repofetch::CLI do
@@ -22,7 +23,7 @@ RSpec.describe Repofetch::CLI do
         end
 
         def self.from_git(*)
-          raise ArgumentError, 'mock error from +from_git+'
+          raise Repofetch::PluginUsageError, 'mock error from +from_git+'
         end
 
         def self.from_args(*)
