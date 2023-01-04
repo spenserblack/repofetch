@@ -126,6 +126,8 @@ class Repofetch
       end
       parser.parse(args)
 
+      raise Repofetch::PluginUsageError, parser.to_s unless args.length == 1
+
       new(args[0])
     end
   end

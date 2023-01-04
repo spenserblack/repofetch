@@ -5,6 +5,10 @@
 - Simple help message for the GitLab plugin (`repofetch --plugin Repofetch::Gitlab -- --help`)
 - `--path` option, which is an alias for `--repository`
 
+## Fixed
+
+- Confusing error on incorrect CLI args for the GitLab plugin
+
 ## Breaking for users
 
 ### Changed
