@@ -11,6 +11,9 @@
 /.yardoc/
 /doc/
 
+# Vendored files
+/vendor/bundle
+
 # Legacy ignores from Rust version
 /target
 **/*.rs.bk
