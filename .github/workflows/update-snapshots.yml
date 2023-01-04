@@ -2,18 +2,17 @@ name: Update Snapshots
 
 on:
   workflow_dispatch:
+    inputs:
+      os:
+        required: true
+        type: string
 
 jobs:
   update-snapshots:
     name: Update Snapshots
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ inputs.os }}
     permissions:
       contents: write
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
 
     steps:
     - uses: actions/checkout@v3
