@@ -1,0 +1,32 @@
+name: Update Snapshots
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-snapshots:
+    name: Update Snapshots
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'
+        bundler-cache: true
+    - name: Update Snapshots
+      env:
+        UPDATE_SNAPSHOTS: 1
+      run: ruby bin/rake spec
+    - name: Push Changes
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Update snapshots
