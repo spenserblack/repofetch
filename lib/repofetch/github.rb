@@ -31,15 +31,15 @@ class Repofetch
     end
 
     def stats
-      stats = [url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
+      stats = [http_clone_url, ssh_clone_url, stargazers, subscribers, forks, created, updated, size, issues,
+               pull_requests]
       stats.each { |stat| stat.style_label!(:bold) }
     end
 
     # Detects that the repository is a GitHub repository.
     def self.matches_repo?(git)
       default_remote = Repofetch.default_remote(git)
-      url = default_remote&.url
-      matches_remote?(url)
+      matches_remote?(default_remote&.url)
     end
 
     # Detects that the remote URL is for a GitHub repository.
@@ -50,8 +50,7 @@ class Repofetch
     # Gets the owner and repository from a GitHub local repository.
     def self.repo_identifiers(git)
       default_remote = Repofetch.default_remote(git)
-      url = default_remote&.url
-      remote_identifiers(url)
+      remote_identifiers(default_remote&.url)
     end
 
     # Gets the owner and repository from a GitHub remote URL.
@@ -108,8 +107,12 @@ class Repofetch
       @repo_stats
     end
 
-    def url
-      Repofetch::Stat.new('URL', repo_stats['clone_url'], emoji: '🌐')
+    def http_clone_url
+      Repofetch::Stat.new('HTTP(S)', repo_stats['clone_url'], emoji: '🌐')
+    end
+
+    def ssh_clone_url
+      Repofetch::Stat.new('SSH', repo_stats['ssh_url'], emoji: '🔑')
     end
 
     def stargazers
@@ -133,12 +136,8 @@ class Repofetch
     end
 
     def size
-      byte_size = number_to_human_size(
-        (repo_stats['size'] || 0) * 1024,
-        precision: 2,
-        significant: false,
-        strip_insignificant_zeros: false
-      )
+      byte_size = number_to_human_size((repo_stats['size'] || 0) * 1024, precision: 2, significant: false,
+                                                                         strip_insignificant_zeros: false)
       Repofetch::Stat.new('size', byte_size, emoji: '💽')
     end
 
