@@ -22,7 +22,11 @@ class Repofetch
     end
 
     def header
-      "#{repo_data['name_with_namespace']} @ GitLab"
+      "#{header_format(repo_data['name_with_namespace'])} @ #{header_format('GitLab')}"
+    end
+
+    def header_format(text)
+      theme.format(:bold, theme.format(:red, text))
     end
 
     def stats

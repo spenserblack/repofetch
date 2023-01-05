@@ -9,6 +9,7 @@
 ## Changed
 
 - "URL" stat in GitHub and GitLab plugins to "HTTP(S)"
+- GitLab header to be styled
 
 ## Fixed
 
