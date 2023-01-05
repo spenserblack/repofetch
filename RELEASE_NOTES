@@ -4,6 +4,11 @@
 
 - Simple help message for the GitLab plugin (`repofetch --plugin Repofetch::Gitlab -- --help`)
 - `--path` option, which is an alias for `--repository`
+- SSH url stat to GitHub and GitLab plugins
+
+## Changed
+
+- "URL" stat in GitHub and GitLab plugins to "HTTP(S)"
 
 ## Fixed
 
