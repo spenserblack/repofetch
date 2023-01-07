@@ -4,8 +4,8 @@ require 'repofetch'
 
 class Repofetch
   # Adds support for Bitbucket repositories.
-  class Bitbucket < Repofetch::Plugin
-    ASCII = File.read(File.expand_path('bitbucket/ASCII', __dir__))
+  class BitbucketCloud < Repofetch::Plugin
+    ASCII = File.read(File.expand_path('bitbucketcloud/ASCII', __dir__))
 
     def header
       'Bitbucket'
@@ -35,4 +35,4 @@ class Repofetch
   end
 end
 
-Repofetch::Bitbucket.register
+Repofetch::BitbucketCloud.register
