@@ -45,6 +45,12 @@ yay -S ruby-repofetch-bin
 yay -S ruby-repofetch
 ```
 
+### Via NetBSD
+
+```bash
+pkgin install ruby-repofetch
+```
+
 ### Installing Version `< 0.4.0`
 
 Version 0.3.3 and lower was a different implementation written in Rust. While `>= 0.4.0` is unstable
