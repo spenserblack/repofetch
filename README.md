@@ -23,6 +23,8 @@ repofetch. With 3rd-party plugins, however, it can support other types of output
 
 ## Installation
 
+[![Packaging status](https://repology.org/badge/vertical-allrepos/ruby:repofetch.svg)](https://repology.org/project/ruby:repofetch/versions)
+
 ### Via RubyGems.org
 
 ```bash
