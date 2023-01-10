@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/repofetch.svg)](https://badge.fury.io/rb/repofetch)
 [![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/spenserblack/repofetch)](./CREDITS.md)
 ![CI](https://github.com/spenserblack/repofetch/workflows/CI/badge.svg)
-[![CodeQL](https://github.com/spenserblack/repofetch/actions/workflows/codeql.yml/badge.svg)](https://github.com/spenserblack/repofetch/actions/workflows/codeql.yml)
+[![CodeQL](https://github.com/spenserblack/repofetch/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/spenserblack/repofetch/actions/workflows/github-code-scanning/codeql)
 [![codecov](https://codecov.io/gh/spenserblack/repofetch/branch/master/graph/badge.svg?token=3572AEWQAY)](https://codecov.io/gh/spenserblack/repofetch)
 
 Fetch details about your remote repository.
