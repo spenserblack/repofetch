@@ -20,6 +20,10 @@ repofetch is a CLI tool to fetch stats (think [neofetch] or
 [onefetch]) that uses plugins for its implementation. The original version was focused on
 repository stats, and any official plugin will be for repositories, hence the "repo" in
 repofetch. With 3rd-party plugins, however, it can support other types of outputs, too.
+This tool may be renamed in the future.
+
+Follow [this discussion](https://github.com/spenserblack/repofetch/discussions/219)
+for details.
 
 ## Installation
 
