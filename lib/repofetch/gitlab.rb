@@ -22,11 +22,15 @@ class Repofetch
     end
 
     def header
-      "#{repo_data['name_with_namespace']} @ GitLab"
+      "#{header_format(repo_data['name_with_namespace'])} @ #{header_format('GitLab')}"
+    end
+
+    def header_format(text)
+      theme.format(:bold, theme.format(:red, text))
     end
 
     def stats
-      stats = [url, stars, forks, created, updated]
+      stats = [http_clone_url, ssh_clone_url, stars, forks, created, updated]
 
       # NOTE: Stats that require authentication
       stats << open_issues unless token.nil?
@@ -52,8 +56,12 @@ class Repofetch
       @repo_data ||= agent.call(:get, "projects/#{@repo_identifier}").data
     end
 
-    def url
-      Repofetch::Stat.new('URL', repo_data['http_url_to_repo'], emoji: '🌐')
+    def http_clone_url
+      Repofetch::Stat.new('HTTP(S)', repo_data['http_url_to_repo'], emoji: '🌐')
+    end
+
+    def ssh_clone_url
+      Repofetch::Stat.new('SSH', repo_data['ssh_url_to_repo'], emoji: '🔑')
     end
 
     def stars

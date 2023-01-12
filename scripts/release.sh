@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Generates a release tag from RELEASE_NOTES, temporarily setting
 # comments to ; to permit Markdown, creates the tag, then
 # clears RELEASE_NOTES and resets git comments.

@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/repofetch.svg)](https://badge.fury.io/rb/repofetch)
 [![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/spenserblack/repofetch)](./CREDITS.md)
 ![CI](https://github.com/spenserblack/repofetch/workflows/CI/badge.svg)
-[![CodeQL](https://github.com/spenserblack/repofetch/actions/workflows/codeql.yml/badge.svg)](https://github.com/spenserblack/repofetch/actions/workflows/codeql.yml)
+[![CodeQL](https://github.com/spenserblack/repofetch/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/spenserblack/repofetch/actions/workflows/github-code-scanning/codeql)
 [![codecov](https://codecov.io/gh/spenserblack/repofetch/branch/master/graph/badge.svg?token=3572AEWQAY)](https://codecov.io/gh/spenserblack/repofetch)
 
 Fetch details about your remote repository.
@@ -20,8 +20,14 @@ repofetch is a CLI tool to fetch stats (think [neofetch] or
 [onefetch]) that uses plugins for its implementation. The original version was focused on
 repository stats, and any official plugin will be for repositories, hence the "repo" in
 repofetch. With 3rd-party plugins, however, it can support other types of outputs, too.
+This tool may be renamed in the future.
+
+Follow [this discussion](https://github.com/spenserblack/repofetch/discussions/219)
+for details.
 
 ## Installation
+
+[![Packaging status](https://repology.org/badge/vertical-allrepos/ruby:repofetch.svg)](https://repology.org/project/ruby:repofetch/versions)
 
 ### Via RubyGems.org
 
@@ -43,6 +49,12 @@ yay -S ruby-repofetch-bin
 
 ```
 yay -S ruby-repofetch
+```
+
+### Via NetBSD
+
+```bash
+pkgin install ruby-repofetch
 ```
 
 ### Installing Version `< 0.4.0`

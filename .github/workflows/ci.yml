@@ -7,7 +7,7 @@ on:
     branches: ['main']
 
 jobs:
-  test-unix:
+  test:
     name: Test (${{ matrix.os }}, Ruby ${{ matrix.ruby-version }})
     runs-on: ${{ matrix.os }}
     strategy:
@@ -16,38 +16,17 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
+          - windows-latest
         ruby-version:
           - '2.7'
           - '3.0'
           - '3.1'
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Ruby ${{ matrix.ruby-version }}
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true
-
-      - name: Run Tests and Generate Coverage
-        run: bundle exec rake spec
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: unix
-
-  test-windows:
-    name: Test (${{ matrix.os }}, Ruby ${{ matrix.ruby-version }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - windows-latest
-        ruby-version:
-          # TODO: Figure out why <3.1 breaks in Windows CI
-          - '3.1'
+        exclude:
+          # TODO: Figure out why Windows breaks on these
+          - os: windows-latest
+            ruby-version: '2.7'
+          - os: windows-latest
+            ruby-version: '3.0'
 
     steps:
       - uses: actions/checkout@v3
@@ -63,7 +42,7 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags: windows
+          flags: ${{ matrix.os }},ruby-${{ matrix.ruby-version  }}
 
   lint:
     name: Check Style
