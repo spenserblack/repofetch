@@ -33,8 +33,7 @@ class Repofetch
     end
 
     def agent
-      @agent ||= Sawyer::Agent.new('https://api.bitbucket.org/2.0',
-                                   links_parser: Sawyer::LinkParsers::Simple.new) do |http|
+      @agent ||= Sawyer::Agent.new('https://api.bitbucket.org/2.0') do |http|
         http.headers['Authorization'] = "Bearer #{token}" unless token.nil?
       end
     end
