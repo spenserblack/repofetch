@@ -23,7 +23,7 @@ class Repofetch
     end
 
     def stats
-      stats = [Repofetch::Stat.new('URL', 'https://bitbucket.org', emoji: '🌐')]
+      stats = [http_clone_url, ssh_clone_url]
 
       stats.each { |stat| %i[bold blue].each { |style| stat.style_label!(style) } }
     end
@@ -66,6 +66,20 @@ class Repofetch
       raise Repofetch::PluginUsageError, parser.to_s unless args.length == 1
 
       new(args[0])
+    end
+
+    protected
+
+    def clone_urls
+      @clone_urls ||= repo_data['links']['clone'].to_h { |clone| [clone['name'].to_sym, clone['href']] }
+    end
+
+    def http_clone_url
+      Repofetch::Stat.new('HTTP(S)', clone_urls[:https], emoji: '🌐')
+    end
+
+    def ssh_clone_url
+      Repofetch::Stat.new('SSH', clone_urls[:ssh], emoji: '🔑')
     end
   end
 end
