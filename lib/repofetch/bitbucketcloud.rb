@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'action_view'
 require 'optparse'
 require 'repofetch'
 require 'repofetch/exceptions'
@@ -8,6 +9,8 @@ require 'sawyer'
 class Repofetch
   # Adds support for Bitbucket repositories.
   class BitbucketCloud < Repofetch::Plugin
+    include ActionView::Helpers::NumberHelper
+
     ASCII = File.read(File.expand_path('bitbucketcloud/ASCII', __dir__))
 
     attr_reader :repo_identifier
@@ -23,7 +26,7 @@ class Repofetch
     end
 
     def stats
-      stats = [http_clone_url, ssh_clone_url, watchers, forks, created, updated]
+      stats = [http_clone_url, ssh_clone_url, watchers, forks, created, updated, size]
 
       stats.each { |stat| %i[bold blue].each { |style| stat.style_label!(style) } }
     end
@@ -97,6 +100,14 @@ class Repofetch
 
     def updated
       Repofetch::TimespanStat.new('updated', repo_data['updated_on'], emoji: '📤')
+    end
+
+    def size
+      # NOTE: Size is in bytes
+      # TODO: Move this somewhere else instead of using a copy-paste
+      byte_size = number_to_human_size(repo_data['size'] || 0, precision: 2, significant: false,
+                                                               strip_insignificant_zeros: false)
+      Repofetch::Stat.new('size', byte_size, emoji: '💽')
     end
   end
 end
