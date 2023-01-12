@@ -23,7 +23,7 @@ repofetch. With 3rd-party plugins, however, it can support other types of output
 This tool may be renamed in the future.
 
 Follow [this discussion](https://github.com/spenserblack/repofetch/discussions/219)
-for details.
+for details about the potential rename.
 
 ## Installation
 
