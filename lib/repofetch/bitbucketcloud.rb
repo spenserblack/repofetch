@@ -23,7 +23,7 @@ class Repofetch
     end
 
     def stats
-      stats = [http_clone_url, ssh_clone_url]
+      stats = [http_clone_url, ssh_clone_url, watchers]
 
       stats.each { |stat| %i[bold blue].each { |style| stat.style_label!(style) } }
     end
@@ -79,6 +79,11 @@ class Repofetch
 
     def ssh_clone_url
       Repofetch::Stat.new('SSH', clone_urls[:ssh], emoji: '🔑')
+    end
+
+    def watchers
+      @watcher_data ||= agent.call(:get, "repositories/#{@repo_identifier}/watchers").data
+      Repofetch::Stat.new('subscribers', @watcher_data['size'], emoji: '👀')
     end
   end
 end
