@@ -42,10 +42,6 @@ class Repofetch
       ENV.fetch('BITBUCKET_TOKEN', nil)
     end
 
-    def repo_data
-      @repo_data ||= agent.call(:get, "repositories/#{@repo_identifier}").data
-    end
-
     def self.matches_repo?(*)
       false
     end
@@ -68,6 +64,10 @@ class Repofetch
     end
 
     protected
+
+    def repo_data
+      @repo_data ||= agent.call(:get, "repositories/#{@repo_identifier}").data
+    end
 
     def clone_urls
       @clone_urls ||= repo_data['links']['clone'].to_h { |clone| [clone['name'].to_sym, clone['href']] }
