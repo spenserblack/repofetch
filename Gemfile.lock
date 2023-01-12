@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    repofetch (0.4.2)
+    repofetch (0.4.3)
       actionview (~> 7.0, >= 7.0.4)
       dotenv (~> 2.8)
       faraday-retry (~> 2.0)
@@ -51,10 +51,8 @@ GEM
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mini_portile2 (2.8.1)
     minitest (5.17.0)
-    nokogiri (1.13.10)
-      mini_portile2 (~> 2.8.0)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     octokit (6.0.1)
       faraday (>= 1, < 3)
@@ -151,4 +149,4 @@ DEPENDENCIES
   yard (~> 0.9.28)
 
 BUNDLED WITH
-   2.1.2
+   2.1.4
