@@ -26,7 +26,7 @@ class Repofetch
     end
 
     def stats
-      stats = [http_clone_url, ssh_clone_url, watchers, forks, created, updated, size]
+      stats = [http_clone_url, ssh_clone_url, watchers, forks, created, updated, size, issues, pull_requests]
 
       stats.each { |stat| %i[bold blue].each { |style| stat.style_label!(style) } }
     end
@@ -108,6 +108,16 @@ class Repofetch
       byte_size = number_to_human_size(repo_data['size'] || 0, precision: 2, significant: false,
                                                                strip_insignificant_zeros: false)
       Repofetch::Stat.new('size', byte_size, emoji: '💽')
+    end
+
+    def issues
+      @issue_data ||= agent.call(:get, "repositories/#{@repo_identifier}/issues").data
+      Repofetch::Stat.new('issues', @issue_data['size'], emoji: '❗')
+    end
+
+    def pull_requests
+      @pull_request_data ||= agent.call(:get, "repositories/#{@repo_identifier}/pullrequests").data
+      Repofetch::Stat.new('pull requests', @pull_request_data['size'], emoji: '🔀')
     end
   end
 end
