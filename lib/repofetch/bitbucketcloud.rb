@@ -23,7 +23,7 @@ class Repofetch
     end
 
     def stats
-      stats = [http_clone_url, ssh_clone_url, watchers, forks]
+      stats = [http_clone_url, ssh_clone_url, watchers, forks, created, updated]
 
       stats.each { |stat| %i[bold blue].each { |style| stat.style_label!(style) } }
     end
@@ -89,6 +89,14 @@ class Repofetch
     def forks
       @fork_data ||= agent.call(:get, "repositories/#{@repo_identifier}/forks").data
       Repofetch::Stat.new('forks', @fork_data['size'], emoji: '🔱')
+    end
+
+    def created
+      Repofetch::TimespanStat.new('created', repo_data['created_on'], emoji: '🐣')
+    end
+
+    def updated
+      Repofetch::TimespanStat.new('updated', repo_data['updated_on'], emoji: '📤')
     end
   end
 end
