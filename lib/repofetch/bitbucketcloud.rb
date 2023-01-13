@@ -11,6 +11,8 @@ class Repofetch
   class BitbucketCloud < Repofetch::Plugin
     include ActionView::Helpers::NumberHelper
 
+    HTTP_REMOTE_REGEX = %r{https?://bitbucket\.org/(?<owner>[\w._-]+)/(?<repo>[\w._-]+)}.freeze
+    SSH_REMOTE_REGEX = %r{git@bitbucket\.org:(?<owner>[\w._-]+)/(?<repo>[\w._-]+)}.freeze
     ASCII = File.read(File.expand_path('bitbucketcloud/ASCII', __dir__))
 
     attr_reader :repo_identifier
@@ -45,8 +47,32 @@ class Repofetch
       ENV.fetch('BITBUCKET_TOKEN', nil)
     end
 
-    def self.matches_repo?(*)
-      false
+    # Detects that the repository is a Bitbucket repository.
+    def self.matches_repo?(git)
+      default_remote = Repofetch.default_remote(git)
+      matches_remote?(default_remote&.url)
+    end
+
+    # Detects that the remote URL is for a Bitbucket Cloud repository.
+    def self.matches_remote?(remote)
+      HTTP_REMOTE_REGEX.match?(remote) || SSH_REMOTE_REGEX.match?(remote)
+    end
+
+    # Gets the owner and repository from a GitHub local repository.
+    def self.repo_identifiers(git)
+      default_remote = Repofetch.default_remote(git)
+      remote_identifiers(default_remote&.url)
+    end
+
+    # Gets the owner and repository from a GitHub remote URL.
+    #
+    # Returns nil if there is no match.
+    def self.remote_identifiers(remote)
+      match = HTTP_REMOTE_REGEX.match(remote)
+      match = SSH_REMOTE_REGEX.match(remote) if match.nil?
+      raise "Remote #{remote.inspect} doesn't look like a Bitbucket Cloud remote" if match.nil?
+
+      [match[:owner], match[:repo].delete_suffix('.git')]
     end
 
     def self.from_git(*)
