@@ -2,6 +2,7 @@
 
 require 'git'
 require 'repofetch'
+require 'repofetch/config'
 
 RSpec.describe Repofetch do
   describe '#register_plugin' do
@@ -181,6 +182,15 @@ RSpec.describe Repofetch do
       it 'raises NoMethodError' do
         expect { mock_plugin.matches_repo?(Git::Base.new) }.to raise_error(NoMethodError)
       end
+    end
+  end
+
+  describe '#load_config' do
+    before { allow(described_class::Config).to receive(:load) }
+
+    it 'calls Config.load' do
+      described_class.load_config
+      expect(described_class::Config).to have_received(:load)
     end
   end
 end
