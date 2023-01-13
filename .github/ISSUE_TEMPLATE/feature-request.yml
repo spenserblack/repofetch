@@ -1,0 +1,28 @@
+name: Feature Request
+description: Request a new feature for repofetch
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: feature-request
+    attributes:
+      label: What feature would you like to be implemented?
+      description: Describe what you would like repofetch to do and why.
+      placeholder: It should do this thing because it's awesome...
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-implementation
+    attributes:
+      label: Proposed Implementation
+      description: Have an idea on how this should be done? Share it!
+      placeholder: It should be done by...
+    validations:
+      required: false      
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional info
+      description: Is there anything else that we should know?
+    validations:
+      required: false
