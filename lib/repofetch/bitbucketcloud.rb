@@ -75,8 +75,15 @@ class Repofetch
       [match[:owner], match[:repo].delete_suffix('.git')]
     end
 
-    def self.from_git(*)
-      new
+    # Creates an instance from a +Git::Base+ instance.
+    #
+    # @raise [Repofetch::PluginUsageError] if this plugin was selected *and* arguments were passed.
+    def self.from_git(git, args)
+      raise Repofetch::PluginUsageError, 'Explicitly activate this plugin to CLI arguments' unless args.empty?
+
+      owner, repository = repo_identifiers(git)
+
+      new("#{owner}/#{repository}")
     end
 
     def self.from_args(args)
