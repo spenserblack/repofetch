@@ -1,1 +1,6 @@
+Bitbucket Cloud Bugfix
 
+## Fixed
+
+- Bitbucket Cloud not getting automatically detected when running `repofetch` in a
+  Bitbucket Cloud repository
