@@ -193,4 +193,40 @@ RSpec.describe Repofetch do
       expect(described_class::Config).to have_received(:load)
     end
   end
+
+  describe '#load_config!' do
+    before { allow(described_class::Config).to receive(:load!) }
+
+    it 'calls Config.load!' do
+      described_class.load_config!
+      expect(described_class::Config).to have_received(:load!)
+    end
+  end
+
+  describe '#default_remote' do
+    let(:git) { instance_double(Git::Base) }
+    let(:origin) { instance_double(Git::Remote) }
+    let(:upstream) { instance_double(Git::Remote) }
+
+    before do
+      allow(origin).to receive(:name).and_return('origin')
+      allow(upstream).to receive(:name).and_return('upstream')
+    end
+
+    context 'when git has a remote named origin' do
+      before { allow(git).to receive(:remotes).and_return([upstream, origin]) }
+
+      it 'always returns the remote named "origin"' do
+        expect(described_class.default_remote(git)).to eq origin
+      end
+    end
+
+    context 'when git has no remote named origin' do
+      before { allow(git).to receive(:remotes).and_return([upstream]) }
+
+      it 'returns the first remote' do
+        expect(described_class.default_remote(git)).to eq upstream
+      end
+    end
+  end
 end
