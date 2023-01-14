@@ -229,4 +229,19 @@ RSpec.describe Repofetch do
       end
     end
   end
+
+  describe '#default_remote_url' do
+    let(:git) { instance_double(Git::Base) }
+    let(:remote) { instance_double(Git::Remote) }
+    let(:url) { 'https://github.com/ghost/boo.git' }
+
+    before do
+      allow(described_class).to receive(:default_remote).and_return(remote)
+      allow(remote).to receive(:url).and_return(url)
+    end
+
+    it 'returns the url of the default remote' do
+      expect(described_class.default_remote_url(git)).to eq url
+    end
+  end
 end
