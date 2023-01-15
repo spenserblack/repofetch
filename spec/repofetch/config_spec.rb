@@ -49,4 +49,13 @@ RSpec.describe Repofetch::Config do
       end
     end
   end
+
+  describe '#[]' do
+    let(:contents) { 'plugins: [foo]' }
+
+    it 'returns the value for the given key' do
+      config = described_class.new(contents)
+      expect(config[:plugins]).to eq(['foo'])
+    end
+  end
 end
