@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'git'
+require 'repofetch'
 require 'repofetch/gitlab'
 
 RSpec.describe Repofetch::Gitlab do
@@ -100,6 +102,42 @@ RSpec.describe Repofetch::Gitlab do
       it 'is false' do
         expect(described_class.matches_remote?(remote)).to be false
       end
+    end
+  end
+
+  describe '#matches_repo?' do
+    let(:git) { instance_double(Git::Base) }
+    let(:origin_url) { 'https://gitlab.com/foo/bar.git' }
+    let(:origin) { instance_double(Git::Remote) }
+
+    before do
+      allow(origin).to receive(:url).and_return(origin_url)
+      allow(Repofetch).to receive(:default_remote).and_return(origin)
+      allow(described_class).to receive(:matches_remote?).and_return(true)
+    end
+
+    it 'calls #matches_remote? with the default remote URL' do
+      described_class.matches_repo?(git)
+
+      expect(described_class).to have_received(:matches_remote?).with(origin_url)
+    end
+  end
+
+  describe '#repo_identifier' do
+    let(:git) { instance_double(Git::Base) }
+    let(:origin_url) { 'https://gitlab.com/foo/bar.git' }
+    let(:origin) { instance_double(Git::Remote) }
+
+    before do
+      allow(origin).to receive(:url).and_return(origin_url)
+      allow(Repofetch).to receive(:default_remote).and_return(origin)
+      allow(described_class).to receive(:remote_identifier)
+    end
+
+    it 'calls #remote_identifier with the default remote URL' do
+      described_class.repo_identifier(git)
+
+      expect(described_class).to have_received(:remote_identifier).with(origin_url)
     end
   end
 end
