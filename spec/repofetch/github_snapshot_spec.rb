@@ -7,6 +7,8 @@ describe Repofetch::Github do
   describe '#stats' do
     let(:client) { instance_double(Octokit::Client) }
 
+    # TODO: Instead of making time relative to test, the raw time should be used.
+    last_year = Time.new(Time.now.year - 1, Time.now.month, Time.now.day)
     before do
       allow(Octokit::Client).to receive(:new).and_return(client)
       allow(client).to receive(:repository).with('ghost/boo').and_return({
@@ -15,8 +17,8 @@ describe Repofetch::Github do
                                                                            'stargazers_count' => 1,
                                                                            'subscribers_count' => 2,
                                                                            'forks_count' => 3,
-                                                                           'created_at' => Time.new(2023, 1, 16),
-                                                                           'updated_at' => Time.new(2023, 1, 17),
+                                                                           'created_at' => last_year,
+                                                                           'updated_at' => last_year,
                                                                            'size' => 1000
                                                                          })
       allow(client).to receive(:search_issues)
