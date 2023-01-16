@@ -171,4 +171,36 @@ RSpec.describe Repofetch::Github do
       end
     end
   end
+
+  describe '#from_args' do
+    let(:instance) { instance_double(described_class) }
+
+    before do
+      allow(described_class).to receive(:new).and_return(instance)
+    end
+
+    context 'when no CLI args are given' do
+      let(:args) { [] }
+
+      it 'raises a PluginUsageError' do
+        expect { described_class.from_args(args) }.to raise_error(Repofetch::PluginUsageError)
+      end
+    end
+
+    context "when CLI arg isn't in the right format" do
+      let(:args) { ['foo'] }
+
+      it 'raises a PluginUsageError' do
+        expect { described_class.from_args(args) }.to raise_error(Repofetch::PluginUsageError)
+      end
+    end
+
+    context 'when CLI args are given' do
+      let(:args) { ['ghost/boo'] }
+
+      it 'creates a new instance with the repo identifiers' do
+        expect(described_class.from_args(args)).to eq instance
+      end
+    end
+  end
 end
