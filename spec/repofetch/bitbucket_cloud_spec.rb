@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'repofetch'
 require 'repofetch/bitbucketcloud'
 
 RSpec.describe Repofetch::BitbucketCloud do
