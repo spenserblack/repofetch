@@ -7,9 +7,9 @@ describe Repofetch::Github do
   describe '#to_s' do
     let(:client) { instance_double(Octokit::Client) }
 
-    # TODO: Instead of making time relative to test, the raw time should be used.
-    last_year = Time.new(Time.now.year - 1, Time.now.month, Time.now.day)
     before do
+      # TODO: Instead of making time relative to test, the raw time should be used.
+      last_year = Time.new(Time.now.year - 1, Time.now.month, Time.now.day)
       allow(Octokit::Client).to receive(:new).and_return(client)
       allow(client).to receive(:repository).with('ghost/boo').and_return({
                                                                            'clone_url' => 'https://github.com/ghost/boo.git',
