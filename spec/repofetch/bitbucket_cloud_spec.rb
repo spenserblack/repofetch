@@ -149,4 +149,21 @@ RSpec.describe Repofetch::BitbucketCloud do
       expect(described_class).to have_received(:matches_remote?).with(origin_url)
     end
   end
+
+  describe '#repo_identifiers' do
+    let(:git) { instance_double(Git::Base) }
+    let(:origin_url) { 'https://bitbucket.org/foo/bar.git' }
+    let(:origin) { instance_double(Git::Remote, url: origin_url) }
+
+    before do
+      allow(Repofetch).to receive(:default_remote).and_return(origin)
+      allow(described_class).to receive(:remote_identifiers).and_return(%w[foo bar])
+    end
+
+    it 'calls #remote_identifiers with the default remote URL' do
+      described_class.repo_identifiers(git)
+
+      expect(described_class).to have_received(:remote_identifiers).with(origin_url)
+    end
+  end
 end
