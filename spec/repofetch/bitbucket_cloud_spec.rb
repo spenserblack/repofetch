@@ -2,6 +2,7 @@
 
 require 'repofetch'
 require 'repofetch/bitbucketcloud'
+require 'repofetch/exceptions'
 
 RSpec.describe Repofetch::BitbucketCloud do
   context 'when the remote is "http://bitbucket.org/foo/bar.git"' do
@@ -165,6 +166,64 @@ RSpec.describe Repofetch::BitbucketCloud do
       described_class.repo_identifiers(git)
 
       expect(described_class).to have_received(:remote_identifiers).with(origin_url)
+    end
+  end
+
+  describe '#from_git' do
+    let(:git) { instance_double(Git::Base) }
+    let(:instance) { instance_double(described_class) }
+
+    before do
+      allow(described_class).to receive(:new).and_return(instance)
+      allow(described_class).to receive(:repo_identifiers).and_return(%w[foo bar])
+    end
+
+    context 'when no CLI args are given' do
+      let(:args) { [] }
+
+      it 'creates a new instance with the repo identifier' do
+        expect(described_class.from_git(git, args)).to eq instance
+      end
+    end
+
+    context 'when one or more CLI args are given' do
+      let(:args) { ['abc/xyz'] }
+
+      it 'raises a PluginUsageError' do
+        expect { described_class.from_git(git, args) }.to raise_error(Repofetch::PluginUsageError)
+      end
+    end
+  end
+
+  describe '#from_args' do
+    let(:instance) { instance_double(described_class) }
+
+    before do
+      allow(described_class).to receive(:new).and_return(instance)
+    end
+
+    context 'when no CLI args are given' do
+      let(:args) { [] }
+
+      it 'raises a PluginUsageError' do
+        expect { described_class.from_args(args) }.to raise_error(Repofetch::PluginUsageError)
+      end
+    end
+
+    context 'when one CLI arg is given' do
+      let(:args) { ['foo/bar'] }
+
+      it 'creates a new instance with the repo identifier' do
+        expect(described_class.from_args(args)).to eq instance
+      end
+    end
+
+    context 'when two or more CLI args are given' do
+      let(:args) { ['foo/bar', 'abc/xyz'] }
+
+      it 'raises a PluginUsageError' do
+        expect { described_class.from_args(args) }.to raise_error(Repofetch::PluginUsageError)
+      end
     end
   end
 end
