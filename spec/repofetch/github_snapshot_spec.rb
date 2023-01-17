@@ -4,7 +4,7 @@ require 'octokit'
 require 'repofetch/github'
 
 describe Repofetch::Github do
-  describe '#stats' do
+  describe '#to_s' do
     let(:client) { instance_double(Octokit::Client) }
 
     # TODO: Instead of making time relative to test, the raw time should be used.
