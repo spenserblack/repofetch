@@ -102,4 +102,36 @@ RSpec.describe Repofetch::BitbucketCloud do
       end
     end
   end
+
+  describe '#agent' do
+    context 'when the token is set' do
+      let(:agent) { instance_double(Sawyer::Agent) }
+      let(:connection) { instance_double(Faraday::Connection) }
+      let(:headers) { {} }
+      let(:instance) { described_class.new('foo/bar') }
+
+      before do
+        allow(instance).to receive(:token).and_return('abc123')
+        allow(connection).to receive(:headers).and_return(headers)
+        allow(Sawyer::Agent).to receive(:new) do |&block|
+          block.call(connection)
+          agent
+        end
+      end
+
+      it 'sets the Authorization header' do
+        instance.agent
+
+        expect(headers['Authorization']).to eq 'Bearer abc123'
+      end
+    end
+  end
+
+  describe '#token' do
+    before { allow(ENV).to receive(:fetch).with('BITBUCKET_TOKEN', nil).and_return('abc123') }
+
+    it 'returns the value of the BITBUCKET_TOKEN environment variable' do
+      expect(described_class.new('foo/bar').token).to eq 'abc123'
+    end
+  end
 end
