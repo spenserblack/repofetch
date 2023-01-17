@@ -11,8 +11,8 @@ class Repofetch
   class Github < Repofetch::Plugin
     include ActionView::Helpers::NumberHelper
 
-    HTTP_REMOTE_REGEX = %r{https?://github\.com/(?<owner>[\w.-]+)/(?<repository>[\w.-]+)}.freeze
-    SSH_REMOTE_REGEX = %r{git@github\.com:(?<owner>[\w.-]+)/(?<repository>[\w.-]+)}.freeze
+    HTTP_REMOTE_REGEX = %r{https?://github\.com/(?<owner>[\w.-]+)/(?<repository>[\w.-]+)}
+    SSH_REMOTE_REGEX = %r{git@github\.com:(?<owner>[\w.-]+)/(?<repository>[\w.-]+)}
     ASCII = File.read(File.expand_path('github/ASCII', __dir__))
 
     attr_reader :owner, :repository

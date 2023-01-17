@@ -8,8 +8,8 @@ require 'sawyer'
 class Repofetch
   # Adds support for GitLab repositories.
   class Gitlab < Repofetch::Plugin
-    HTTP_REMOTE_REGEX = %r{https?://gitlab\.com/(?<path>[\w.-][\w.\-/]+)}.freeze
-    SSH_REMOTE_REGEX = %r{git@gitlab\.com:(?<path>[\w.-][\w.\-/]+)}.freeze
+    HTTP_REMOTE_REGEX = %r{https?://gitlab\.com/(?<path>[\w.-][\w.\-/]+)}
+    SSH_REMOTE_REGEX = %r{git@gitlab\.com:(?<path>[\w.-][\w.\-/]+)}
     ASCII = File.read(File.expand_path('gitlab/ASCII', __dir__))
 
     attr_reader :repo_identifier
