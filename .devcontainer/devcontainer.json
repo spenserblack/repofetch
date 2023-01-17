@@ -5,12 +5,13 @@
   },
   "extensions": [
     "EditorConfig.EditorConfig",
+    "ms-vscode.live-server",
     "rebornix.Ruby"
   ],
   "portsAttributes": {
     "3000": {
       "label": "Coverage",
-      "onAutoForward": "notify"
+      "onAutoForward": "silent"
     }
   },
   "postCreateCommand": ".devcontainer/postCreate.sh",
