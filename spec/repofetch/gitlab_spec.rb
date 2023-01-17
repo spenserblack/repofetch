@@ -140,4 +140,12 @@ RSpec.describe Repofetch::Gitlab do
       expect(described_class).to have_received(:remote_identifier).with(origin_url)
     end
   end
+
+  describe '#token' do
+    before { allow(ENV).to receive(:fetch).with('GITLAB_TOKEN', nil).and_return('abc123') }
+
+    it 'returns the value of the GITLAB_TOKEN environment variable' do
+      expect(described_class.new('1').token).to eq 'abc123'
+    end
+  end
 end
