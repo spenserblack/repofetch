@@ -6,6 +6,7 @@ require 'sawyer'
 describe Repofetch::Gitlab do
   describe '#to_s' do
     let(:agent) { instance_double(Sawyer::Agent) }
+    let(:instance) { described_class.new('123') }
 
     before do
       # TODO: Instead of making time relative to test, the raw time should be used.
@@ -25,8 +26,20 @@ describe Repofetch::Gitlab do
                                                    })
     end
 
-    it 'renders the stats and ASCII art' do
-      expect(described_class.new('123').to_s).to match_snapshot('repofetch_gitlab_1')
+    context 'when token is nil' do
+      before { allow(instance).to receive(:token).and_return(nil) }
+
+      it 'renders the stats and ASCII art' do
+        expect(instance.to_s).to match_snapshot('repofetch_gitlab_1')
+      end
+    end
+
+    context 'when token is not nil' do
+      before { allow(instance).to receive(:token).and_return('abc123') }
+
+      it 'includes open issues count' do
+        expect(instance.to_s).to match_snapshot('repofetch_gitlab_2')
+      end
     end
   end
 end

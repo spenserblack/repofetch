@@ -1,0 +1,17 @@
+[31m          OOO                  OOO           [0m[1m[31mFoo / Bar[0m[0m @ [1m[31mGitLab[0m[0m
+[31m        OOOOOO                OOOOOO         [0m----------------------------------------------------
+[31m       OOOOOOOO              OOOOOOOO        [0m🌐[31m[1mHTTP(S)[0m[0m: https://gitlab.com/foo/bar.git
+[31m      OOOOOOOOOO            OOOOOOOOOO       [0m🔑[31m[1mSSH[0m[0m: git@gitlab.com:foo/bar.git
+[31m     OOOOOOOOOOOO          OOOOOOOOOOOO      [0m⭐[31m[1mstars[0m[0m: 1
+[31m    OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO     [0m🔱[31m[1mforks[0m[0m: 2
+[31m   OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO    [0m🐣[31m[1mcreated[0m[0m: about 1 year ago
+[33m   ...[31mOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO[33m...    [0m📤[31m[1mupdated[0m[0m: about 1 year ago
+[33m   ......[31mOOOOOOOOOOOOOOOOOOOOOOOOOO[33m......    [0m❗[31m[1mopen issues[0m[0m: 3
+[33m    ........[31mOOOOOOOOOOOOOOOOOOOO[33m........     [0m
+[33m     ..........[31mOOOOOOOOOOOOOO[33m..........      [0m
+[33m      ............[31mOOOOOOOO[33m............       [0m
+[33m        .............[31mOO[33m..............        [0m
+[33m           .......[33m@@@@@@@@[33m........           [0m
+[33m             ..[33m@@@@@@@@@@@@@@@[33m..             [0m
+[33m                @@@@@@@@@@@@@                [0m
+[33m                   @@@@@@@                   [0m
