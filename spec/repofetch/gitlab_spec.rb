@@ -3,6 +3,7 @@
 require 'git'
 require 'repofetch'
 require 'repofetch/gitlab'
+require 'sawyer'
 
 RSpec.describe Repofetch::Gitlab do
   context 'when the remote is "http://gitlab.com/gitlab-org/gitlab.git"' do
@@ -146,6 +147,30 @@ RSpec.describe Repofetch::Gitlab do
 
     it 'returns the value of the GITLAB_TOKEN environment variable' do
       expect(described_class.new('1').token).to eq 'abc123'
+    end
+  end
+
+  describe '#agent' do
+    context 'when the token is set' do
+      let(:agent) { instance_double(Sawyer::Agent) }
+      let(:connection) { instance_double(Faraday::Connection) }
+      let(:headers) { {} }
+      let(:instance) { described_class.new('1') }
+
+      before do
+        allow(instance).to receive(:token).and_return('abc123')
+        allow(connection).to receive(:headers).and_return(headers)
+        allow(Sawyer::Agent).to receive(:new) do |&block|
+          block.call(connection)
+          agent
+        end
+      end
+
+      it 'sets the Authorization header' do
+        instance.agent
+
+        expect(headers['Authorization']).to eq 'Bearer abc123'
+      end
     end
   end
 end
