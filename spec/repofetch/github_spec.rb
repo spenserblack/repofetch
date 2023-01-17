@@ -115,10 +115,9 @@ RSpec.describe Repofetch::Github do
   describe 'matches_repo?' do
     let(:git) { instance_double(Git::Base) }
     let(:origin_url) { 'https://github.com/ghost/boo.git' }
-    let(:origin) { instance_double(Git::Remote) }
+    let(:origin) { instance_double(Git::Remote, url: origin_url) }
 
     before do
-      allow(origin).to receive(:url).and_return(origin_url)
       allow(Repofetch).to receive(:default_remote).and_return(origin)
       allow(described_class).to receive(:matches_remote?).and_return(true)
     end
@@ -132,10 +131,9 @@ RSpec.describe Repofetch::Github do
   describe '#repo_identifiers' do
     let(:git) { instance_double(Git::Base) }
     let(:origin_url) { 'https://github.com/ghost/boo.git' }
-    let(:origin) { instance_double(Git::Remote) }
+    let(:origin) { instance_double(Git::Remote, url: origin_url) }
 
     before do
-      allow(origin).to receive(:url).and_return(origin_url)
       allow(Repofetch).to receive(:default_remote).and_return(origin)
       allow(described_class).to receive(:remote_identifiers).and_return(%w[ghost boo])
     end

@@ -106,13 +106,11 @@ RSpec.describe Repofetch::BitbucketCloud do
   describe '#agent' do
     context 'when the token is set' do
       let(:agent) { instance_double(Sawyer::Agent) }
-      let(:connection) { instance_double(Faraday::Connection) }
-      let(:headers) { {} }
+      let(:connection) { instance_double(Faraday::Connection, headers: {}) }
       let(:instance) { described_class.new('foo/bar') }
 
       before do
         allow(instance).to receive(:token).and_return('abc123')
-        allow(connection).to receive(:headers).and_return(headers)
         allow(Sawyer::Agent).to receive(:new) do |&block|
           block.call(connection)
           agent
@@ -122,7 +120,7 @@ RSpec.describe Repofetch::BitbucketCloud do
       it 'sets the Authorization header' do
         instance.agent
 
-        expect(headers['Authorization']).to eq 'Bearer abc123'
+        expect(connection.headers['Authorization']).to eq 'Bearer abc123'
       end
     end
   end

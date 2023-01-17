@@ -110,10 +110,9 @@ RSpec.describe Repofetch::Gitlab do
   describe '#matches_repo?' do
     let(:git) { instance_double(Git::Base) }
     let(:origin_url) { 'https://gitlab.com/foo/bar.git' }
-    let(:origin) { instance_double(Git::Remote) }
+    let(:origin) { instance_double(Git::Remote, url: origin_url) }
 
     before do
-      allow(origin).to receive(:url).and_return(origin_url)
       allow(Repofetch).to receive(:default_remote).and_return(origin)
       allow(described_class).to receive(:matches_remote?).and_return(true)
     end
@@ -128,10 +127,9 @@ RSpec.describe Repofetch::Gitlab do
   describe '#repo_identifier' do
     let(:git) { instance_double(Git::Base) }
     let(:origin_url) { 'https://gitlab.com/foo/bar.git' }
-    let(:origin) { instance_double(Git::Remote) }
+    let(:origin) { instance_double(Git::Remote, url: origin_url) }
 
     before do
-      allow(origin).to receive(:url).and_return(origin_url)
       allow(Repofetch).to receive(:default_remote).and_return(origin)
       allow(described_class).to receive(:remote_identifier)
     end
@@ -154,13 +152,11 @@ RSpec.describe Repofetch::Gitlab do
   describe '#agent' do
     context 'when the token is set' do
       let(:agent) { instance_double(Sawyer::Agent) }
-      let(:connection) { instance_double(Faraday::Connection) }
-      let(:headers) { {} }
+      let(:connection) { instance_double(Faraday::Connection, headers: {}) }
       let(:instance) { described_class.new('1') }
 
       before do
         allow(instance).to receive(:token).and_return('abc123')
-        allow(connection).to receive(:headers).and_return(headers)
         allow(Sawyer::Agent).to receive(:new) do |&block|
           block.call(connection)
           agent
@@ -170,7 +166,7 @@ RSpec.describe Repofetch::Gitlab do
       it 'sets the Authorization header' do
         instance.agent
 
-        expect(headers['Authorization']).to eq 'Bearer abc123'
+        expect(connection.headers['Authorization']).to eq 'Bearer abc123'
       end
     end
   end

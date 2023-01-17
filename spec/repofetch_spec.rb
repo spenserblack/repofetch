@@ -205,13 +205,8 @@ RSpec.describe Repofetch do
 
   describe '#default_remote' do
     let(:git) { instance_double(Git::Base) }
-    let(:origin) { instance_double(Git::Remote) }
-    let(:upstream) { instance_double(Git::Remote) }
-
-    before do
-      allow(origin).to receive(:name).and_return('origin')
-      allow(upstream).to receive(:name).and_return('upstream')
-    end
+    let(:origin) { instance_double(Git::Remote, name: 'origin') }
+    let(:upstream) { instance_double(Git::Remote, name: 'upstream') }
 
     context 'when git has a remote named origin' do
       before { allow(git).to receive(:remotes).and_return([upstream, origin]) }
@@ -232,8 +227,8 @@ RSpec.describe Repofetch do
 
   describe '#default_remote_url' do
     let(:git) { instance_double(Git::Base) }
-    let(:remote) { instance_double(Git::Remote) }
     let(:url) { 'https://github.com/ghost/boo.git' }
+    let(:remote) { instance_double(Git::Remote, url: url) }
 
     before do
       allow(described_class).to receive(:default_remote).and_return(remote)
