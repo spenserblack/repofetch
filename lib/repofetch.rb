@@ -105,6 +105,8 @@ class Repofetch
 
   # @abstract Subclass to create a plugin.
   class Plugin
+    include Repofetch::Util
+
     # Plugin intializer arguments should come from the +from_git+ or +from_args+
     # class methods.
     def initialize(*) end
@@ -174,12 +176,12 @@ class Repofetch
 
     # Creates the separator that appears underneath the header
     def separator
-      '-' * Repofetch::Util.clean_ansi(header).length
+      '-' * clean_ansi(header).length
     end
 
     def to_s
       zipped_lines.map do |ascii_line, stat_line|
-        cleaned_ascii = Repofetch::Util.clean_s(ascii_line)
+        cleaned_ascii = clean_s(ascii_line)
         styled_ascii = (ascii_line % theme.to_h) + theme.style(:reset)
         aligned_stat_line = "#{' ' * (MAX_ASCII_WIDTH + 5)}#{stat_line}"
         "#{styled_ascii}#{aligned_stat_line.slice(cleaned_ascii.length..)}\n"

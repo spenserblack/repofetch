@@ -7,3 +7,9 @@ Next
 ## Fixed
 
 - length of separator to match *visual* length of header
+
+## Potentially Breaking for 3rd-party Plugins
+
+### Changed
+
+- `Repofetch::Util` to be a module

@@ -2,14 +2,14 @@
 
 class Repofetch
   # Provides uncategorized utilities.
-  class Util
+  module Util
     # Cleans a string with style parameters (e.g. +"%{green}OK"+ -> +"OK"+)
-    def self.clean_s(str)
+    def clean_s(str)
       str.gsub(/%{[\w\d]+?}/, '')
     end
 
     # Removes ANSI escape sequences from +str+.
-    def self.clean_ansi(str)
+    def clean_ansi(str)
       str.gsub("\e", '').gsub(/\[\d+(;\d+)*m/, '')
     end
   end
