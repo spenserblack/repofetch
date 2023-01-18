@@ -1,5 +1,9 @@
 Next
 
+## Changed
+
+- Bitbucket Cloud header to be bold and blue
+
 ## Fixed
 
 - length of separator to match *visual* length of header
