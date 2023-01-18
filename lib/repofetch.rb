@@ -80,32 +80,6 @@ class Repofetch
     available_plugins[0].from_git(git, args)
   end
 
-  # Gets the name of the default remote to use.
-  #
-  # Will try to pick "origin", but if that is not found then it will
-  # pick the first one found, or nil if there aren't any available.
-  #
-  # @param [Git::Base] git The repository instance.
-  #
-  # @return [Git::Remote]
-  def self.default_remote(git)
-    remotes = git.remotes
-    found_remote = remotes.find { |remote| remote.name == 'origin' }
-    found_remote = remotes[0] if found_remote.nil?
-    found_remote
-  end
-
-  # Just wrapper around +default_remote+ since this is likely the most common
-  # use case (and it's easier than referencing the +Git::Remote+ docs to ensure
-  # correct usage in each plugin).
-  #
-  # @param [String] path The path to the repository.
-  #
-  # @return [String]
-  def self.default_remote_url(path)
-    default_remote(path)&.url
-  end
-
   def self.clear_plugins
     @plugins = []
   end

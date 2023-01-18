@@ -14,3 +14,4 @@ Next
 
 - `Repofetch::Util` to be a module
 - `clean_s` to be called `remove_format_params`
+- Moved `default_remote` and `default_remote_url` to be in `Repofetch::Util`

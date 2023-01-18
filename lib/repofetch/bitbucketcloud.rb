@@ -2,9 +2,10 @@
 
 require 'action_view'
 require 'optparse'
-require 'repofetch'
 require 'repofetch/bitbucketcloud/stats'
 require 'repofetch/exceptions'
+require 'repofetch/plugin'
+require 'repofetch/util'
 require 'sawyer'
 
 class Repofetch
@@ -12,6 +13,8 @@ class Repofetch
   class BitbucketCloud < Repofetch::Plugin
     include ActionView::Helpers::NumberHelper
     include Repofetch::BitbucketCloud::Stats
+    include Repofetch::Util
+    extend Repofetch::Util
 
     HTTP_REMOTE_REGEX = %r{https?://bitbucket\.org/(?<owner>[\w._-]+)/(?<repo>[\w._-]+)}.freeze
     SSH_REMOTE_REGEX = %r{git@bitbucket\.org:(?<owner>[\w._-]+)/(?<repo>[\w._-]+)}.freeze
@@ -57,8 +60,7 @@ class Repofetch
 
     # Detects that the repository is a Bitbucket repository.
     def self.matches_repo?(git)
-      default_remote = Repofetch.default_remote(git)
-      matches_remote?(default_remote&.url)
+      matches_remote?(default_remote_url(git))
     end
 
     # Detects that the remote URL is for a Bitbucket Cloud repository.
@@ -68,8 +70,7 @@ class Repofetch
 
     # Gets the owner and repository from a GitHub local repository.
     def self.repo_identifiers(git)
-      default_remote = Repofetch.default_remote(git)
-      remote_identifiers(default_remote&.url)
+      remote_identifiers(default_remote_url(git))
     end
 
     # Gets the owner and repository from a GitHub remote URL.

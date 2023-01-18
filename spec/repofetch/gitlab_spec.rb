@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'git'
-require 'repofetch'
 require 'repofetch/exceptions'
 require 'repofetch/gitlab'
 require 'sawyer'
@@ -108,36 +107,20 @@ RSpec.describe Repofetch::Gitlab do
   end
 
   describe '#matches_repo?' do
-    let(:git) { instance_double(Git::Base) }
-    let(:origin_url) { 'https://gitlab.com/foo/bar.git' }
-    let(:origin) { instance_double(Git::Remote, url: origin_url) }
+    let(:origin) { instance_double(Git::Remote, url: 'https://gitlab.com/foo/bar.git', name: 'origin') }
+    let(:git) { instance_double(Git::Base, remotes: [origin]) }
 
-    before do
-      allow(Repofetch).to receive(:default_remote).and_return(origin)
-      allow(described_class).to receive(:matches_remote?).and_return(true)
-    end
-
-    it 'calls #matches_remote? with the default remote URL' do
-      described_class.matches_repo?(git)
-
-      expect(described_class).to have_received(:matches_remote?).with(origin_url)
+    it 'returns true when the default remote is a GitLab remote' do
+      expect(described_class.matches_repo?(git)).to be true
     end
   end
 
   describe '#repo_identifier' do
-    let(:git) { instance_double(Git::Base) }
-    let(:origin_url) { 'https://gitlab.com/foo/bar.git' }
-    let(:origin) { instance_double(Git::Remote, url: origin_url) }
+    let(:origin) { instance_double(Git::Remote, url: 'https://gitlab.com/foo/bar.git', name: 'origin') }
+    let(:git) { instance_double(Git::Base, remotes: [origin]) }
 
-    before do
-      allow(Repofetch).to receive(:default_remote).and_return(origin)
-      allow(described_class).to receive(:remote_identifier)
-    end
-
-    it 'calls #remote_identifier with the default remote URL' do
-      described_class.repo_identifier(git)
-
-      expect(described_class).to have_received(:remote_identifier).with(origin_url)
+    it 'returns owner/repository' do
+      expect(described_class.repo_identifier(git)).to eq 'foo/bar'
     end
   end
 
