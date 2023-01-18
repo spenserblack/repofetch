@@ -174,7 +174,7 @@ class Repofetch
 
     # Creates the separator that appears underneath the header
     def separator
-      '-' * Repofetch::Util.clean_s(header).length
+      '-' * Repofetch::Util.clean_ansi(header).length
     end
 
     def to_s
