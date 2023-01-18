@@ -13,3 +13,4 @@ Next
 ### Changed
 
 - `Repofetch::Util` to be a module
+- `clean_s` to be called `remove_format_params`

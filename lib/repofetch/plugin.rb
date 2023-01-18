@@ -82,7 +82,7 @@ class Repofetch
 
     def to_s
       zipped_lines.map do |ascii_line, stat_line|
-        cleaned_ascii = clean_s(ascii_line)
+        cleaned_ascii = remove_format_params(ascii_line)
         styled_ascii = (ascii_line % theme.to_h) + theme.style(:reset)
         aligned_stat_line = "#{' ' * (MAX_ASCII_WIDTH + 5)}#{stat_line}"
         "#{styled_ascii}#{aligned_stat_line.slice(cleaned_ascii.length..)}\n"

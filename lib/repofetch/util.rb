@@ -3,8 +3,8 @@
 class Repofetch
   # Provides uncategorized utilities.
   module Util
-    # Cleans a string with style parameters (e.g. +"%{green}OK"+ -> +"OK"+)
-    def clean_s(str)
+    # Converts a format string into a plain string (e.g. +"%{green}OK"+ -> +"OK"+)
+    def remove_format_params(str)
       str.gsub(/%{[\w\d]+?}/, '')
     end
 
