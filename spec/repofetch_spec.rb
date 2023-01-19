@@ -202,41 +202,4 @@ RSpec.describe Repofetch do
       expect(described_class::Config).to have_received(:load!)
     end
   end
-
-  describe '#default_remote' do
-    let(:git) { instance_double(Git::Base) }
-    let(:origin) { instance_double(Git::Remote, name: 'origin') }
-    let(:upstream) { instance_double(Git::Remote, name: 'upstream') }
-
-    context 'when git has a remote named origin' do
-      before { allow(git).to receive(:remotes).and_return([upstream, origin]) }
-
-      it 'always returns the remote named "origin"' do
-        expect(described_class.default_remote(git)).to eq origin
-      end
-    end
-
-    context 'when git has no remote named origin' do
-      before { allow(git).to receive(:remotes).and_return([upstream]) }
-
-      it 'returns the first remote' do
-        expect(described_class.default_remote(git)).to eq upstream
-      end
-    end
-  end
-
-  describe '#default_remote_url' do
-    let(:git) { instance_double(Git::Base) }
-    let(:url) { 'https://github.com/ghost/boo.git' }
-    let(:remote) { instance_double(Git::Remote, url: url) }
-
-    before do
-      allow(described_class).to receive(:default_remote).and_return(remote)
-      allow(remote).to receive(:url).and_return(url)
-    end
-
-    it 'returns the url of the default remote' do
-      expect(described_class.default_remote_url(git)).to eq url
-    end
-  end
 end

@@ -1,9 +1,25 @@
 Next
 
+## Added
+
+- `Stat#format(theme)` to create styled stats
+- `Stat#style_label` to style the label without mutating the original `Stat` instance
+
 ## Changed
 
 - Bitbucket Cloud header to be bold and blue
+- `Stat#style_label!` to accept one or more styles as parameters
 
 ## Fixed
 
 - length of separator to match *visual* length of header
+
+## Potentially Breaking for 3rd-party Plugins
+
+### Changed
+
+- `Repofetch::Util` to be a module
+- `clean_s` to be called `remove_format_params`
+- Moved `default_remote` and `default_remote_url` to be in `Repofetch::Util`
+- `Stat#to_s` to return an unstyled value
+- Header text and stats will now automatically be bold and use the value returned by `Plugin#primary_color`

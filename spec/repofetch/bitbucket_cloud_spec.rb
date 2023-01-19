@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'repofetch'
 require 'repofetch/bitbucketcloud'
 require 'repofetch/exceptions'
 
@@ -136,36 +135,20 @@ RSpec.describe Repofetch::BitbucketCloud do
   end
 
   describe '#matches_repo?' do
-    let(:git) { instance_double(Git::Base) }
-    let(:origin_url) { 'https://bitbucket.org/foo/bar.git' }
-    let(:origin) { instance_double(Git::Remote, url: origin_url) }
+    let(:remote) { instance_double(Git::Remote, url: 'https://bitbucket.org/foo/bar.git', name: 'origin') }
+    let(:git) { instance_double(Git::Base, remotes: [remote]) }
 
-    before do
-      allow(Repofetch).to receive(:default_remote).and_return(origin)
-      allow(described_class).to receive(:matches_remote?).with(origin_url).and_return(true)
-    end
-
-    it 'calls #matches_remote? with the default remote URL' do
-      described_class.matches_repo?(git)
-
-      expect(described_class).to have_received(:matches_remote?).with(origin_url)
+    it 'returns true when the default remote matches the pattern(s)' do
+      expect(described_class.matches_repo?(git)).to be true
     end
   end
 
   describe '#repo_identifiers' do
-    let(:git) { instance_double(Git::Base) }
-    let(:origin_url) { 'https://bitbucket.org/foo/bar.git' }
-    let(:origin) { instance_double(Git::Remote, url: origin_url) }
+    let(:remote) { instance_double(Git::Remote, url: 'https://bitbucket.org/foo/bar.git', name: 'origin') }
+    let(:git) { instance_double(Git::Base, remotes: [remote]) }
 
-    before do
-      allow(Repofetch).to receive(:default_remote).and_return(origin)
-      allow(described_class).to receive(:remote_identifiers).and_return(%w[foo bar])
-    end
-
-    it 'calls #remote_identifiers with the default remote URL' do
-      described_class.repo_identifiers(git)
-
-      expect(described_class).to have_received(:remote_identifiers).with(origin_url)
+    it 'returns the owner and repository' do
+      expect(described_class.repo_identifiers(git)).to eq %w[foo bar]
     end
   end
 

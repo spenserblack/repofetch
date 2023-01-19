@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
 require 'cgi'
-require 'repofetch'
 require 'repofetch/exceptions'
+require 'repofetch/plugin'
+require 'repofetch/util'
 require 'sawyer'
 
 class Repofetch
   # Adds support for GitLab repositories.
   class Gitlab < Repofetch::Plugin
+    include Repofetch::Util
+    extend Repofetch::Util
+
     HTTP_REMOTE_REGEX = %r{https?://gitlab\.com/(?<path>[\w.-][\w.\-/]+)}.freeze
     SSH_REMOTE_REGEX = %r{git@gitlab\.com:(?<path>[\w.-][\w.\-/]+)}.freeze
     ASCII = File.read(File.expand_path('gitlab/ASCII', __dir__))
@@ -22,11 +26,11 @@ class Repofetch
     end
 
     def header
-      "#{header_format(repo_data['name_with_namespace'])} @ #{header_format('GitLab')}"
+      [repo_data['name_with_namespace'], 'GitLab']
     end
 
-    def header_format(text)
-      theme.format(:bold, theme.format(:red, text))
+    def primary_color
+      :red
     end
 
     def stats
@@ -35,7 +39,7 @@ class Repofetch
       # NOTE: Stats that require authentication
       stats << open_issues unless token.nil?
 
-      stats.each { |stat| %i[bold red].each { |style| stat.style_label!(style) } }
+      stats
     end
 
     def ascii
@@ -87,9 +91,7 @@ class Repofetch
 
     # Gets the path (+owner/subproject/repo+) of the repository.
     def self.repo_identifier(git)
-      default_remote = Repofetch.default_remote(git)
-      url = default_remote&.url
-      remote_identifier(url)
+      remote_identifier(default_remote_url(git))
     end
 
     # Gets the path (+owner/subproject/repo+) of the repository.
@@ -105,9 +107,7 @@ class Repofetch
 
     # Detects that the repository is a GitHub repository.
     def self.matches_repo?(git)
-      default_remote = Repofetch.default_remote(git)
-      url = default_remote&.url
-      matches_remote?(url)
+      matches_remote?(default_remote_url(git))
     end
 
     # Detects that the remote URL is for a GitHub repository.

@@ -62,14 +62,15 @@ The following requirements assume you are *not* manually implementing a plugin's
 `to_s` method, and you are inheriting from `Repofetch::Plugin`.
 
 - `ascii` should return a string for the ASCII art
-- `header` should return the header text that will be above the `---` separator on the right side.
+- `header` should return the header text or an array of header text that will be above the `---` separator on the right side.
 - `stats` should return an array of values that implement `to_s`. These will be
   the stats displayed to the right of the ASCII art. You can use`Repofetch::Stat` and
   `Repofetch::TimespanStat` to create a pretty stat.
 
-The following are optional.
+### Optional Plugin Instance Methods
 
 - `theme` can return an instance of `Repofetch::Theme` to use a different color scheme.
+- `primary_color` will set the color for the header and stat labels.
 
 ### Authoring ASCII Art
 
@@ -113,15 +114,16 @@ class MyCoolPlugin < Repofetch::Plugin
   end
 
   def header
-    # NOTE: theme is provided by the base Plugin class
-    "stats from #{theme.format(:underline, 'my plugin')}"
+    # NOTE: The inherited header_joiner method will make the final header "My Plugin @ Me"
+    # You can override this method to use a different joiner, or override formatted_header
+    # for more control.
+    ['My Plugin', 'Me']
   end
 
   def stats
-    # if theme is not passed, the stat will not be styled
     [
-      Repofetch::Stat.new('git repo detected', @detected_from_git, emoji: '📂', theme: theme),
-      Repofetch::Stat.new('args passed', @arg_count, theme: theme)
+      Repofetch::Stat.new('git repo detected', @detected_from_git, emoji: '📂'),
+      Repofetch::Stat.new('args passed', @arg_count)
     ]
   end
 end

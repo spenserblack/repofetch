@@ -3,13 +3,16 @@
 require 'action_view'
 require 'octokit'
 require 'optparse'
-require 'repofetch'
 require 'repofetch/exceptions'
+require 'repofetch/plugin'
+require 'repofetch/util'
 
 class Repofetch
   # Adds support for GitHub repositories.
   class Github < Repofetch::Plugin
     include ActionView::Helpers::NumberHelper
+    include Repofetch::Util
+    extend Repofetch::Util
 
     HTTP_REMOTE_REGEX = %r{https?://github\.com/(?<owner>[\w.-]+)/(?<repository>[\w.-]+)}.freeze
     SSH_REMOTE_REGEX = %r{git@github\.com:(?<owner>[\w.-]+)/(?<repository>[\w.-]+)}.freeze
@@ -31,15 +34,12 @@ class Repofetch
     end
 
     def stats
-      stats = [http_clone_url, ssh_clone_url, stargazers, subscribers, forks, created, updated, size, issues,
-               pull_requests]
-      stats.each { |stat| stat.style_label!(:bold) }
+      [http_clone_url, ssh_clone_url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
     end
 
     # Detects that the repository is a GitHub repository.
     def self.matches_repo?(git)
-      default_remote = Repofetch.default_remote(git)
-      matches_remote?(default_remote&.url)
+      matches_remote?(default_remote_url(git))
     end
 
     # Detects that the remote URL is for a GitHub repository.
@@ -49,8 +49,7 @@ class Repofetch
 
     # Gets the owner and repository from a GitHub local repository.
     def self.repo_identifiers(git)
-      default_remote = Repofetch.default_remote(git)
-      remote_identifiers(default_remote&.url)
+      remote_identifiers(default_remote_url(git))
     end
 
     # Gets the owner and repository from a GitHub remote URL.
@@ -93,7 +92,7 @@ class Repofetch
     end
 
     def header
-      "#{theme.format(:bold, "#{owner}/#{repository}")} @ #{theme.format(:bold, 'GitHub')}"
+      ["#{owner}/#{repository}", 'GitHub']
     end
 
     def ascii
