@@ -26,11 +26,11 @@ class Repofetch
     end
 
     def header
-      "#{header_format(repo_data['name_with_namespace'])} @ #{header_format('GitLab')}"
+      [repo_data['name_with_namespace'], 'GitLab']
     end
 
-    def header_format(text)
-      theme.format(:bold, theme.format(:red, text))
+    def primary_color
+      :red
     end
 
     def stats
@@ -39,7 +39,7 @@ class Repofetch
       # NOTE: Stats that require authentication
       stats << open_issues unless token.nil?
 
-      stats.map { |stat| stat.style_label(:bold, :red) }
+      stats
     end
 
     def ascii

@@ -29,19 +29,15 @@ class Repofetch
     end
 
     def header
-      name = header_format("#{repo_data['owner']['display_name']}/#{repo_data['name']}")
-      host = header_format('Bitbucket')
-      "#{name} @ #{host}"
+      ["#{repo_data['owner']['display_name']}/#{repo_data['name']}", 'Bitbucket']
     end
 
-    def header_format(text)
-      theme.format(:bold, theme.format(:blue, text))
+    def primary_color
+      :blue
     end
 
     def stats
-      [http_clone_url, ssh_clone_url, watchers, forks, created, updated, size, issues, pull_requests].map do |stat|
-        stat.style_label(:bold, :blue)
-      end
+      [http_clone_url, ssh_clone_url, watchers, forks, created, updated, size, issues, pull_requests]
     end
 
     def ascii

@@ -35,7 +35,6 @@ class Repofetch
 
     def stats
       [http_clone_url, ssh_clone_url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
-        .map { |stat| stat.style_label(:bold) }
     end
 
     # Detects that the repository is a GitHub repository.
@@ -93,7 +92,7 @@ class Repofetch
     end
 
     def header
-      "#{theme.format(:bold, "#{owner}/#{repository}")} @ #{theme.format(:bold, 'GitHub')}"
+      ["#{owner}/#{repository}", 'GitHub']
     end
 
     def ascii

@@ -2,6 +2,7 @@
 
 require 'repofetch'
 require 'repofetch/util'
+require 'repofetch/stat'
 
 class Repofetch
   # @abstract Subclass to create a plugin.
@@ -70,14 +71,29 @@ class Repofetch
     # @abstract The header to show for the plugin.
     #
     # This should be overridden by the plugin subclass.
-    # For example, "foo/bar @ GitHub".
+    #
+    # If an array is returned, it will be joined by +header_joiner+.
+    #
+    # @return [String, Array<String>]
     def header
       raise NoMethodError, 'header must be overridden by the plugin subclass'
     end
 
+    # A string to join header text.
+    #
+    # Override to use a different string.
+    # @return [String]
+    def header_joiner
+      ' @ '
+    end
+
     # Creates the separator that appears underneath the header
     def separator
-      '-' * clean_ansi(header).length
+      return '-' * header.length unless header.is_a?(Array)
+
+      header_length = header.map(&:length).sum + ((header.length - 1) * header_joiner.length)
+
+      '-' * header_length
     end
 
     def to_s
@@ -96,9 +112,31 @@ class Repofetch
       []
     end
 
+    # The primary color to use for the header and stats.
+    #
+    # Override to use a different color from the theme.
+    # @see Repofetch::Theme
+    #
+    # @return [Symbol]
+    def primary_color
+      :default
+    end
+
+    # Returns the header, formatted with the primary color and bold, and joined with the header joiner.
+    #
+    # @return [String]
+    def formatted_header
+      (header.is_a?(Array) ? header : [header]).map { |h| apply_styles(h, :bold, primary_color) }.join(header_joiner)
+    end
+
     # Makes an array of stat lines, including the header and separator.
     def stat_lines
-      [header, separator, *stats.map { |stat| stat.respond_to?(:format) ? stat.format(theme) : stat.to_s }]
+      styled_stats = stats.map do |stat|
+        next stat unless stat.is_a?(Repofetch::Stat)
+
+        stat.style_label(:bold, primary_color).format(theme)
+      end
+      [formatted_header, separator, *styled_stats]
     end
 
     # Zips ASCII lines with stat lines.
@@ -111,6 +149,12 @@ class Repofetch
       else
         stat_lines.zip(ascii_lines).map(&:reverse)
       end.map { |ascii, stat| [ascii.to_s, stat.to_s] }
+    end
+
+    private
+
+    def apply_styles(str, *styles)
+      styles.inject(str) { |style, s| theme.format(s, style) }
     end
   end
 end
