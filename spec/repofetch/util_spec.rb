@@ -42,4 +42,10 @@ describe Repofetch::Util do
       expect(dummy.default_remote_url(git)).to eq url
     end
   end
+
+  describe '#clean_ansi' do
+    it 'cleans ANSI escape sequences to return a raw string' do
+      expect(dummy.clean_ansi("\e[1;32mOK\e[0m")).to eq 'OK'
+    end
+  end
 end
