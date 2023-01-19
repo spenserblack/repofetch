@@ -97,8 +97,6 @@ class Repofetch
     end
 
     # Makes an array of stat lines, including the header and separator.
-    #
-    # Mutates +stats+ to add the +theme+.
     def stat_lines
       [header, separator, *stats.map { |stat| stat.respond_to?(:format) ? stat.format(theme) : stat.to_s }]
     end

@@ -3,10 +3,12 @@ Next
 ## Added
 
 - `Stat#format(theme)` to create styled stats
+- `Stat#style_label` to style the label without mutating the original `Stat` instance
 
 ## Changed
 
 - Bitbucket Cloud header to be bold and blue
+- `Stat#style_label!` to accept one or more styles as parameters
 
 ## Fixed
 

@@ -39,7 +39,7 @@ class Repofetch
       # NOTE: Stats that require authentication
       stats << open_issues unless token.nil?
 
-      stats.each { |stat| %i[bold red].each { |style| stat.style_label!(style) } }
+      stats.map { |stat| stat.style_label(:bold, :red) }
     end
 
     def ascii

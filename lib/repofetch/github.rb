@@ -34,9 +34,8 @@ class Repofetch
     end
 
     def stats
-      stats = [http_clone_url, ssh_clone_url, stargazers, subscribers, forks, created, updated, size, issues,
-               pull_requests]
-      stats.each { |stat| stat.style_label!(:bold) }
+      [http_clone_url, ssh_clone_url, stargazers, subscribers, forks, created, updated, size, issues, pull_requests]
+        .map { |stat| stat.style_label(:bold) }
     end
 
     # Detects that the repository is a GitHub repository.

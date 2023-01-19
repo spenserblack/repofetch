@@ -40,11 +40,21 @@ class Repofetch
       "#{emoji}#{@label}: #{@value}"
     end
 
-    # Adds a style for the label
+    # Adds one or more styles for the label
     #
     # @param [Symbol] style The theme's style to add
-    def style_label!(style)
+    # @param [Symbol] styles Additional styles to add
+    def style_label!(style, *styles)
       @label_styles << style
+      @label_styles.concat(styles)
+    end
+
+    # Adds one or more styles for the label, returning a new stat
+    #
+    # @param [Symbol] style The theme's style to add
+    # @return [Stat] A new stat with the style added
+    def style_label(style, *styles)
+      dup.tap { |stat| stat.style_label!(style, *styles) }
     end
   end
 end

@@ -39,9 +39,9 @@ class Repofetch
     end
 
     def stats
-      stats = [http_clone_url, ssh_clone_url, watchers, forks, created, updated, size, issues, pull_requests]
-
-      stats.each { |stat| %i[bold blue].each { |style| stat.style_label!(style) } }
+      [http_clone_url, ssh_clone_url, watchers, forks, created, updated, size, issues, pull_requests].map do |stat|
+        stat.style_label(:bold, :blue)
+      end
     end
 
     def ascii
