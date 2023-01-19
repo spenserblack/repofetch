@@ -96,20 +96,11 @@ class Repofetch
       []
     end
 
-    # Adds +theme+ to the stats, mutating those stats.
-    #
-    # @return [Array<Stat>]
-    def theme_stats!
-      stats.each do |stat|
-        stat.theme = theme if stat.respond_to?(:theme=)
-      end
-    end
-
     # Makes an array of stat lines, including the header and separator.
     #
     # Mutates +stats+ to add the +theme+.
-    def stat_lines!
-      [header, separator, *theme_stats!.map(&:to_s)]
+    def stat_lines
+      [header, separator, *stats.map { |stat| stat.respond_to?(:format) ? stat.format(theme) : stat.to_s }]
     end
 
     # Zips ASCII lines with stat lines.
@@ -117,7 +108,6 @@ class Repofetch
     # If there are more of one than the other, than the zip will be padded with empty strings.
     def zipped_lines
       ascii_lines = ascii.lines.map(&:chomp)
-      stat_lines = stat_lines!
       if ascii_lines.length > stat_lines.length
         ascii_lines.zip(stat_lines)
       else

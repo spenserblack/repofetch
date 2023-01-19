@@ -18,10 +18,26 @@ class Repofetch
       @label_styles = []
     end
 
+    def format(theme = nil)
+      return to_s if theme.nil?
+
+      emoji = @emoji
+      emoji = nil unless Repofetch.config.nil? || Repofetch.config.emojis?
+      styled_label = @label_styles.inject(@label) { |label, style| theme.format(style, label) }
+      "#{emoji}#{styled_label}: #{format_value}"
+    end
+
+    # Formats the value of the stat
+    #
+    # Simply calls +to_s+, but can be overridden by subclasses.
+    def format_value
+      @value.to_s
+    end
+
     def to_s
       emoji = @emoji
       emoji = nil unless Repofetch.config.nil? || Repofetch.config.emojis?
-      "#{emoji}#{format_label}: #{format_value}"
+      "#{emoji}#{@label}: #{@value}"
     end
 
     # Adds a style for the label
@@ -29,23 +45,6 @@ class Repofetch
     # @param [Symbol] style The theme's style to add
     def style_label!(style)
       @label_styles << style
-    end
-
-    # Formats the label, including styles.
-    #
-    # @return [String]
-    def format_label
-      return @label if @theme.nil?
-
-      @label_styles.inject(@label) { |label, style| @theme.format(style, label) }
-    end
-
-    # Formats the value
-    #
-    # This simply converts the value to a string, but can be overridden but
-    # subclasses to affect +to_s+.
-    def format_value
-      @value.to_s
     end
   end
 end
