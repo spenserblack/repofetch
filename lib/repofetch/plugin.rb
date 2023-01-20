@@ -56,6 +56,16 @@ class Repofetch
       raise NoMethodError, 'from_git must be overridden by the plugin subclass'
     end
 
+    # @abstract This should use a path and call +Plugin.new+.
+    #
+    # @param [String] _path The path to use when calling +Plugin.new+.
+    # @param [Array] _args The arguments to process.
+    #
+    # @return [Plugin]
+    def self.from_path(_path, _args)
+      raise NoMethodError, 'from_path must be overridden by the plugin subclass'
+    end
+
     # @abstract This will receive an array of strings (e.g. +ARGV+) and call +Plugin.new+.
     #
     # @param [Array] _args The arguments to process.
