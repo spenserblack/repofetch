@@ -93,32 +93,6 @@ RSpec.describe Repofetch do
         expect(described_class.get_plugin(nil, nil).class).to be plugin
       end
     end
-
-    context 'when a plugin author forgets to implement #matches_repo?' do
-      let(:ok_plugin) do
-        Class.new(described_class::Plugin) do
-          def self.matches_repo?(*)
-            true
-          end
-
-          def self.from_git(*)
-            new
-          end
-        end
-      end
-
-      let(:bad_plugin) do
-        Class.new(described_class::Plugin)
-      end
-
-      before { [ok_plugin, bad_plugin].each(&:register) }
-
-      it 'generates a warning' do
-        expect do
-          described_class.get_plugin(nil, nil)
-        end.to output(/Does not implement \+matches_repo\?\+/).to_stderr
-      end
-    end
   end
 
   describe Repofetch::Plugin, '#register' do
@@ -171,16 +145,6 @@ RSpec.describe Repofetch do
 
       it 'raises NoMethodError' do
         expect { mock_plugin.new('foo').ascii }.to raise_error(NoMethodError)
-      end
-    end
-  end
-
-  describe Repofetch::Plugin, '#matches_repo?' do
-    context 'when a plugin subclass does not override the matches_repo? method' do
-      let(:mock_plugin) { Class.new(described_class) }
-
-      it 'raises NoMethodError' do
-        expect { mock_plugin.matches_repo?(Git::Base.new) }.to raise_error(NoMethodError)
       end
     end
   end

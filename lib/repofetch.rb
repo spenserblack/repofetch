@@ -67,12 +67,7 @@ class Repofetch
   #
   # @return [Plugin] A plugin to use.
   def self.get_plugin(git, args)
-    available_plugins = @plugins.filter do |plugin_class|
-      plugin_class.matches_repo?(git)
-    rescue NoMethodError
-      warn "#{plugin_class} Does not implement +matches_repo?+"
-      false
-    end
+    available_plugins = @plugins.filter { |plugin_class| plugin_class.matches_repo?(git) }
     raise NoPluginsError if available_plugins.empty?
 
     raise TooManyPluginsError if available_plugins.length > 1

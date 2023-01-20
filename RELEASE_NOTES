@@ -9,6 +9,7 @@ Next
 
 - Bitbucket Cloud header to be bold and blue
 - `Stat#style_label!` to accept one or more styles as parameters
+- `Plugin#matches_repo?` to return `false` instead of raising an error when it is not overridden
 
 ## Fixed
 

@@ -33,7 +33,7 @@ class Repofetch
     #
     # @param [Git::Base] _git The Git repository object
     def self.matches_repo?(_git)
-      raise NoMethodError, 'matches_repo? must be overridden by the plugin subclass'
+      false
     end
 
     # @abstract This should use a git instance and call +Plugin.new+.

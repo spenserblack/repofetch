@@ -4,8 +4,8 @@ require 'repofetch'
 
 RSpec.describe Repofetch::Plugin do
   describe '#matches_repo?' do
-    it 'raises a NoMethodError' do
-      expect { described_class.matches_repo?(nil) }.to raise_error(NoMethodError)
+    it 'returns false' do
+      expect(described_class.matches_repo?(nil)).to be false
     end
   end
 
