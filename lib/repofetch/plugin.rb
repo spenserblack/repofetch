@@ -36,6 +36,16 @@ class Repofetch
       false
     end
 
+    # @abstract Detects that this plugin should be used. Should be overridden by subclasses.
+    #
+    # This is intended to be more generic than +matches_repo?+, and support any path.
+    #
+    # An example implementation is checking if an expected file exists in this path.
+    # @param [String] _path The path to check
+    def self.matches_path?(_path)
+      false
+    end
+
     # @abstract This should use a git instance and call +Plugin.new+.
     #
     # @param [Git::Base] _git The Git repository object to use when calling +Plugin.new+.
