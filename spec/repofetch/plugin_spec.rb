@@ -21,6 +21,12 @@ RSpec.describe Repofetch::Plugin do
     end
   end
 
+  describe '#from_path' do
+    it 'raises a NoMethodError' do
+      expect { described_class.from_path(nil, nil) }.to raise_error(NoMethodError)
+    end
+  end
+
   describe '#from_args' do
     it 'raises a NoMethodError' do
       expect { described_class.from_args(nil) }.to raise_error(NoMethodError)
