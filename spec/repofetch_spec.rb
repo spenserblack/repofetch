@@ -95,6 +95,16 @@ RSpec.describe Repofetch do
     end
   end
 
+  describe '#get_plugins_for_repo' do
+    context 'when the repository cannot be opened/found' do
+      before { allow(Git).to receive(:open).and_raise(ArgumentError) }
+
+      it 'returns an empty array' do
+        expect(described_class.get_plugins_for_repo('foo')).to eq []
+      end
+    end
+  end
+
   describe Repofetch::Plugin, '#register' do
     before { Repofetch.send(:clear_plugins) }
 
