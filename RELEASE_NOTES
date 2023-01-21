@@ -4,6 +4,8 @@ Next
 
 - `Stat#format(theme)` to create styled stats
 - `Stat#style_label` to style the label without mutating the original `Stat` instance
+- `Plugin#matches_path?` and `Plugin#from_path` to allow plugins to initialize from paths, not
+  just git repositories
 
 ## Changed
 
