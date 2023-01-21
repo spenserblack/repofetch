@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'git'
 require 'optparse'
 require 'repofetch'
 require 'repofetch/config'
@@ -56,8 +55,7 @@ class Repofetch
     def new_plugin
       return @plugin.from_args(@args) unless @plugin.nil?
 
-      git = Git.open(@repository_path)
-      Repofetch.get_plugin(git, @args)
+      Repofetch.get_plugin(@repository_path, @args)
     end
 
     private

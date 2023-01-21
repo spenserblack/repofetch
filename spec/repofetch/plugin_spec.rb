@@ -9,9 +9,21 @@ RSpec.describe Repofetch::Plugin do
     end
   end
 
+  describe '#matches_path?' do
+    it 'returns false' do
+      expect(described_class.matches_path?(nil)).to be false
+    end
+  end
+
   describe '#from_git' do
     it 'raises a NoMethodError' do
       expect { described_class.from_git(nil, nil) }.to raise_error(NoMethodError)
+    end
+  end
+
+  describe '#from_path' do
+    it 'raises a NoMethodError' do
+      expect { described_class.from_path(nil, nil) }.to raise_error(NoMethodError)
     end
   end
 

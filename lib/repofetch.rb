@@ -59,20 +59,75 @@ class Repofetch
   # Raises a +Repofetch::NoPluginsError+ if no plugins are found.
   # Raises a +Repofetch::TooManyPluginsError+ if more than one plugin is found.
   #
-  # @param [Git::Base] git A repository instance.
+  # @param [String] path The path to check.
   # @param [Array<String>] args The arguments passed to the program.
   #
   # @raise [NoPluginsError] If no plugins were selected.
   # @raise [TooManyPluginsError] If more than one plugin was selected.
   #
   # @return [Plugin] A plugin to use.
-  def self.get_plugin(git, args)
-    available_plugins = @plugins.filter { |plugin_class| plugin_class.matches_repo?(git) }
-    raise NoPluginsError if available_plugins.empty?
+  def self.get_plugin(path, args)
+    path_plugin = get_plugin_for_path(path)
+    repo_plugin = get_plugin_for_repo(path)
 
-    raise TooManyPluginsError if available_plugins.length > 1
+    raise TooManyPluginsError if path_plugin && repo_plugin
 
-    available_plugins[0].from_git(git, args)
+    raise NoPluginsError if path_plugin.nil? && repo_plugin.nil?
+
+    return path_plugin.from_path(path, args) unless path_plugin.nil?
+
+    git = Git.open(path)
+    repo_plugin.from_git(git, args)
+  end
+
+  # Gets the plugins that matches the given path.
+  #
+  # @param [String] path The path to check.
+  #
+  # @return [Array<Plugin>] The plugins that match the path.
+  def self.get_plugins_for_path(path)
+    @plugins.filter { |plugin_class| plugin_class.matches_path?(path) }
+  end
+
+  # Gets a single plugin that matches the given path.
+  #
+  # @param [String] path The path to check.
+  #
+  # @return [Plugin, nil] The plugin that matches the path.
+  def self.get_plugin_for_path(path)
+    plugins = get_plugins_for_path(path)
+
+    raise TooManyPluginsError if plugins.length > 1
+
+    plugins[0]
+  end
+
+  # Gets the plugins that matches the given repository.
+  #
+  # @param [String] path The repository to check.
+  #
+  # @return [Array<Plugin>] The plugins that match the repository.
+  def self.get_plugins_for_repo(path)
+    begin
+      git = Git.open(path)
+    rescue ArgumentError
+      return []
+    end
+
+    @plugins.filter { |plugin_class| plugin_class.matches_repo?(git) }
+  end
+
+  # Gets a single plugin that matches the given repository.
+  #
+  # @param [String] path The repository to check.
+  #
+  # @return [Plugin, nil] The plugin that matches the repository.
+  def self.get_plugin_for_repo(path)
+    plugins = get_plugins_for_repo(path)
+
+    raise TooManyPluginsError if plugins.length > 1
+
+    plugins[0]
   end
 
   def self.clear_plugins
