@@ -10,6 +10,7 @@ require 'repofetch/stat'
 require 'repofetch/timespan_stat'
 require 'repofetch/theme'
 require 'repofetch/util'
+require 'repofetch/version'
 
 # Main class for repofetch
 class Repofetch

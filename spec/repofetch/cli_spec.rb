@@ -107,4 +107,20 @@ RSpec.describe Repofetch::CLI do
       end
     end
   end
+
+  describe '#define_options' do
+    let(:config) { Repofetch::Config.new }
+
+    before { allow(Kernel).to receive(:exit) }
+
+    context 'when -v/--version is passed' do
+      let(:args) { %w[--version] }
+
+      it 'prints the version' do
+        expect do
+          described_class.new(config, args).define_options.parse!(args)
+        end.to output("repofetch #{Repofetch::VERSION}\n").to_stdout
+      end
+    end
+  end
 end

@@ -4,6 +4,7 @@ require 'optparse'
 require 'repofetch'
 require 'repofetch/config'
 require 'repofetch/exceptions'
+require 'repofetch/version'
 
 class Repofetch
   # Command line interface for repofetch.
@@ -27,15 +28,9 @@ class Repofetch
       load_plugins
       define_options.parse!(@args)
 
-      begin
-        plugin = new_plugin
-      rescue Repofetch::PluginUsageError => e
-        warn e
-        return 1
-      end
+      return @exit unless @exit.nil?
 
-      puts plugin
-      0
+      start_plugin
     end
 
     def define_options
@@ -45,6 +40,7 @@ class Repofetch
         add_repository_options(opts)
         add_plugin_options(opts)
         add_options_notes(opts)
+        add_version_option(opts)
       end
     end
 
@@ -59,6 +55,13 @@ class Repofetch
     end
 
     private
+
+    def add_version_option(opts)
+      opts.on('-v', '--version', 'Print the version number and exit.') do
+        puts "repofetch #{Repofetch::VERSION}"
+        @exit = 0
+      end
+    end
 
     def add_repository_options(opts)
       opts.on('-r', '--repository', '-p', '--path PATH',
@@ -90,6 +93,18 @@ class Repofetch
 
     def available_plugins
       Repofetch.plugins.to_h { |plugin| [plugin.name, plugin] }
+    end
+
+    def start_plugin
+      begin
+        plugin = new_plugin
+      rescue Repofetch::PluginUsageError => e
+        warn e
+        return 1
+      end
+
+      puts plugin
+      0
     end
   end
 end
