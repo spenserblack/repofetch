@@ -8,3 +8,4 @@ The following dotenv files can be used to set environment variables: /home/me/re
 
 You config file is at /home/me/.repofetch.yml
 Installed plugins: Namespace::Myplugin
+    -v, --version                    Print the version number and exit.

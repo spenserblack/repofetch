@@ -8,6 +8,10 @@ TAG_NAME=$1
 TAG_TARGET=$2
 REPOFETCH_PRERELEASE=${REPOFETCH_PRERELEASE:-0}
 
+echo "$TAG_NAME" | sed 's/^v//' > lib/repofetch/VERSION
+git add lib/repofetch/VERSION
+git commit -m "Update Repofetch::VERSION"
+
 if git config core.commentChar; then
 	HAD_COMMENT_CHAR=1
 	COMMENT_CHAR=$(git config --get core.commentChar)

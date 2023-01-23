@@ -1,1 +1,6 @@
+Next
 
+## Added
+
+- `-v`/`--version` to print the version from the CLI
+- `Repofetch::VERSION` to get the version as a library
