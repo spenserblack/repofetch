@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'lib/repofetch/version'
+
 LONG_DESCRIPTION = 'A plugin-based tool to fetch stats, with a GitHub stat fetcher included by default'
 
 Gem::Specification.new do |spec|
   spec.name                               = 'repofetch'
-  spec.version                            = '0.5.0'
+  spec.version                            = Repofetch::VERSION
   spec.authors                            = ['Spenser Black']
 
   spec.summary                            = 'A plugin-based stat fetcher'
