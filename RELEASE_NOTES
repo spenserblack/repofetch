@@ -1,1 +1,5 @@
+Next
 
+## Fixed
+
+- Placement of `-v, --version` help in the help message

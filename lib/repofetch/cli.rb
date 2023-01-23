@@ -39,8 +39,8 @@ class Repofetch
 
         add_repository_options(opts)
         add_plugin_options(opts)
-        add_options_notes(opts)
         add_version_option(opts)
+        add_options_notes(opts)
       end
     end
 
