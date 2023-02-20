@@ -2,7 +2,7 @@
 
 require_relative 'lib/repofetch/version'
 
-LONG_DESCRIPTION = 'A plugin-based tool to fetch stats, with a GitHub stat fetcher included by default'
+LONG_DESCRIPTION = 'A plugin-based tool to fetch stats, with some git repository host stat fetchers included by default'
 
 Gem::Specification.new do |spec|
   spec.name                               = 'repofetch'
