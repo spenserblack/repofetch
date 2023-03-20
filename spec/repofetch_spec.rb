@@ -50,11 +50,16 @@ RSpec.describe Repofetch do
   end
 
   describe '#get_plugin' do
-    before { described_class.send(:clear_plugins) }
+    before do
+      described_class.send(:clear_plugins)
+      allow(Git).to receive(:open).with('foo').and_raise(ArgumentError)
+      allow(Git).to receive(:open).with('multiple').and_return(instance_double(Git::Base))
+      allow(Git).to receive(:open).with('single').and_return(instance_double(Git::Base))
+    end
 
     context 'when no plugins match the repo' do
       it 'raises a NoPluginsError' do
-        expect { described_class.get_plugin(nil, nil) }.to raise_error(described_class::NoPluginsError)
+        expect { described_class.get_plugin('foo', nil) }.to raise_error(described_class::NoPluginsError)
       end
     end
 
@@ -70,7 +75,7 @@ RSpec.describe Repofetch do
       end
 
       it 'raises a TooManyPluginsError' do
-        expect { described_class.get_plugin(nil, nil) }.to raise_error(Repofetch::TooManyPluginsError)
+        expect { described_class.get_plugin('multiple', nil) }.to raise_error(Repofetch::TooManyPluginsError)
       end
     end
 
@@ -90,7 +95,7 @@ RSpec.describe Repofetch do
       before { plugin.register }
 
       it 'returns an instance of that plugin' do
-        expect(described_class.get_plugin(nil, nil).class).to be plugin
+        expect(described_class.get_plugin('single', nil).class).to be plugin
       end
     end
   end
