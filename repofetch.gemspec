@@ -33,15 +33,16 @@ Gem::Specification.new do |spec|
   }
 
   # TODO: Really seems like overkill to install this just for distance_of_time_in_words
-  spec.add_runtime_dependency 'actionview', '~> 7.0', '>= 7.0.4'
+  spec.add_runtime_dependency 'actionview', '>= 5.0', '< 8.0'
 
-  spec.add_runtime_dependency 'dotenv', '~> 2.8'
+  spec.add_runtime_dependency 'dotenv', '~> 2.0'
   spec.add_runtime_dependency 'faraday-retry', '~> 2.0'
-  spec.add_runtime_dependency 'git', '~> 1.12'
-  spec.add_runtime_dependency 'octokit', '~> 6.0', '>= 6.0.1'
+  spec.add_runtime_dependency 'git', '~> 1.0'
+  spec.add_runtime_dependency 'octokit', '>= 4.0', '< 7.0'
   spec.add_runtime_dependency 'sawyer'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
+  spec.add_development_dependency 'fpm', '~> 1.15'
   spec.add_development_dependency 'os', '~> 1.1'
   spec.add_development_dependency 'overcommit', '~> 0.59'
   spec.add_development_dependency 'rake', '~> 13.0'

@@ -16,6 +16,9 @@ Gemfile.lock
 # Vendored files
 /vendor/bundle
 
+# Packages
+*.deb
+
 # Legacy ignores from Rust version
 /target
 **/*.rs.bk
