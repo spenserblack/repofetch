@@ -40,17 +40,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'git', '~> 1.12'
   spec.add_runtime_dependency 'octokit', '~> 6.0', '>= 6.0.1'
   spec.add_runtime_dependency 'sawyer'
-
-  spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'os', '~> 1.1'
-  spec.add_development_dependency 'overcommit', '~> 0.59'
-  spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rspec', '~> 3.11'
-  spec.add_development_dependency 'rspec-snapshot', '~> 2.0'
-  spec.add_development_dependency 'rubocop', '~> 1.36'
-  spec.add_development_dependency 'rubocop-rake', '~> 0.6'
-  spec.add_development_dependency 'rubocop-rspec', '~> 2.13'
-  spec.add_development_dependency 'simplecov', '~> 0.21'
-  spec.add_development_dependency 'simplecov-cobertura', '~> 2.1'
-  spec.add_development_dependency 'yard', '~> 0.9.28'
 end

@@ -76,7 +76,7 @@ class Repofetch
       end
 
       Repofetch.plugins.each do |plugin|
-        opts.on("--#{plugin.name.sub(/::/, '-').downcase}", "Shortcut for --plugin #{plugin.name}") do
+        opts.on("--#{plugin.name.sub('::', '-').downcase}", "Shortcut for --plugin #{plugin.name}") do
           @plugin = plugin
         end
       end

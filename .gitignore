@@ -2,8 +2,6 @@
 /.bundle/
 /coverage/
 
-Gemfile.lock
-
 # Bundler Binstubs
 /bin/*
 !/bin/rake
