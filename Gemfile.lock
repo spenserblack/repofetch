@@ -145,7 +145,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.0)
   os (~> 1.1)
   overcommit (~> 0.59)
   rake (~> 13.0)
