@@ -14,7 +14,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
       - name: Publish GitHub Release
-        uses: spenserblack/actions-tag-to-release@v2
+        uses: spenserblack/actions-tag-to-release@v3
 
   publish:
     name: Publish
